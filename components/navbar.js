@@ -1,10 +1,10 @@
 import Image from "next/future/image";
+import Link from "next/link";
 
 /* This example requires Tailwind CSS v2.0+ */
 // import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 
 const navigation = [
 	// { name: "Dashboard", href: "#", current: true },
@@ -38,30 +38,29 @@ export default function Example() {
 							<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 								<div className="flex flex-shrink-0 items-center">
 									<Link href="/">
-										<a>
-											<Image
-												className="block h-8 w-auto lg:hidden"
-												src="/images/logo_jc.svg"
-												width={30}
-												height={30}
-												alt="Logo JC"
-											/>
-											<Image
-												className="hidden h-8 w-auto lg:block"
-												src="/images/logo_jc.svg"
-												width={30}
-												height={30}
-												alt="Logo JC"
-											/>
-										</a>
+									<a>
+										<Image
+											className="block h-8 w-auto lg:hidden"
+											src="/images/logo_jc.svg"
+											width={30}
+											height={30}
+											alt="Logo JC"
+										/>
+										<Image
+											className="hidden h-8 w-auto lg:block"
+											src="/images/logo_jc.svg"
+											width={30}
+											height={30}
+											alt="Logo JC"
+										/>
+									</a>
 									</Link>
 								</div>
 								<div className="hidden sm:ml-6 sm:block">
 									<div className="flex space-x-4">
 										{navigation.map((item) => (
-											<Link href={item.href}>
+											<Link href={item.href} key={item.name}>
 												<a
-													key={item.name}
 													className={classNames(
 														item.current
 															? "bg-gray-900 text-white"
@@ -169,7 +168,11 @@ export default function Example() {
 									)}
 									aria-current={item.current ? "page" : undefined}
 								>
-									{item.name}
+									<Link href={item.href} key={item.name}>
+										<a>
+											{item.name}
+										</a>
+									</Link>
 								</Disclosure.Button>
 							))}
 						</div>
