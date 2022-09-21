@@ -10,7 +10,11 @@ export default function Perfil() {
                     Detalle
                 </Head>
                 <Container>
+                    
+                    <div className="pt-20">
                     <h1>Perfil</h1>
+
+                    </div>
                 </Container>
 			</Layout>
 		</>
