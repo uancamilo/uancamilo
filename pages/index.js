@@ -13,7 +13,7 @@ export default function Index({ preview, allPosts }) {
 		<>
 			<Layout preview={preview}>
 				<Head>
-					<title>FrontEnd Juan Camilo Serna</title>
+					<title>FrontEnd | Juan Camilo Serna</title>
 				</Head>
 				<Intro />
 				<Container>
