@@ -9,18 +9,18 @@ export default function Contacto() {
 					<title>Contacto | Juan Camilo Serna</title>
 				</Head>
 				<div className="bg-gradient-to-b from-purple-600 to-indigo-700 h-96 w-full">
-					<div className="w-full flex items-center justify-center pt-28">
-						<div className="bg-white shadow rounded py-16 lg:px-28 px-8">
+					<div className="w-full flex items-center justify-center">
+						<div className="fixed top-40 bg-white shadow rounded py-12 lg:px-28 px-8">
 							<p className="md:text-3xl text-xl font-bold leading-7 text-center text-gray-700">
-								Este será el comienzo de un gran proyecto.
+								Este será el comienzo de algo sorprendente.
 							</p>
-							<p className="md:text-3xl text-xl font-bold leading-7 text-center text-gray-700">
-								Enviame tus datos.
+							<p className="md:text-2xl text-xl italic leading-7 text-center text-gray-700 pt-5">
+								Enviarme tus datos será el primer paso.
 							</p>
 							<div className="md:flex items-center mt-12">
 								<div className="md:w-72 flex flex-col">
 									<label className="text-base font-semibold leading-none text-gray-800">
-										Nombre
+										Nombres
 									</label>
 									<input
 										tabIndex={0}
