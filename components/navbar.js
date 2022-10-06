@@ -10,7 +10,7 @@ const navigation = [
 	// { name: "Dashboard", href: "#", current: true },
 	{ name: "Perfil", href: "/perfil", current: false },
 	{ name: "Proyectos", href: "#", current: false },
-	{ name: "Contacto", href: "#", current: false },
+	{ name: "Contacto", href: "/contacto", current: false },
 ];
 
 function classNames(...classes) {
@@ -81,7 +81,7 @@ export default function Example() {
 									type="button"
 									className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
 								>
-									<span className="sr-only">View notifications</span>
+									<span className="sr-only">Notificaciones</span>
 									<BellIcon className="h-6 w-6" aria-hidden="true" />
 								</button>
 
