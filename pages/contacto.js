@@ -1,7 +1,9 @@
 import Head from "next/head";
 import Layout from "../components/layout";
+import { useForm } from "react-hook-form";
 
 export default function Contacto() {
+	const { register, handleSubmit, errors, reset } = useForm;
 	return (
 		<>
 			<Layout>
@@ -18,74 +20,76 @@ export default function Contacto() {
 								<p className="md:text-2xl text-xl italic leading-7 text-center text-gray-700 pt-5">
 									Enviarme tus datos será el primer paso.
 								</p>
-								<div className="md:flex justify-around items-center mt-12 ">
-									<div className="md:w-72 flex flex-col">
-										<label className="text-base font-semibold leading-none text-gray-800">
-											Nombres
-										</label>
-										<input
-											tabIndex={0}
-											arial-label="Please input name"
-											type="name"
-											className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
-											placeholder="Please input  name"
-										/>
+								<form>
+									<div className="md:flex justify-around items-center mt-12 ">
+										<div className="md:w-72 flex flex-col">
+											<label className="text-base font-semibold leading-none text-gray-800">
+												Nombres
+											</label>
+											<input
+												tabIndex={0}
+												arial-label="Ingrese sus nombres"
+												type="name"
+												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
+												placeholder="Ingrese sus nombres"
+											/>
+										</div>
+										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
+											<label className="text-base font-semibold leading-none text-gray-800">
+												Correo electrónico
+											</label>
+											<input
+												tabIndex={0}
+												arial-label="Cuál es tu correo electrónico"
+												type="name"
+												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
+												placeholder="Cuál es tu correo electrónico"
+											/>
+										</div>
 									</div>
-									<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
-										<label className="text-base font-semibold leading-none text-gray-800">
-											Correo electrónico
-										</label>
-										<input
-											tabIndex={0}
-											arial-label="Please input email address"
-											type="name"
-											className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
-											placeholder="Please input email address"
-										/>
+									<div className="md:flex justify-around items-center mt-8">
+										<div className="md:w-72 flex flex-col">
+											<label className="text-base font-semibold leading-none text-gray-800">
+												Empresa / compañía
+											</label>
+											<input
+												tabIndex={0}
+												role="input"
+												arial-label="Indicame el nombre de tu compañía"
+												type="name"
+												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 "
+												placeholder="Indicame el nombre de tu compañía"
+											/>
+										</div>
+										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
+											<label className="text-base font-semibold leading-none text-gray-800">
+												País
+											</label>
+											<input
+												tabIndex={0}
+												arial-label="Desde que país te comunicas"
+												type="name"
+												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
+												placeholder="Desde que país te comunicas"
+											/>
+										</div>
 									</div>
-								</div>
-								<div className="md:flex justify-around items-center mt-8">
-									<div className="md:w-72 flex flex-col">
-										<label className="text-base font-semibold leading-none text-gray-800">
-											Empresa / compañía
-										</label>
-										<input
-											tabIndex={0}
-											role="input"
-											arial-label="Please input company name"
-											type="name"
-											className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 "
-											placeholder="Please input company name"
-										/>
+									<div>
+										<div className="w-full flex flex-col mt-8">
+											<label className="text-base font-semibold leading-none text-gray-800">
+												Mensaje
+											</label>
+											<textarea
+												tabIndex={0}
+												aria-label="Envía el mensaje"
+												role="textbox"
+												type="name"
+												className="h-36 text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 resize-none"
+												defaultValue={""}
+											/>
+										</div>
 									</div>
-									<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
-										<label className="text-base font-semibold leading-none text-gray-800">
-											País
-										</label>
-										<input
-											tabIndex={0}
-											arial-label="Please input country name"
-											type="name"
-											className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
-											placeholder="Please input country name"
-										/>
-									</div>
-								</div>
-								<div>
-									<div className="w-full flex flex-col mt-8">
-										<label className="text-base font-semibold leading-none text-gray-800">
-											Mensaje
-										</label>
-										<textarea
-											tabIndex={0}
-											aria-label="leave a message"
-											role="textbox"
-											type="name"
-											className="h-36 text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 resize-none"
-											defaultValue={""}
-										/>
-									</div>
-								</div>
+								</form>
 								<p className="text-xs leading-3 text-gray-600 mt-4">
 									Al hacer clic en enviar, acepta nuestros términos de servicio,
 									política de privacidad y cómo usamos los datos que acá se
