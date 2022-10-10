@@ -3,7 +3,22 @@ import Layout from "../components/layout";
 import { useForm } from "react-hook-form";
 
 export default function Contacto() {
-	const { register, handleSubmit, errors, reset } = useForm;
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		values: {
+			nombre: "",
+			email: "",
+			empresa: "",
+			pais: "",
+			mensaje: "",
+		},
+	});
+	function onSubmitForm() {
+		console.log(values);
+	}
 	return (
 		<>
 			<Layout>
@@ -20,7 +35,7 @@ export default function Contacto() {
 								<p className="md:text-2xl text-xl italic leading-7 text-center text-gray-700 pt-5">
 									Enviarme tus datos será el primer paso.
 								</p>
-								<form>
+								<form onSubmit={handleSubmit(onSubmitForm)}>
 									<div className="md:flex justify-around items-center mt-12 ">
 										<div className="md:w-72 flex flex-col">
 											<label className="text-base font-semibold leading-none text-gray-800">
@@ -32,6 +47,9 @@ export default function Contacto() {
 												type="name"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Ingrese sus nombres"
+												{...register("nombre", {
+													required: "Requerido",
+												})}
 											/>
 										</div>
 										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
@@ -44,6 +62,9 @@ export default function Contacto() {
 												type="name"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Cuál es tu correo electrónico"
+												{...register("email", {
+													required: "Requerido",
+												})}
 											/>
 										</div>
 									</div>
@@ -59,6 +80,9 @@ export default function Contacto() {
 												type="name"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 "
 												placeholder="Indicame el nombre de tu compañía"
+												{...register("empresa", {
+													required: "Requerido",
+												})}
 											/>
 										</div>
 										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
@@ -71,6 +95,9 @@ export default function Contacto() {
 												type="name"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Desde que país te comunicas"
+												{...register("pais", {
+													required: "Requerido",
+												})}
 											/>
 										</div>
 									</div>
@@ -86,20 +113,31 @@ export default function Contacto() {
 												type="name"
 												className="h-36 text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 resize-none"
 												defaultValue={""}
+												{...register("mensaje", {
+													required: "Requerido",
+												})}
 											/>
 										</div>
 									</div>
+									<p className="text-xs leading-3 text-gray-600 mt-4">
+										Al hacer clic en enviar, acepta nuestros términos de
+										servicio, política de privacidad y cómo usamos los datos que
+										acá se envían.
+									</p>
+									<div className="flex items-center justify-center w-full">
+										<input
+											type="submit"
+											className="mt-9 text-base font-semibold leading-none text-white py-4 px-10 bg-indigo-700 rounded hover:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none"
+										/>
+									</div>
 								</form>
-								<p className="text-xs leading-3 text-gray-600 mt-4">
-									Al hacer clic en enviar, acepta nuestros términos de servicio,
-									política de privacidad y cómo usamos los datos que acá se
-									envían.
-								</p>
-								<div className="flex items-center justify-center w-full">
-									<button className="mt-9 text-base font-semibold leading-none text-white py-4 px-10 bg-indigo-700 rounded hover:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none">
-										Enviar
-									</button>
-								</div>
+
+								{/* <div className="flex items-center justify-center w-full">
+									<input
+										type="submit"
+										className="mt-9 text-base font-semibold leading-none text-white py-4 px-10 bg-indigo-700 rounded hover:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none"
+									/>
+								</div> */}
 							</div>
 						</div>
 					</div>
