@@ -1,23 +1,33 @@
 import Head from "next/head";
 import Layout from "../components/layout";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function Contacto() {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
-	} = useForm({
-		values: {
-			nombre: "",
-			email: "",
-			empresa: "",
-			pais: "",
-			mensaje: "",
-		},
-	});
-	function onSubmitForm() {
-		console.log(values);
+	} = useForm();
+	async function onSubmitForm(values) {
+		let config = {
+			method: "POST",
+			url: `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
+			headers: {
+				"Content-type": "application/json",
+			},
+			data: values,
+		};
+		try {
+			const response = await axios(config);
+			console.log(response);
+			if (response.status == 200) {
+				reset();
+			}
+		} catch (err) {
+			console.log(err);
+		}
 	}
 	return (
 		<>
@@ -48,9 +58,12 @@ export default function Contacto() {
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Ingrese sus nombres"
 												{...register("nombre", {
-													required: "Requerido",
+													required: "No olvides ingresar el nombre.",
 												})}
 											/>
+											<span className="text-red-400">
+												{errors.nombre?.message}
+											</span>
 										</div>
 										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
 											<label className="text-base font-semibold leading-none text-gray-800">
@@ -59,11 +72,15 @@ export default function Contacto() {
 											<input
 												tabIndex={0}
 												arial-label="Cuál es tu correo electrónico"
-												type="name"
+												type="email"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Cuál es tu correo electrónico"
 												{...register("email", {
-													required: "Requerido",
+													required: true,
+													pattern: {
+														value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+														message: "This needs to be a valid email address",
+													},
 												})}
 											/>
 										</div>
@@ -77,11 +94,11 @@ export default function Contacto() {
 												tabIndex={0}
 												role="input"
 												arial-label="Indicame el nombre de tu compañía"
-												type="name"
+												type="empresa"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 "
 												placeholder="Indicame el nombre de tu compañía"
 												{...register("empresa", {
-													required: "Requerido",
+													required: true,
 												})}
 											/>
 										</div>
@@ -92,11 +109,11 @@ export default function Contacto() {
 											<input
 												tabIndex={0}
 												arial-label="Desde que país te comunicas"
-												type="name"
+												type="pais"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Desde que país te comunicas"
 												{...register("pais", {
-													required: "Requerido",
+													required: true,
 												})}
 											/>
 										</div>
@@ -110,11 +127,10 @@ export default function Contacto() {
 												tabIndex={0}
 												aria-label="Envía el mensaje"
 												role="textbox"
-												type="name"
+												type="mensaje"
 												className="h-36 text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 resize-none"
-												defaultValue={""}
 												{...register("mensaje", {
-													required: "Requerido",
+													required: true,
 												})}
 											/>
 										</div>
@@ -128,16 +144,10 @@ export default function Contacto() {
 										<input
 											type="submit"
 											className="mt-9 text-base font-semibold leading-none text-white py-4 px-10 bg-indigo-700 rounded hover:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none"
+											value="Enviar"
 										/>
 									</div>
 								</form>
-
-								{/* <div className="flex items-center justify-center w-full">
-									<input
-										type="submit"
-										className="mt-9 text-base font-semibold leading-none text-white py-4 px-10 bg-indigo-700 rounded hover:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 focus:outline-none"
-									/>
-								</div> */}
 							</div>
 						</div>
 					</div>
