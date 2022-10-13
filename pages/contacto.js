@@ -15,14 +15,14 @@ export default function Contacto() {
 			method: "POST",
 			url: `${process.env.NEXT_PUBLIC_API_URL}/api/contact`,
 			headers: {
-				"Content-type": "application/json",
+				Accept: "application/json, text/plain, */*",
+				"Content-Type": "application/json",
 			},
 			data: values,
 		};
 		try {
-			const response = await axios(config);
-			console.log(response);
-			if (response.status == 200) {
+			const res = await axios(config);
+			if (res.status == 200) {
 				reset();
 			}
 		} catch (err) {
@@ -104,15 +104,15 @@ export default function Contacto() {
 										</div>
 										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
 											<label className="text-base font-semibold leading-none text-gray-800">
-												País
+												Teléfono
 											</label>
 											<input
 												tabIndex={0}
 												arial-label="Desde que país te comunicas"
-												type="pais"
+												type="telefono"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
 												placeholder="Desde que país te comunicas"
-												{...register("pais", {
+												{...register("telefono", {
 													required: true,
 												})}
 											/>
