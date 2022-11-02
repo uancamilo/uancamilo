@@ -73,15 +73,18 @@ export default function PerfilPDF(props) {
 							pageNumber={p + 1}
 						/>
 					))}
+			<style>
+				{`
+					.react-pdf__Page__canvas{
+						width: 75% !important;
+						height: 75% !important;
+					}
 
-					<style>
-						{`
-							.react-pdf__Page__canvas{
-								width: 75% !important;
-								height: 75% !important;
-							}
-							`}
-					</style>
+					.react-pdf__Page__textContent {
+						height: 0% !important;
+					}
+					`}
+			</style>
 				</Document>
 			</div>
 		</>
