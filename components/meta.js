@@ -1,7 +1,7 @@
-import Head from 'next/head'
+import Head from "next/head";
 
 export default function Meta() {
-  return (
+	return (
 		<Head>
 			<link
 				rel="apple-touch-icon"
@@ -30,6 +30,7 @@ export default function Meta() {
 			<meta name="msapplication-TileColor" content="#000000" />
 			<meta name="msapplication-config" content="/favicon/browserconfig.xml" />
 			<meta name="theme-color" content="#000" />
+			<meta name="description" content="Esta es la web de Juan Camilo Serna. FrontEnd dev. Medellín, Colombia." />
 			<meta
 				name="google-site-verification"
 				content="SmSLs8hW6F2BOxiuyl2zJ367y1w8jxVj6fM3SBgosZo"

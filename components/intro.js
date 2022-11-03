@@ -8,13 +8,12 @@ export default function Intro() {
 					src="/images/bgImage.jpg"
 					layout="fill"
 					className="object-cover h-96 absolute mix-blend-overlay"
+					alt="FrontEnd dev universe"
 				/>
 				<div className="text-center absolute w-full">
 					<h1 className="font-bold text-slate-300 text-4xl sm:text-5xl md:text-6xl">
 						<span className="block pb-12">{"< Hola mundo . . . /> "}</span>{" "}
-						<span className="block text-gray-800">
-							Tus {"{ proyectos }"}
-						</span>
+						<span className="block text-gray-800">Tus {"{ proyectos }"}</span>
 					</h1>
 					<p className="mt-3 text-base text-gray-300 sm:mx-auto sm:mt-5 sm:text-lg md:mt-5 md:text-xl lg:mx-0 ">
 						empiezan con un ¡Hola!
