@@ -23,7 +23,7 @@ export default function PerfilPDF(props) {
 
 	return (
 		<>
-			<div className="pt-16 flex justify-end bg-gray-600 pr-24">
+			<div className="pt-16 flex justify-end bg-gray-600 md:pr-16 lg:pr-20">
 				<button onClick={onButtonClick} className="flex">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
