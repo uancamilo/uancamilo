@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Intro() {
 	return (
@@ -28,12 +29,11 @@ export default function Intro() {
 								</a>
 							</div> */}
 						<div className="mt-3 sm:mt-0 sm:ml-3">
-							<a
-								href="#"
-								className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-200 px-8 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 md:text-lg"
-							>
-								¿ Conversamos ?
-							</a>
+							<Link href="/contacto">
+								<a className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-200 px-8 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 md:text-lg">
+									¿ Conversamos ?
+								</a>
+							</Link>
 						</div>
 					</div>
 				</div>

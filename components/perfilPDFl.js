@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-
-import { Document, Page, pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+import Image from "next/image";
 
 export default function PerfilPDF(props) {
-	const [numPages, setNumPages] = useState(null);
-
-	function onDocumentLoadSuccess({ numPages }) {
-		setNumPages(numPages);
-	}
 	const onButtonClick = () => {
 		fetch("./assets/docs/Hoja_de_vida.pdf").then((response) => {
 			response.blob().then((blob) => {
@@ -61,31 +54,13 @@ export default function PerfilPDF(props) {
 					</svg>
 				</button>
 			</div>
-			<div className="container mx-auto">
-				<Document
-					file="./assets/docs/Hoja_de_vida.pdf"
-					onLoadSuccess={onDocumentLoadSuccess}
-				>
-					{[...Array(numPages).keys()].map((p) => (
-						<Page
-							className="flex justify-center w-full"
-							key={p}
-							pageNumber={p + 1}
-						/>
-					))}
-			<style>
-				{`
-					.react-pdf__Page__canvas{
-						width: 75% !important;
-						height: 75% !important;
-					}
-
-					.react-pdf__Page__textContent {
-						height: 0% !important;
-					}
-					`}
-			</style>
-				</Document>
+			<div className="container flex justify-center mx-auto">
+				<Image
+					src="/images/Hoja_de_vida.png"
+					width="1414px"
+					height="2000px"
+					alt="FrontEnd dev Hoja de vida"
+				/>
 			</div>
 		</>
 	);
