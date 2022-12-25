@@ -52,7 +52,7 @@ export default function Post({ post, morePosts, preview }) {
   )
 }
 
-export async function getServerSideProps({ params, preview = false }) {
+export async function getStaticProps({ params, preview = false }) {
   const data = await getPostAndMorePosts(params.slug, preview)
 
   return {
@@ -61,6 +61,7 @@ export async function getServerSideProps({ params, preview = false }) {
       post: data?.post ?? null,
       morePosts: data?.morePosts ?? null,
     },
+    revalidate: 1
   }
 }
 
