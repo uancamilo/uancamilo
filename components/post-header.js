@@ -5,7 +5,7 @@ import PostTitle from '../components/post-title'
 
 export default function PostHeader({ title, coverImage, date, author }) {
   return (
-    <div className='pt-20'>
+    <div className='container'>
       <PostTitle>{title}</PostTitle>
       <div className="hidden md:block md:mb-12">
         {author && <Avatar name={author.name} picture={author.picture} />}
