@@ -16,13 +16,13 @@ const customMarkdownOptions = (content) => ({
 
 export default function PostBody({ content }) {
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className={markdownStyles['markdown']}>
-        {documentToReactComponents(
-          content.json,
-          customMarkdownOptions(content)
-        )}
-      </div>
-    </div>
-  )
+		<div className="max-w-2xl mx-auto">
+			<div className={`${markdownStyles["markdown"]} text-justify`}>
+				{documentToReactComponents(
+					content.json,
+					customMarkdownOptions(content)
+				)}
+			</div>
+		</div>
+	);
 }
