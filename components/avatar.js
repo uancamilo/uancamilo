@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Avatar({ name, picture }) {
 	return (
-		<>
+		<div className="flex justify-center">
 			<span className="flex items-center text-xl mr-4"> Autor:</span>
 			<Link href="/perfil">
 				<a className="flex items-center">
@@ -18,6 +18,6 @@ export default function Avatar({ name, picture }) {
 					</div>
 				</a>
 			</Link>
-		</>
+		</div>
 	);
 }

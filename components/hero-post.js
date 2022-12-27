@@ -25,10 +25,10 @@ export default function HeroPost({
 				<p className="text-lg leading-relaxed mb-4">{excerpt}</p>
 			</div>
 
-			<div className="flex gap-5">
-				<span className="flex items-center text-xl">
+			<div className="grid grid-cols-1 sm:grid-cols-2">
+				<div className="flex justify-center">
 					<DateComponent dateString={date} />
-				</span>
+				</div>
 				{author && <Avatar name={author.name} picture={author.picture} />}
 			</div>
 		</section>
