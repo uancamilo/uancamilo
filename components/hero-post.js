@@ -41,11 +41,13 @@ export default function HeroPost({
 				<p className="text-lg leading-relaxed mb-4">{excerpt}</p>
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-0">
-				<div className="flex justify-center">
+			<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 ">
+				<div className="flex justify-center sm:justify-end">
 					<DateComponent dateString={date} />
 				</div>
-				{author && <Avatar name={author.name} picture={author.picture} />}
+				<div className="flex justify-center sm:justify-start">
+					{author && <Avatar name={author.name} picture={author.picture} />}
+				</div>
 			</div>
 		</section>
 	);

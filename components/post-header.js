@@ -10,8 +10,7 @@ export default function PostHeader({ title, coverImage, date, author }) {
 			<div className="mb-8 md:mb-16 sm:mx-0">
 				<CoverImage title={title} url={coverImage.url} />
 			</div>
-
-			<div className="grid grid-cols-0 sm:grid-cols-2 gap-5">
+			<div className="grid justify-center gap-5 sm:flex">
 				<DateComponent dateString={date} />
 				<Avatar name={author.name} picture={author.picture} />
 			</div>
