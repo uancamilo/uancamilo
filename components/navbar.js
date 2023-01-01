@@ -1,13 +1,13 @@
 import Image from "next/future/image";
 import Link from "next/link";
 
-/* This example requires Tailwind CSS v2.0+ */
 // import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
 	// { name: "Dashboard", href: "#", current: true },
+	{ name: "Inicio", href: "/", current: false },
 	{ name: "Perfil", href: "/perfil", current: false },
 	{ name: "Proyectos", href: "#", current: false },
 	{ name: "Contacto", href: "/contacto", current: false },
