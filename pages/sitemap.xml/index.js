@@ -4,11 +4,11 @@ const EXTERNAL_DATA_URL = "https://uancamilo.vercel.app";
 
 function generateSiteMap(allPosts) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset 
-   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+   <urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 	 <url>
        <loc>https://uancamilo.vercel.app/</loc>
 	   <priority>1.00</priority>
@@ -16,7 +16,7 @@ function generateSiteMap(allPosts) {
      </url>
      <url>
        <loc>https://uancamilo.vercel.app/perfil/</loc>
-	   <priority>1.00</priority>
+	   <priority>0.90</priority>
      </url>
      <url>
        <loc>https://uancamilo.vercel.app/contacto/</loc>
@@ -26,7 +26,7 @@ function generateSiteMap(allPosts) {
 				.map(({ slug }) => {
 					return `
        <url>
-           <loc>${`${EXTERNAL_DATA_URL}/${slug}/`}</loc>
+           <loc>${`${EXTERNAL_DATA_URL}/pagina/${slug}/`}</loc>
 		   <lastmod>2023-01-03T03:36:19+00:00</lastmod>
 		   <priority>0.80</priority>
        </url>
