@@ -5,9 +5,7 @@ module.exports = {
 	generateRobotsTxt: true,
 	robotsTxtOptions: {
 		policies: [{ userAgent: "*", allow: "/" }],
-		additionalSitemaps: [
-			`${siteUrl}/server-sitemap.xml/`,
-			`${siteUrl}/server-0.xml/`,
-		],
+		additionalSitemaps: [`${siteUrl}/sitemap-0.xml/`],
+		
 	},
 };
