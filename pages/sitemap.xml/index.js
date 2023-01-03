@@ -7,7 +7,7 @@ function generateSiteMap(allPosts) {
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 	 <url>
        <loc>https://uancamilo.vercel.app/</loc>
-	   <priority>1.00</priority>
+	   <priority>1</priority>
 	   <changefreq>monthly</changefreq>
      </url>
      <url>
@@ -23,12 +23,11 @@ function generateSiteMap(allPosts) {
 					return `
        <url>
            <loc>${`${EXTERNAL_DATA_URL}/pagina/${slug}/`}</loc>
-		   <lastmod>2023-01-03T03:36:19+00:00</lastmod>
 		   <priority>0.80</priority>
        </url>
      `;
 				})
-				.join("")}
+				.join("\n")}
    </urlset>
  `;
 }
