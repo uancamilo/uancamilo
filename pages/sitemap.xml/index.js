@@ -10,26 +10,30 @@ export async function getServerSideProps(context) {
 	const principales = [
 		{
 			loc: "https://uancamilo.vercel.app/",
-			lastmod: new Date().toDateString("2023-01-02T00:00.000-05:00"),
+			lastmod: "2023-01-02",
 			changefreq: "monthly",
 			priority: "1.0",
 		},
 		{
 			loc: "https://uancamilo.vercel.app/contacto",
-			lastmod: new Date().toDateString("2023-01-02T00:00.000-05:00"),
+			lastmod: "2023-01-02",
 			changefreq: "monthly",
 			priority: "0.9",
 		},
 	];
 
+	console.log(urls);
+
 	const fields = urls?.map((url) => ({
 		loc: `https://uancamilo.vercel.app/pagina/${url.slug}`,
-		lastmod: new Date().toDateString(url.date),
+		lastmod: new Date(`${url.date}`).toISOString().split("T")[0],
 		changefreq: "monthly",
 		priority: "0.8",
 	}));
 
 	principales.push(...fields);
+
+	console.log(principales);
 
 	return getServerSideSitemap(context, principales);
 }
