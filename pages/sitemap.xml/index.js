@@ -22,8 +22,6 @@ export async function getServerSideProps(context) {
 		},
 	];
 
-	console.log(urls);
-
 	const fields = urls?.map((url) => ({
 		loc: `https://uancamilo.vercel.app/pagina/${url.slug}`,
 		lastmod: new Date(`${url.date}`).toISOString().split("T")[0],
@@ -32,8 +30,6 @@ export async function getServerSideProps(context) {
 	}));
 
 	principales.push(...fields);
-
-	console.log(principales);
 
 	return getServerSideSitemap(context, principales);
 }
