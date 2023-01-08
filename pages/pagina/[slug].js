@@ -12,30 +12,12 @@ import { getAllPostsWithSlug, getPostAndMorePosts } from "../../lib/api";
 import PostTitle from "../../components/post-title";
 import Button from "../../components/button";
 
-export default function Post({ post, morePosts, preview }) {
+export default function Post({ post, morePosts, preview, structuredData }) {
 	const router = useRouter();
 
 	if (!router.isFallback && !post) {
 		return <ErrorPage statusCode={404} />;
 	}
-
-	const structuredData = {
-		"@context": "https://schema.org",
-		"@type": "BlogPosting",
-		headline: post.title,
-		description: post.excerpt,
-		author: [
-			{
-				"@type": "Person",
-				name: post.author,
-				url: "https://uancamilo.vercel.app/perfil",
-			},
-		],
-		image: post.coverImage.url,
-		datePublished: post.date,
-	};
-
-	console.log(structuredData);
 
 	return (
 		<Layout preview={preview}>
@@ -85,6 +67,21 @@ export async function getStaticProps({ params, preview = false }) {
 			preview,
 			post: data?.post ?? null,
 			morePosts: data?.morePosts ?? null,
+			structuredData: {
+				"@context": "https://schema.org",
+				"@type": "BlogPosting",
+				headline: data?.post.title,
+				description: data?.post.excerpt,
+				author: [
+					{
+						"@type": "Person",
+						name: data?.post.author,
+						url: "https://uancamilo.vercel.app/perfil",
+					},
+				],
+				image: data?.post.coverImage.url,
+				datePublished: data?.post.date,
+			},
 		},
 		revalidate: 1,
 	};
