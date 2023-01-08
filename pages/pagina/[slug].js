@@ -10,6 +10,7 @@ import SectionSeparator from "../../components/section-separator";
 import Layout from "../../components/layout";
 import { getAllPostsWithSlug, getPostAndMorePosts } from "../../lib/api";
 import PostTitle from "../../components/post-title";
+import Button from "../../components/button";
 
 export default function Post({ post, morePosts, preview }) {
 	const router = useRouter();
@@ -17,6 +18,24 @@ export default function Post({ post, morePosts, preview }) {
 	if (!router.isFallback && !post) {
 		return <ErrorPage statusCode={404} />;
 	}
+
+	const structuredData = {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		headline: post.title,
+		description: post.excerpt,
+		author: [
+			{
+				"@type": "Person",
+				name: post.author,
+				url: "https://uancamilo.vercel.app/perfil",
+			},
+		],
+		image: post.coverImage.url,
+		datePublished: post.date,
+	};
+
+	console.log(structuredData);
 
 	return (
 		<Layout preview={preview}>
@@ -30,6 +49,13 @@ export default function Post({ post, morePosts, preview }) {
 							<Head>
 								<title>{post.title} | FrontEnd Juan Camilo Serna</title>
 								<meta property="og:image" content={post.coverImage.url} />
+								<script
+									key="structured-data"
+									type="application/ld+json"
+									dangerouslySetInnerHTML={{
+										__html: JSON.stringify(structuredData),
+									}}
+								/>
 							</Head>
 							<PostHeader
 								title={post.title}
@@ -39,6 +65,7 @@ export default function Post({ post, morePosts, preview }) {
 							/>
 							<PostBody content={post.content} />
 						</article>
+						<Button />
 						<SectionSeparator />
 						{morePosts && morePosts.length > 0 && (
 							<MoreStories posts={morePosts} />
