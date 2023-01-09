@@ -15,10 +15,16 @@ export async function getServerSideProps(context) {
 			priority: "1.0",
 		},
 		{
-			loc: "https://uancamilo.vercel.app/contacto",
+			loc: "https://uancamilo.vercel.app/perfil",
 			lastmod: "2023-01-02",
 			changefreq: "monthly",
 			priority: "0.9",
+		},
+		{
+			loc: "https://uancamilo.vercel.app/contacto",
+			lastmod: "2023-01-02",
+			changefreq: "monthly",
+			priority: "0.8",
 		},
 	];
 
