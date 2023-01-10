@@ -1,7 +1,11 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { INLINES, BLOCKS } from "@contentful/rich-text-types";
+import Avatar from "../components/avatar";
+import Author from "../components/author";
+import DateComponent from "../components/date";
 import markdownStyles from "./markdown-styles.module.css";
 import RichTextAsset from "./rich-text-asset";
+import Button from "../components/button";
 
 const customMarkdownOptions = (content) => ({
 	renderNode: {
@@ -24,16 +28,23 @@ const customMarkdownOptions = (content) => ({
 	},
 });
 
-
-export default function PostBody({ content }) {
+export default function PostBody({ content, date, author }) {
 	return (
-		<div className="max-w-2xl mx-auto">
+		<div className="container">
+			<div className="flex gap-5">
+				<Avatar picture={author.picture} />
+				<div>
+					<Author name={author.name} />
+					<DateComponent dateString={date} />
+				</div>
+			</div>
 			<div className={`${markdownStyles["markdown"]} text-justify`}>
 				{documentToReactComponents(
 					content.json,
 					customMarkdownOptions(content)
 				)}
 			</div>
+			<Button />
 		</div>
 	);
 }

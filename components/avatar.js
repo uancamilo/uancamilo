@@ -3,11 +3,9 @@ import Link from "next/link";
 
 export default function Avatar({ name, picture }) {
 	return (
-		<div className="flex justify-center">
-			<span className="flex items-center text-xl mr-4"> Autor:</span>
+		<div className="flex">
 			<Link href="/perfil">
-				<a className="flex items-center">
-					<div className="text-xl font-bold mr-4">{name}</div>
+				<a>
 					<div className="relative w-12 h-12">
 						<ContentfulImage
 							src={picture.url}

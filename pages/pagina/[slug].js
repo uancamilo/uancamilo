@@ -4,13 +4,11 @@ import ErrorPage from "next/error";
 import Container from "../../components/container";
 import PostBody from "../../components/post-body";
 import MoreStories from "../../components/more-stories";
-// import Header from '../../components/header'
 import PostHeader from "../../components/post-header";
 import SectionSeparator from "../../components/section-separator";
 import Layout from "../../components/layout";
 import { getAllPostsWithSlug, getPostAndMorePosts } from "../../lib/api";
 import PostTitle from "../../components/post-title";
-import Button from "../../components/button";
 
 export default function Post({ post, morePosts, preview, structuredData }) {
 	const router = useRouter();
@@ -27,7 +25,7 @@ export default function Post({ post, morePosts, preview, structuredData }) {
 					<PostTitle>Cargando...</PostTitle>
 				) : (
 					<>
-						<article>
+						<article className="pb-10">
 							<Head>
 								<title>{post.title} | FrontEnd Juan Camilo Serna</title>
 								<meta property="og:image" content={post.coverImage.url} />
@@ -39,19 +37,23 @@ export default function Post({ post, morePosts, preview, structuredData }) {
 									}}
 								/>
 							</Head>
-							<PostHeader
-								title={post.title}
-								coverImage={post.coverImage}
-								date={post.date}
-								author={post.author}
-							/>
-							<PostBody content={post.content} />
+							<PostHeader title={post.title} coverImage={post.coverImage} />
+
+							<div className="lg:w-10/12 lg:mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-10">
+								<div className="col-span-2">
+									<PostBody
+										content={post.content}
+										author={post.author}
+										date={post.date}
+									/>
+								</div>
+								<div className="bg-gray-200"></div>
+							</div>
 						</article>
-						<Button />
-						<SectionSeparator />
 						{morePosts && morePosts.length > 0 && (
 							<MoreStories posts={morePosts} />
 						)}
+						<SectionSeparator />
 					</>
 				)}
 			</Container>
