@@ -30,11 +30,15 @@ export default function Meta() {
 			<meta name="msapplication-TileColor" content="#000000" />
 			<meta name="msapplication-config" content="/favicon/browserconfig.xml" />
 			<meta name="theme-color" content="#000" />
-			<meta name="description" content="Esta es la web de Juan Camilo Serna. FrontEnd dev. Medellín, Colombia." />
+			<meta
+				name="description"
+				content="Esta es la web de Juan Camilo Serna. FrontEnd dev. Medellín, Colombia."
+			/>
 			<meta
 				name="google-site-verification"
 				content="SmSLs8hW6F2BOxiuyl2zJ367y1w8jxVj6fM3SBgosZo"
 			/>
+			<meta name="p:domain_verify" content="593b420af50c5c86dfdefe8d945391a9" />
 			<link rel="alternate" type="application/rss+xml" href="/feed.xml" />
 			<meta
 				name="Juan Camilo Serna "
