@@ -194,7 +194,7 @@ export default function Footer() {
 								Elaborado por:{" "}
 								<span className="font-bold">Juan Camilo Serna </span>
 								<br />
-								con nextjs, contentful, vercel y ❤ en Medellín, CO.
+								con nextjs, contentful y ❤ en Medellín, CO.
 							</p>
 						</div>
 					</div>
