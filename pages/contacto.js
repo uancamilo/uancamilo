@@ -74,12 +74,13 @@ export default function Contacto() {
 												arial-label="Cuál es tu correo electrónico"
 												type="email"
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100"
-												placeholder="Cuál es tu correo electrónico"
+												placeholder="¿Cuál es tu correo electrónico?"
 												{...register("email", {
 													required: true,
 													pattern: {
 														value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-														message: "This needs to be a valid email address",
+														message:
+															"Esta debe ser una dirección de correo electrónico válida.",
 													},
 												})}
 											/>
@@ -101,6 +102,9 @@ export default function Contacto() {
 													required: true,
 												})}
 											/>
+											<span className="text-red-400">
+												{errors.empresa?.message}
+											</span>
 										</div>
 										<div className="md:w-72 flex flex-col md:ml-6 md:mt-0 mt-4">
 											<label className="text-base font-semibold leading-none text-gray-800">
