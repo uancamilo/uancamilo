@@ -99,7 +99,7 @@ export default function Contacto() {
 												className="text-base leading-none text-gray-900 p-3 focus:oultine-none focus:border-indigo-700 mt-4 bg-gray-100 border rounded border-gray-200 placeholder-gray-100 "
 												placeholder="Indicame el nombre de tu compañía"
 												{...register("empresa", {
-													required: true,
+													required: "Indicame a cual entidad representas",
 												})}
 											/>
 											<span className="text-red-400">
