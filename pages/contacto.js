@@ -36,7 +36,7 @@ export default function Contacto() {
 					<title>Contacto | Juan Camilo Serna</title>
 				</Head>
 				<div className="h-[70rem] md:h-[55rem]">
-					<div className="bg-gradient-to-b from-purple-600 to-indigo-700 h-96 w-full">
+					<div className="bg-gradient-to-b from-indigo-700 to-purple-600 h-96 w-full">
 						<div className="w-full flex items-center justify-center py-28">
 							<div className="bg-white shadow rounded py-12 lg:px-28 px-8">
 								<p className="md:text-3xl text-xl font-bold leading-7 text-center text-gray-700">
