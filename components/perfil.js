@@ -1,5 +1,49 @@
 import Link from "next/link";
+import Skills from "./skills";
 import Container from "../components/container";
+
+const skills = [
+	{
+		title: "HTML, JavaScript y CSS",
+		description:
+			"HTML estructura, CSS estilo y JavaScript interactividad en desarrollo web, formando la base para crear páginas dinámicas y atractivas.",
+	},
+	{
+		title: "React con Next",
+		description:
+			"React es una biblioteca JavaScript para interfaces de usuario, mientras que Next.js es un marco que extiende React para facilitar el desarrollo web, ofreciendo enrutamiento y renderización del lado del servidor.",
+	},
+	{
+		title: "Scrum Master",
+		description:
+			"Facilitador ágil y líder de equipo. Optimiza la entrega de proyectos mediante la implementación efectiva de la metodología Scrum.",
+	},
+	{
+		title: "Firebase y Vercel",
+		description:
+			"Firebase: Plataforma de desarrollo para aplicaciones web y móviles con servicios como base de datos y autenticación. Vercel: Plataforma para despliegue y alojamiento rápido de aplicaciones web.",
+	},
+	{
+		title: "Hotjar + Analytics",
+		description:
+			"Optimiza tu sitio con Hotjar para análisis de comportamiento y Google Analytics para datos cuantitativos, mejorando la experiencia del usuario y tomando decisiones informadas en marketing digital.",
+	},
+	{
+		title: "Hubspot",
+		description:
+			"Plataforma integral de marketing, ventas y servicios. Impulsa el crecimiento empresarial con automatización, análisis y experiencia del cliente.",
+	},
+	{
+		title: "Contentfull",
+		description:
+			"Plataforma de gestión de contenido API-first. Crea, gestiona y entrega contenido de manera flexible y eficiente en todos los canales digitales",
+	},
+	{
+		title: "Node.js",
+		description:
+			"Entorno de ejecución de JavaScript del lado del servidor. Eficiente y escalable, ideal para construir aplicaciones web y APIs en tiempo real.",
+	},
+];
 
 export default function Perfil(props) {
 	return (
@@ -53,6 +97,7 @@ export default function Perfil(props) {
 							</main>
 						</div>
 					</div>
+					{/* Imagen de perfil */}
 					<div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
 						<img
 							className="h-56 w-full object-cover sm:h-72 md:h-96 lg:h-full lg:w-full"
@@ -60,11 +105,15 @@ export default function Perfil(props) {
 							alt="uancamilo"
 						/>
 					</div>
-
 					<p>{props.verPDF}</p>
 				</div>
 				<Container>
-					Cards
+					<div>
+						<h2 className="text-4xl text-center font-bold text-indigo-700 my-8">
+							Habilidades y conocimientos
+						</h2>
+					</div>
+					<Skills skills={skills} />
 				</Container>
 			</div>
 		</>

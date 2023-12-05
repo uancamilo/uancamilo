@@ -11,8 +11,12 @@ export default function MostrarPerfil() {
 	const [data, setData] = useState(null);
 
 	async function fetchData() {
-		const response = await fetch("https://api.github.com/users/uancamilo");
-		setData(await response.json());
+		try {
+			const response = await fetch("https://api.github.com/users/uancamilo");
+			setData(await response.json());
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	useEffect(() => {
