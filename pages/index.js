@@ -1,10 +1,10 @@
 import Layout from "../components/layout";
 import Intro from "../components/intro";
 import Container from "../components/container";
-import { createClient } from "contentful";
+import { getEntries } from "../lib/contentful"
 
-export default function Index({ estaticas }) {
-	console.log(estaticas);
+export default function Index({ entries }) {
+	console.log(entries);
 
 	return (
 		<>
@@ -18,24 +18,19 @@ export default function Index({ estaticas }) {
 	);
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 	try {
-		const client = createClient({
-			space: process.env.CONTENTFUL_SPACE_ID,
-			accessToken: process.env.CONTENTFUL_ACCESS_KEY,
-		});
-		const res = await client.getEntries({ content_type: "estaticas" });
-
+		const entries = await getEntries("estaticas");
 		return {
 			props: {
-				estaticas: res.items,
+				entries,
 			},
 		};
 	} catch (error) {
-		console.error("Error al obtener datos estáticos:", error);
+		console.error("Error fetching entries:", error);
 		return {
 			props: {
-				estaticas: [],
+				entries: [],
 			},
 		};
 	}

@@ -7,9 +7,9 @@ export default function Intro() {
 			<div className="bg-gradient-to-tr from-indigo-300 to-purple-900 h-screen relative flex items-center">
 				<Image
 					src="/images/bgImage.jpg"
-					layout="fill"
 					className="object-cover absolute mix-blend-overlay"
 					alt="FrontEnd dev universe"
+					fill={true}
 				/>
 				<div className="text-center absolute w-full">
 					<h1 className="font-bold text-slate-300 text-4xl sm:text-5xl md:text-6xl">
