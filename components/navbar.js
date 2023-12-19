@@ -165,7 +165,7 @@ export default function Example() {
 									aria-current={item.current ? "page" : undefined}
 								>
 									<Link href={item.href} key={item.name}>
-										<a>{item.name}</a>
+										{item.name}
 									</Link>
 								</Disclosure.Button>
 							))}
