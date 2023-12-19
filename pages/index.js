@@ -18,7 +18,7 @@ export default function Index({ estaticas }) {
 	);
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	try {
 		const client = createClient({
 			space: process.env.CONTENTFUL_SPACE_ID,
@@ -30,10 +30,13 @@ export async function getStaticProps() {
 			props: {
 				estaticas: res.items,
 			},
-			revalidate: 60, // tiempo en segundos para regenerar la página estática
 		};
 	} catch (error) {
 		console.error("Error al obtener datos estáticos:", error);
-		throw error;
+		return {
+			props: {
+				estaticas: [],
+			},
+		};
 	}
 }
