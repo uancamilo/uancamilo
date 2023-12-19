@@ -8,7 +8,7 @@ export default function Intro() {
 				<Image
 					src="/images/bgImage.jpg"
 					layout="fill"
-					className="object-cover h-96 absolute mix-blend-overlay"
+					className="object-cover absolute mix-blend-overlay"
 					alt="FrontEnd dev universe"
 				/>
 				<div className="text-center absolute w-full">
@@ -29,8 +29,11 @@ export default function Intro() {
 								</a>
 							</div> */}
 						<div className="mt-3 sm:mt-0 sm:ml-3">
-							<Link href="/contacto"className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-200 px-8 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 md:text-lg">
-									¿ Conversamos ?
+							<Link
+								href="/contacto"
+								className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-200 px-8 py-3 text-base font-medium text-indigo-700 hover:bg-indigo-200 md:text-lg"
+							>
+								¿ Conversamos ?
 							</Link>
 						</div>
 					</div>
