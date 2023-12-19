@@ -22,7 +22,7 @@ export default function Page({ estaticas }) {
 	);
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	const client = createClient({
 		space: process.env.CONTENTFUL_SPACE_ID,
 		accessToken: process.env.CONTENTFUL_ACCESS_KEY,
