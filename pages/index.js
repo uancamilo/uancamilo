@@ -4,11 +4,11 @@ import Container from "../components/container";
 import { getEntries } from "../lib/contentful";
 import Head from "next/head";
 import HeroEntries from "../components/hero-entries";
-
+import MoreEstaticas from "../components/mas-estaticas";
 
 export async function getServerSideProps() {
 	const entries = await getEntries();
-	console.log(entries)
+	console.log(entries);
 	return {
 		props: {
 			entries,
@@ -19,7 +19,7 @@ export async function getServerSideProps() {
 export default function Index({ entries }) {
 	// console.log(entries);
 	const heroEntries = entries[0];
-	const allEntries = entries.slice(1);
+	const moreEntries = entries.slice(1);
 
 	return (
 		<>
@@ -39,6 +39,7 @@ export default function Index({ entries }) {
 							excerpt={heroEntries.excerpt}
 						/>
 					)}
+					{moreEntries.length > 0 && <MoreEstaticas estaticas={moreEntries} />}
 				</Container>
 			</Layout>
 		</>
