@@ -1,11 +1,11 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { INLINES, BLOCKS } from "@contentful/rich-text-types";
-import Avatar from "../components/avatar";
-import Author from "../components/author";
-import DateComponent from "../components/date";
+import Avatar from "./avatar";
+import Author from "./author";
+import DateComponent from "./date";
 import markdownStyles from "./markdown-styles.module.css";
 import RichTextAsset from "./rich-text-asset";
-import Button from "../components/button";
+import Button from "./button";
 
 const customMarkdownOptions = (content) => ({
 	renderNode: {
@@ -28,7 +28,7 @@ const customMarkdownOptions = (content) => ({
 	},
 });
 
-export default function EstaticaBody({ content, date, author }) {
+export default function PaginaBody({ content, date, author }) {
 	return (
 		<div className="container">
 			<div className="flex gap-5">

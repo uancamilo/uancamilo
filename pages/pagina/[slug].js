@@ -2,12 +2,12 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import ErrorPage from "next/error";
 import Container from "../../components/container";
-import EstaticaBody from "../../components/estatica-body";
-import MoreEstaticas from "../../components/mas-estaticas";
-import EstaticasHeader from "../../components/estaticas-header";
+import PaginaBody from "../../components/pagina-body";
+import MasPaginas from "../../components/mas-paginas";
+import CabeceraPagina from "../../components/cabecera-pagina";
 import SectionSeparator from "../../components/section-separator";
 import Layout from "../../components/layout";
-import EstaticasTitle from "../../components/estaticas-title";
+import TituloPagina from "../../components/titulo-pagina";
 import {
 	getEntriesAndMoreEntries,
 	getEntriesWithSlug,
@@ -30,7 +30,7 @@ export default function Estatica({
 			<Container>
 				{/* <Header /> */}
 				{router.isFallback ? (
-					<EstaticasTitle>Cargando...</EstaticasTitle>
+					<TituloPagina>Cargando...</TituloPagina>
 				) : (
 					<>
 						<article className="pb-10">
@@ -45,13 +45,13 @@ export default function Estatica({
 									}}
 								/>
 							</Head>
-							<EstaticasHeader
+							<CabeceraPagina
 								title={contenido.title}
 								coverImage={contenido.coverImage}
 							/>
 							<div className="lg:w-10/12 lg:mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-10">
 								<div className="col-span-2">
-									<EstaticaBody
+									<PaginaBody
 										content={contenido.content}
 										author={contenido.author}
 										date={contenido.date}
@@ -61,7 +61,7 @@ export default function Estatica({
 							</div>
 						</article>
 						{masContenido && masContenido.length > 0 && (
-							<MoreEstaticas estaticas={masContenido} />
+							<MasPaginas paginas={masContenido} />
 						)}
 						<SectionSeparator />
 					</>
