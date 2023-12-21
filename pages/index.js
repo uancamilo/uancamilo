@@ -6,7 +6,7 @@ import Head from "next/head";
 import HeroEntries from "../components/hero-entries";
 import MoreEstaticas from "../components/mas-estaticas";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 	const entries = await getEntries();
 	console.log(entries);
 	return {

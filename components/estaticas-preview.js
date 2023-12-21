@@ -45,7 +45,7 @@ export default function EstaticasPreview({
 				</div>
 				{author && (
 					<div className="flex gap-5 py-5">
-						<Avatar picture={author.picture} />
+						<Avatar picture={author.picture} name={author.name} />
 						<div>
 							<Author name={author.name} />
 							<DateComponent dateString={date} />
