@@ -1,25 +1,14 @@
+import Head from "next/head";
 import Layout from "../components/layout";
 import Intro from "../components/intro";
 import Container from "../components/container";
-import { getEntries } from "../lib/contentful";
-import Head from "next/head";
 import HeroEntries from "../components/hero-entries";
-import MoreEstaticas from "../components/mas-estaticas";
-
-export async function getStaticProps() {
-	const entries = await getEntries();
-	console.log(entries);
-	return {
-		props: {
-			entries,
-		},
-	};
-}
+import MasPaginas from "../components/mas-paginas";
+import { getEntries } from "../lib/contentful";
 
 export default function Index({ entries }) {
-	// console.log(entries);
-	const heroEntries = entries[0];
-	const moreEntries = entries.slice(1);
+	const paginaPrincipal = entries[0];
+	const masPaginas = entries.slice(1);
 
 	return (
 		<>
@@ -29,19 +18,27 @@ export default function Index({ entries }) {
 				</Head>
 				<Intro />
 				<Container>
-					{heroEntries && (
+					{paginaPrincipal && (
 						<HeroEntries
-							title={heroEntries.title}
-							coverImage={heroEntries.coverImage}
-							date={heroEntries.date}
-							author={heroEntries.author}
-							slug={heroEntries.slug}
-							excerpt={heroEntries.excerpt}
+							title={paginaPrincipal.title}
+							coverImage={paginaPrincipal.coverImage}
+							date={paginaPrincipal.date}
+							author={paginaPrincipal.author}
+							slug={paginaPrincipal.slug}
+							excerpt={paginaPrincipal.excerpt}
 						/>
 					)}
-					{moreEntries.length > 0 && <MoreEstaticas estaticas={moreEntries} />}
+					{masPaginas.length > 0 && <MasPaginas paginas={masPaginas} />}
 				</Container>
 			</Layout>
 		</>
 	);
+}
+export async function getStaticProps() {
+	const entries = await getEntries();
+	return {
+		props: {
+			entries,
+		},
+	};
 }
