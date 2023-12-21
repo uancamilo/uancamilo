@@ -18,16 +18,12 @@ export default function Estatica({
 	masContenido,
 	preview,
 	structuredData,
-	post,
-	morePosts,
 }) {
 	const router = useRouter();
 
 	if (!router.isFallback && !contenido) {
 		return <ErrorPage statusCode={404} />;
 	}
-
-	console.log(contenido);
 
 	return (
 		<Layout preview={preview}>
@@ -39,7 +35,7 @@ export default function Estatica({
 					<>
 						<article className="pb-10">
 							<Head>
-								<title>{contenido.title} | FrontEnd Juan Camilo Serna</title>
+								<title>{contenido.title}</title>
 								<meta property="og:image" content={contenido.coverImage.url} />
 								<script
 									key="structured-data"
@@ -64,9 +60,9 @@ export default function Estatica({
 								<div className="bg-gray-200"></div>
 							</div>
 						</article>
-						{/* {masContenido && masContenido.length > 0 && (
-							<MoreEstaticas estaticas={moreEntries} />
-						)} */}
+						{masContenido && masContenido.length > 0 && (
+							<MoreEstaticas estaticas={masContenido} />
+						)}
 						<SectionSeparator />
 					</>
 				)}
