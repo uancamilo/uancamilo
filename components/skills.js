@@ -1,48 +1,65 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import {
+	ChevronDoubleLeftIcon,
+	ChevronDoubleRightIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Skills({ skills }) {
-	const settings = {
-		dots: true,
-		infinite: true,
-		slidesToShow: 3,
-		slidesToScroll: 1,
-		autoplay: true,
-		autoplaySpeed: 4000,
-		pauseOnHover: true,
+	const scrollWin = (x, y) => {
+		document.getElementById("slider").scrollBy(x, y);
 	};
-
 	return (
-		<Slider {...settings}>
-			{skills.map((skill, index) => (
-				<div
-					key={index}
-					className="skill-card max-w-sm rounded overflow-hidden shadow-lg"
+		<div className="flex justify-center">
+			<div className="self-center hidden md:block lg:px-3 xl:px-5">
+				<button
+					className="btn btn-outline-light shadow-none border-0 "
+					id="atras"
+					aria-label="hacia_atras"
+					onClick={() => scrollWin(-400, 0)}
 				>
-					<img
-						class="w-full"
-						src={skill.coverImage.url}
-						alt="Sunset in the mountains"
-					/>
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">{skill.title}</div>
-						<p class="text-gray-700 text-base">{skill.description}</p>
+					<ChevronDoubleLeftIcon className="h-6 text-indigo-900 hover:text-sky-700" />
+				</button>
+			</div>
+
+			<div
+				id="slider"
+				className="grid grid-flow-col gap-8 overflow-x-hidden scroll-smooth"
+			>
+				{skills.map((skill, index) => (
+					<div key={index} className="w-[350px] rounded shadow-lg">
+						<img
+							className="w-full"
+							src={skill.coverImage.url}
+							alt="Sunset in the mountains"
+						/>
+						<div className="px-6 py-4">
+							<div className="font-bold text-xl mb-2">{skill.title}</div>
+							<p className="text-gray-700 text-base text-justify">
+								{skill.excerpt}
+							</p>
+						</div>
+						<div className="px-6 pt-4 pb-2">
+							{skill.tagsCollection.items.map((tag, index) => (
+								<span
+									key={index}
+									className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+								>
+									# {tag.title}
+								</span>
+							))}
+						</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-							#photography
-						</span>
-						<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-							#travel
-						</span>
-						<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-							#winter
-						</span>
-					</div>
-				</div>
-			))}
-		</Slider>
+				))}
+			</div>
+			<div className="self-center hidden md:block lg:px-3 xl:px-5">
+				<button
+					className="btn btn-outline-light shadow-none border-0 "
+					id="adelante"
+					aria-label="hacia_adelante"
+					onClick={() => scrollWin(400, 0)}
+				>
+					<ChevronDoubleRightIcon className="h-6 text-indigo-900 hover:text-sky-700" />
+				</button>
+			</div>
+		</div>
 	);
 }
