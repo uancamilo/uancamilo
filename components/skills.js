@@ -14,7 +14,7 @@ export default function Skills({ skills }) {
 					className="btn btn-outline-light shadow-none border-0 "
 					id="atras"
 					aria-label="hacia_atras"
-					onClick={() => scrollWin(-400, 0)}
+					onClick={() => scrollWin(-450, 0)}
 				>
 					<ChevronDoubleLeftIcon className="h-6 text-indigo-900 hover:text-sky-700" />
 				</button>
@@ -22,12 +22,12 @@ export default function Skills({ skills }) {
 
 			<div
 				id="slider"
-				className="grid grid-flow-col gap-8 overflow-x-hidden scroll-smooth"
+				className="grid grid-flow-col gap-8 overflow-x-hidden scroll-smooth py-4 px-4"
 			>
 				{skills.map((skill, index) => (
-					<div key={index} className="w-[350px] rounded shadow-lg">
+					<div key={index} className="w-[425px] rounded-lg shadow-lg">
 						<img
-							className="w-full"
+							className="w-full rounded-t-lg"
 							src={skill.coverImage.url}
 							alt="Sunset in the mountains"
 						/>
@@ -55,7 +55,7 @@ export default function Skills({ skills }) {
 					className="btn btn-outline-light shadow-none border-0 "
 					id="adelante"
 					aria-label="hacia_adelante"
-					onClick={() => scrollWin(400, 0)}
+					onClick={() => scrollWin(450, 0)}
 				>
 					<ChevronDoubleRightIcon className="h-6 text-indigo-900 hover:text-sky-700" />
 				</button>
