@@ -44,11 +44,21 @@ export default function EstaticasPreview({
 					<p className="text-lg leading-relaxed mb-4">{excerpt}</p>
 				</div>
 				{author && (
-					<div className="flex gap-5 py-5">
-						<Avatar picture={author.picture} name={author.name} />
-						<div>
-							<Author name={author.name} />
-							<DateComponent dateString={date} />
+					<div className="flex justify-between gap-5 py-5">
+						<div className="flex">
+							<Avatar picture={author.picture} name={author.name} />
+							<div className="mx-5">
+								<Author name={author.name} />
+								<DateComponent dateString={date} />
+							</div>
+						</div>
+						<div className="text-right">
+							<div>Comparte!</div>
+							<div className="flex">
+								<div>Twitter</div>
+								<div>Facebook</div>
+								<div>LinkedIn</div>
+							</div>
 						</div>
 					</div>
 				)}
