@@ -37,6 +37,9 @@ export default function Estatica({
 							<Head>
 								<title>{contenido.title}</title>
 								<meta property="og:image" content={contenido.coverImage.url} />
+								<meta property="og:title" content={contenido.title} />
+								<meta property="og:description" content={contenido.excerpt} />
+								<meta property="og:type" content="website" />
 								<script
 									key="structured-data"
 									type="application/ld+json"
