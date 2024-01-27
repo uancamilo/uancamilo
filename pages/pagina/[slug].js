@@ -39,6 +39,7 @@ export default function Estatica({
 								<meta property="og:image" content={contenido.coverImage.url} />
 								<meta property="og:title" content={contenido.title} />
 								<meta property="og:description" content={contenido.excerpt} />
+								<meta property="og:url" content={`https://uancamilo.vercel.app/pagina/${contenido.slug}`} />
 								<meta property="og:type" content="website" />
 								<script
 									key="structured-data"
