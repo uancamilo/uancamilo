@@ -1,65 +1,39 @@
-import {
-	ChevronDoubleLeftIcon,
-	ChevronDoubleRightIcon,
-} from "@heroicons/react/24/outline";
-
 export default function Skills({ skills }) {
-	const scrollWin = (x, y) => {
-		document.getElementById("slider").scrollBy(x, y);
-	};
-	return (
-		<div className="flex justify-center">
-			<div className="self-center hidden md:block lg:px-3 xl:px-5">
-				<button
-					className="btn btn-outline-light shadow-none border-0 "
-					id="atras"
-					aria-label="hacia_atras"
-					onClick={() => scrollWin(-450, 0)}
-				>
-					<ChevronDoubleLeftIcon className="h-6 text-indigo-900 hover:text-sky-700" />
-				</button>
-			</div>
-
-			<div
-				id="slider"
-				className="grid grid-flow-col gap-8 overflow-x-hidden scroll-smooth py-4 px-4"
+	const renderTags = (tags) => {
+		return tags.map((tag, index) => (
+			<span
+				key={index}
+				className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
 			>
-				{skills.map((skill, index) => (
-					<div key={index} className="w-[425px] rounded-lg shadow-lg">
+				#{tag.title}
+			</span>
+		));
+	};
+
+	return (
+		<div className="mx-auto w-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+			{skills.map((skill, index) => {
+				const { title, excerpt, coverImage, tagsCollection } = skill;
+				return (
+					<div
+						key={index}
+						className="max-w-md rounded-lg overflow-hidden shadow-lg"
+					>
 						<img
 							className="w-full rounded-t-lg"
-							src={skill.coverImage.url}
-							alt="Sunset in the mountains"
+							src={coverImage.url}
+							alt={title}
 						/>
 						<div className="px-6 py-4">
-							<div className="font-bold text-xl mb-2">{skill.title}</div>
-							<p className="text-gray-700 text-base text-justify">
-								{skill.excerpt}
-							</p>
+							<div className="font-bold text-xl mb-2">{title}</div>
+							<p className="text-gray-700 text-base text-justify">{excerpt}</p>
 						</div>
 						<div className="px-6 pt-4 pb-2">
-							{skill.tagsCollection.items.map((tag, index) => (
-								<span
-									key={index}
-									className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-								>
-									# {tag.title}
-								</span>
-							))}
+							{renderTags(tagsCollection.items)}
 						</div>
 					</div>
-				))}
-			</div>
-			<div className="self-center hidden md:block lg:px-3 xl:px-5">
-				<button
-					className="btn btn-outline-light shadow-none border-0 "
-					id="adelante"
-					aria-label="hacia_adelante"
-					onClick={() => scrollWin(450, 0)}
-				>
-					<ChevronDoubleRightIcon className="h-6 text-indigo-900 hover:text-sky-700" />
-				</button>
-			</div>
+				);
+			})}
 		</div>
 	);
 }
