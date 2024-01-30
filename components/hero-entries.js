@@ -43,11 +43,13 @@ export default function HeroEntries({
 				<p className="text-lg leading-relaxed mb-4">{excerpt}</p>
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pb-5">
-				<div className="flex justify-center sm:justify-start">
+			<div className="flex justify-around md:justify-between lg:justify-between pb-5">
+				<div className="flex justify-center">
 					{author && (
 						<div className="flex gap-5">
-							<Avatar picture={author.picture} name={author.name} />
+							<div className="flex self-center">
+								<Avatar picture={author.picture} name={author.name} />
+							</div>
 							<div>
 								<Author name={author.name} />
 								<DateComponent dateString={date} />
