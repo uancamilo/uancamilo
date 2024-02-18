@@ -15,6 +15,10 @@ export default function Index({ entries }) {
 			<Layout>
 				<Head>
 					<title>FrontEnd | Juan Camilo Serna</title>
+					<meta
+						name="description"
+						content="Juan Camilo Serna Fron-End Developer"
+					/>
 				</Head>
 				<Intro />
 				<Container>
