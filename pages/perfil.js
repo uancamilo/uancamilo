@@ -64,8 +64,8 @@ export async function getStaticProps() {
 				"@context": "https://schema.org",
 				"@type": "Person",
 				name: "Juan Camilo Serna Madrid",
-				url: "URL de tu perfil profesional",
-				image: "https://uancamilo.vercel.app/perfil",
+				url: "https://uancamilo.vercel.app/perfil",
+				image: "https://avatars.githubusercontent.com/u/36907625?v=4",
 				jobTitle: "Front-End Developer",
 				description:
 					"Soy un apasionado Front-End Developer con experiencia en crear experiencias digitales cautivadoras. Me enfoco en la innovación y la usabilidad para brindar interfaces web impactantes y funcionales.",
