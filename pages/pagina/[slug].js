@@ -38,6 +38,7 @@ export default function Estatica({
 								<title>{contenido.title}</title>
 								<meta property="og:title" content={contenido.title} />
 								<meta property="og:description" content={contenido.excerpt} />
+								<meta name="description" content={contenido.excerpt} />
 								<meta property="og:image" content={contenido.coverImage.url} />
 								<meta
 									property="og:url"
