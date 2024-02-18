@@ -7,7 +7,7 @@ import Head from "next/head";
 import Layout from "../components/layout";
 import { getSkills } from "../lib/contentful";
 
-export default function MostrarPerfil({ skills }) {
+export default function MostrarPerfil({ skills, structuredData }) {
 	const [verWeb, setVerWeb] = useState(true);
 	const [data, setData] = useState(null);
 
@@ -28,29 +28,6 @@ export default function MostrarPerfil({ skills }) {
 		return "loading...";
 	}
 
-	const schemaOrgMarkup = `
-    {
-		"@context": "https://schema.org",
-		"@type": "Person",
-		"name": "Juan Camilo Serna Madrid",
-		"url": "URL de tu perfil profesional",
-		"image": "https://uancamilo.vercel.app/perfil",
-		"jobTitle": "Front-End Developer",
-		"description": "Soy un apasionado Front-End Developer con experiencia en crear experiencias digitales cautivadoras. Me enfoco en la innovación y la usabilidad para brindar interfaces web impactantes y funcionales.",
-		"address": {
-			"@type": "PostalAddress",
-			"addressLocality": "Medellín",
-			"addressRegion": "Antioquia",
-			"addressCountry": "Colombia"
-			},
-		"email": "uancamilo@gmail.com",
-		"telephone": "+57 300 553 4 553",
-		"sameAs": [
-		"https://www.linkedin.com/in/uancamilo/",
-		]
-	}
-    `;
-
 	return (
 		<>
 			<Layout>
@@ -61,9 +38,10 @@ export default function MostrarPerfil({ skills }) {
 						content="Perfil profesional de Juan Camilo Serna Fron-End Developer"
 					/>
 					<script
+						key="structured-data"
 						type="application/ld+json"
 						dangerouslySetInnerHTML={{
-							__html: JSON.stringify(schemaOrgMarkup),
+							__html: JSON.stringify(structuredData),
 						}}
 					/>
 				</Head>
@@ -82,6 +60,25 @@ export async function getStaticProps() {
 	return {
 		props: {
 			skills,
+			structuredData: {
+				"@context": "https://schema.org",
+				"@type": "Person",
+				name: "Juan Camilo Serna Madrid",
+				url: "URL de tu perfil profesional",
+				image: "https://uancamilo.vercel.app/perfil",
+				jobTitle: "Front-End Developer",
+				description:
+					"Soy un apasionado Front-End Developer con experiencia en crear experiencias digitales cautivadoras. Me enfoco en la innovación y la usabilidad para brindar interfaces web impactantes y funcionales.",
+				address: {
+					"@type": "PostalAddress",
+					addressLocality: "Medellín",
+					addressRegion: "Antioquia",
+					addressCountry: "Colombia",
+				},
+				email: "uancamilo@gmail.com",
+				telephone: "+57 300 553 4 553",
+				sameAs: ["https://www.linkedin.com/in/uancamilo/"],
+			},
 		},
 	};
 }
