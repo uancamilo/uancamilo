@@ -77,7 +77,10 @@ export async function getStaticProps() {
 				},
 				email: "uancamilo@gmail.com",
 				telephone: "+57 300 553 4 553",
-				sameAs: ["https://www.linkedin.com/in/uancamilo/"],
+				sameAs: [
+					"https://www.linkedin.com/in/uancamilo/",
+					"https://github.com/uancamilo",
+				],
 			},
 		},
 	};
