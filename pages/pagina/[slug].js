@@ -36,9 +36,9 @@ export default function Estatica({
 						<article className="pb-10">
 							<Head>
 								<title>{contenido.title}</title>
-								<meta property="og:image" content={contenido.coverImage.url} />
 								<meta property="og:title" content={contenido.title} />
 								<meta property="og:description" content={contenido.excerpt} />
+								<meta property="og:image" content={contenido.coverImage.url} />
 								<meta
 									property="og:url"
 									content={`https://uancamilo.vercel.app/pagina/${contenido.slug}`}

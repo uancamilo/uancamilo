@@ -28,11 +28,44 @@ export default function MostrarPerfil({ skills }) {
 		return "loading...";
 	}
 
+	const schemaOrgMarkup = `
+    {
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"name": "Juan Camilo Serna Madrid",
+		"url": "URL de tu perfil profesional",
+		"image": "https://uancamilo.vercel.app/perfil",
+		"jobTitle": "Front-End Developer",
+		"description": "Soy un apasionado Front-End Developer con experiencia en crear experiencias digitales cautivadoras. Me enfoco en la innovación y la usabilidad para brindar interfaces web impactantes y funcionales.",
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Medellín",
+			"addressRegion": "Antioquia",
+			"addressCountry": "Colombia"
+			},
+		"email": "uancamilo@gmail.com",
+		"telephone": "+57 300 553 4 553",
+		"sameAs": [
+		"https://www.linkedin.com/in/uancamilo/",
+		]
+	}
+    `;
+
 	return (
 		<>
 			<Layout>
 				<Head>
 					<title>Perfil | Juan Camilo Serna</title>
+					<meta
+						name="description"
+						content="Perfil profesional de Juan Camilo Serna Fron-End Developer"
+					/>
+					<script
+						type="application/ld+json"
+						dangerouslySetInnerHTML={{
+							__html: JSON.stringify(schemaOrgMarkup),
+						}}
+					/>
 				</Head>
 				{verWeb ? (
 					<Perfil data={data} skills={skills} onChange={setVerWeb} />
