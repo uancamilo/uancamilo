@@ -95,7 +95,7 @@ export async function getStaticProps({ params, preview = false }) {
 				author: [
 					{
 						"@type": "Person",
-						name: data?.contenido.author,
+						name: data?.contenido.author.name,
 						url: "https://uancamilo.vercel.app/perfil",
 					},
 				],

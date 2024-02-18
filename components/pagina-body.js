@@ -30,7 +30,6 @@ const customMarkdownOptions = (content) => ({
 });
 
 export default function PaginaBody({ content, date, author, contenido }) {
-	console.log(contenido);
 	return (
 		<div className="container">
 			<div className="flex justify-between">
