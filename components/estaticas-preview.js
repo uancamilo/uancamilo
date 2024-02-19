@@ -76,9 +76,10 @@ export default function EstaticasPreview({
 									<div className="flex absolute bg-white">
 										<div className="rounded-full hover:bg-slate-200">
 											<Link
-												target="_blank"
 												rel="noopener noreferrer"
 												href={`https://twitter.com/intent/tweet?text=${title}&url=https://uancamilo.vercel.app/pagina/${slug} via @uancamilo`}
+												aria-label="Compartir en Twitter"
+												target="_blank"
 											>
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
@@ -105,6 +106,7 @@ export default function EstaticasPreview({
 												)}&source=${encodeURIComponent(
 													"https://uancamilo.vercel.app/"
 												)}`}
+												aria-label="linkedin"
 											>
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
@@ -123,6 +125,7 @@ export default function EstaticasPreview({
 												target="_blank"
 												rel="noopener noreferrer"
 												href={`https://www.facebook.com/sharer.php?quote=${title}&u=https://uancamilo.vercel.app/pagina/${slug}`}
+												aria-label="facebook"
 											>
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
@@ -143,6 +146,7 @@ export default function EstaticasPreview({
 												href={`https://web.whatsapp.com/send?text=${encodeURIComponent(
 													`Te comparto post sobre "${title}" que encontré en la página https://uancamilo.vercel.app/pagina/${slug}`
 												)}`}
+												aria-label="WhatsApp"
 											>
 												<svg
 													xmlns="http://www.w3.org/2000/svg"

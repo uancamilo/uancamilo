@@ -48,6 +48,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 								target="_blank"
 								rel="noopener noreferrer"
 								href={`https://twitter.com/intent/tweet?text=${contenido.title}&url=https://uancamilo.vercel.app/pagina/${contenido.slug} via @uancamilo`}
+								aria-label="twitter"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +74,8 @@ export default function PaginaBody({ content, date, author, contenido }) {
 									contenido.excerpt
 								)}&source=${encodeURIComponent(
 									"https://uancamilo.vercel.app/"
-								)}`}
+									)}`}
+								aria-label="linkedin"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -92,6 +94,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 								target="_blank"
 								rel="noopener noreferrer"
 								href={`https://www.facebook.com/sharer.php?quote=${contenido.title}&u=https://uancamilo.vercel.app/pagina/${contenido.slug}`}
+								aria-label="facebook"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +115,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 								href={`https://web.whatsapp.com/send?text=${encodeURIComponent(
 									`Te comparto post sobre "${contenido.title}" que encontré en la página https://uancamilo.vercel.app/pagina/${contenido.slug}`
 								)}`}
+								aria-label="WhatsApp"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
