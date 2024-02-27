@@ -6,7 +6,7 @@ import HeroEntries from "../components/hero-entries";
 import MasPaginas from "../components/mas-paginas";
 import { getEntries } from "../lib/contentful";
 
-export default function Index({ entries }) {
+export default function Index({ entries, structuredData }) {
 	const paginaPrincipal = entries[0];
 	const masPaginas = entries.slice(1);
 
@@ -18,6 +18,13 @@ export default function Index({ entries }) {
 					<meta
 						name="description"
 						content="Juan Camilo Serna Fron-End Developer"
+					/>
+					<script
+						key="structured-data"
+						type="application/ld+json"
+						dangerouslySetInnerHTML={{
+							__html: JSON.stringify(structuredData),
+						}}
 					/>
 				</Head>
 				<Intro />
@@ -43,6 +50,12 @@ export async function getStaticProps() {
 	return {
 		props: {
 			entries,
+			structuredData: {
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				name: "Juan Camilo Serna Front End dev",
+				url: "https://uancamilo.vercel.app/",
+			},
 		},
 	};
 }
