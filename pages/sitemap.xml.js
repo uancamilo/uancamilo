@@ -19,9 +19,9 @@ function generateSiteMap(estaticas) {
      ${estaticas
 				.map(({ slug }) => {
 					return `
-       <url>
-           <loc>${`${EXTERNAL_DATA_URL}/${slug}`}</loc>
-       </url>
+    <url>
+        <loc>${`${EXTERNAL_DATA_URL}/${slug}`}</loc>
+    </url>
      `;
 				})
 				.join("")}
