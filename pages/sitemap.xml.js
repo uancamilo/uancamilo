@@ -9,12 +9,16 @@ function generateSiteMap(estaticas) {
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
      <url>
        <loc>https://uancamilo.vercel.app/</loc>
+       <priority>0.8</priority>
+       <lastmod>2024-03-01</lastmod>
      </url>
      <url>
        <loc>https://uancamilo.vercel.app/perfil</loc>
+       <priority>1.0</priority>
      </url>
      <url>
        <loc>https://uancamilo.vercel.app/contacto</loc>
+       <priority>0.7</priority>
      </url>
      ${estaticas
 				.map(({ slug }) => {
