@@ -19,6 +19,7 @@ export default function Index({ entries, structuredData }) {
 					content="Juan Camilo Serna Fron-End Developer"
 				/>
 				<link rel="canonical" href="https://uancamilo.vercel.app/" />
+				<link rel="icon" href="images/logo.ico" type="image/x-icon" />
 				<script
 					key="structured-data"
 					type="application/ld+json"
@@ -54,12 +55,6 @@ export async function getStaticProps() {
 				"@type": "WebSite",
 				name: "Juan Camilo Serna - Front End Developer",
 				url: "https://uancamilo.vercel.app/",
-				contactPoint: {
-					"@type": "ContactPoint",
-					telephone: "+57 300 553 4 553",
-					contactType: "More information",
-					email: "uancamilo@gmail.com",
-				},
 			},
 		},
 	};
