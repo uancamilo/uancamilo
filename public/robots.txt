@@ -1,0 +1,8 @@
+User-agent: *
+
+# Allow all crawlers
+User-agent: *
+Allow: /perfil
+Allow: /contacto
+
+Sitemap: https://uancamilo.vercel.app/sitemap.xml
