@@ -11,38 +11,37 @@ export default function Index({ entries, structuredData }) {
 	const masPaginas = entries.slice(1);
 
 	return (
-		<>
-			<Layout>
-				<Head>
-					<title>FrontEnd | Juan Camilo Serna</title>
-					<meta
-						name="description"
-						content="Juan Camilo Serna Fron-End Developer"
+		<Layout>
+			<Head>
+				<title>FrontEnd | Juan Camilo Serna</title>
+				<meta
+					name="description"
+					content="Juan Camilo Serna Fron-End Developer"
+				/>
+				<link rel="canonical" href="https://uancamilo.vercel.app/" />
+				<script
+					key="structured-data"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify(structuredData),
+					}}
+				/>
+			</Head>
+			<Intro />
+			<Container>
+				{paginaPrincipal && (
+					<HeroEntries
+						title={paginaPrincipal.title}
+						coverImage={paginaPrincipal.coverImage}
+						date={paginaPrincipal.date}
+						author={paginaPrincipal.author}
+						slug={paginaPrincipal.slug}
+						excerpt={paginaPrincipal.excerpt}
 					/>
-					<script
-						key="structured-data"
-						type="application/ld+json"
-						dangerouslySetInnerHTML={{
-							__html: JSON.stringify(structuredData),
-						}}
-					/>
-				</Head>
-				<Intro />
-				<Container>
-					{paginaPrincipal && (
-						<HeroEntries
-							title={paginaPrincipal.title}
-							coverImage={paginaPrincipal.coverImage}
-							date={paginaPrincipal.date}
-							author={paginaPrincipal.author}
-							slug={paginaPrincipal.slug}
-							excerpt={paginaPrincipal.excerpt}
-						/>
-					)}
-					{masPaginas.length > 0 && <MasPaginas paginas={masPaginas} />}
-				</Container>
-			</Layout>
-		</>
+				)}
+				{masPaginas.length > 0 && <MasPaginas paginas={masPaginas} />}
+			</Container>
+		</Layout>
 	);
 }
 export async function getStaticProps() {
@@ -55,6 +54,12 @@ export async function getStaticProps() {
 				"@type": "WebSite",
 				name: "Juan Camilo Serna Front End dev",
 				url: "https://uancamilo.vercel.app/",
+				contactPoint: {
+					"@type": "ContactPoint",
+					telephone: "+57 300 553 4 553",
+					contactType: "Maś información",
+					email: "uancamilo@gmail.com",
+				},
 			},
 		},
 	};
