@@ -52,12 +52,12 @@ export async function getStaticProps() {
 			structuredData: {
 				"@context": "https://schema.org",
 				"@type": "WebSite",
-				name: "Juan Camilo Serna Front End dev",
+				name: "Juan Camilo Serna - Front End Developer",
 				url: "https://uancamilo.vercel.app/",
 				contactPoint: {
 					"@type": "ContactPoint",
 					telephone: "+57 300 553 4 553",
-					contactType: "Maś información",
+					contactType: "More information",
 					email: "uancamilo@gmail.com",
 				},
 			},
