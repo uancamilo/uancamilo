@@ -57,5 +57,6 @@ export async function getStaticProps() {
 				url: "https://uancamilo.vercel.app/",
 			},
 		},
+		revalidate: 1,
 	};
 }
