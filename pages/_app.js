@@ -15,6 +15,13 @@ function MyApp({ Component, pageProps }) {
 					})(window,document,'script','dataLayer','${GTM_ID}');`,
 				}}
 			/>
+			<Script
+				src="https://platform.linkedin.com/badges/js/profile.js"
+				strategy="afterInteractive"
+				async
+				defer
+				type="text/javascript"
+			/>
 			<Component {...pageProps} />
 		</>
 	);
