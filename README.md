@@ -3,13 +3,13 @@
 
 - 🔭 I’m currently working on [my own website](https://uancamilo.vercel.app/)
 
-- 🌱 I’m currently learning **Java, Spring, Hibernate**
+- 🌱 I’m currently learning **Java, Spring Boot, Hibernate**
 
-- 🤝 I’m looking for help with **elasticsearch**
+- 🤝 I’m looking for help with **Tensor Flow**
 
 - 👨‍💻 All of my projects are available at [https://uancamilo.vercel.app/proyectos](https://uancamilo.vercel.app/proyectos)
 
-- 💬 Ask me about **react & nextjs**
+- 💬 Ask me about **React, Nextjs & Java, Spring Boot**
 
 - 📫 How to reach me **https://uancamilo.vercel.app/contacto**
 
