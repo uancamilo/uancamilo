@@ -13,10 +13,12 @@ export default function Index({ entries, structuredData }) {
 	return (
 		<Layout>
 			<Head>
-				<title>FrontEnd | Juan Camilo Serna</title>
+				<title>
+					Juan Camilo Serna | Desarrollador Fullstack React y Spring Boot
+				</title>
 				<meta
 					name="description"
-					content="Juan Camilo Serna Fron-End Developer"
+					content="Soy Juan Camilo Serna, desarrollador fullstack especializado en tecnologías modernas como React, Spring Boot y Node.js. Diseño soluciones web rápidas, accesibles y centradas en el usuario."
 				/>
 				<link rel="canonical" href="https://uancamilo.vercel.app/" />
 				<link rel="icon" href="images/logo.ico" type="image/x-icon" />
@@ -52,9 +54,39 @@ export async function getStaticProps() {
 			entries,
 			structuredData: {
 				"@context": "https://schema.org",
-				"@type": "WebSite",
-				name: "Juan Camilo Serna - Front End Developer",
+				"@type": "Person",
+				name: "Juan Camilo Serna",
 				url: "https://uancamilo.vercel.app/",
+				image: "https://avatars.githubusercontent.com/u/36907625?v=4",
+				jobTitle: "Desarrollador Fullstack",
+				worksFor: {
+					"@type": "Organization",
+					name: "Freelance",
+				},
+				sameAs: [
+					"https://www.linkedin.com/in/uancamilo/",
+					"https://github.com/uancamilo",
+					"https://www.facebook.com/uancamilo",
+					"https://www.instagram.com/uancamilo/",
+					"https://twitter.com/uancamilo",
+					"https://www.tiktok.com/@uancamilo",
+				],
+				knowsAbout: [
+					"React",
+					"Next.js",
+					"Node.js",
+					"JavaScript",
+					"Tailwind CSS",
+					"HTML",
+					"CSS",
+					"Bootstrap",
+					"Python",
+					"Spring Boot",
+					"Java",
+					"SQL",
+				],
+				description:
+					"Soy Juan Camilo Serna, desarrollador fullstack con experiencia en interfaces modernas, desarrollo web con React, Spring Boot, y optimización de sitios para performance y SEO.",
 			},
 		},
 		revalidate: 1,
