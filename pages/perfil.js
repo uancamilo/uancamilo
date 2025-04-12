@@ -100,7 +100,7 @@ export async function getStaticProps() {
 					addressCountry: "Colombia",
 				},
 				email: "uancamilo@gmail.com",
-				telephone: "+573005534553",
+				telephone: "+573105038505",
 				sameAs: [
 					"https://www.linkedin.com/in/uancamilo/",
 					"https://github.com/uancamilo",
