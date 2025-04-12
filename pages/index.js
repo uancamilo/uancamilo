@@ -11,7 +11,7 @@ export default function Index({ entries, structuredData }) {
 	const masPaginas = entries.slice(1);
 
 	return (
-		<Layout>
+		<>
 			<Head>
 				<title>
 					Juan Camilo Serna | Desarrollador Fullstack React y Spring Boot
@@ -30,25 +30,29 @@ export default function Index({ entries, structuredData }) {
 					}}
 				/>
 			</Head>
-			<Intro />
-			<Container>
-				{paginaPrincipal && (
-					<HeroEntries
-						title={paginaPrincipal.title}
-						coverImage={paginaPrincipal.coverImage}
-						date={paginaPrincipal.date}
-						author={paginaPrincipal.author}
-						slug={paginaPrincipal.slug}
-						excerpt={paginaPrincipal.excerpt}
-					/>
-				)}
-				{masPaginas.length > 0 && <MasPaginas paginas={masPaginas} />}
-			</Container>
-		</Layout>
+			<Layout>
+				<Intro />
+				<Container>
+					{paginaPrincipal && (
+						<HeroEntries
+							title={paginaPrincipal.title}
+							coverImage={paginaPrincipal.coverImage}
+							date={paginaPrincipal.date}
+							author={paginaPrincipal.author}
+							slug={paginaPrincipal.slug}
+							excerpt={paginaPrincipal.excerpt}
+						/>
+					)}
+					{masPaginas.length > 0 && <MasPaginas paginas={masPaginas} />}
+				</Container>
+			</Layout>
+		</>
 	);
 }
 export async function getStaticProps() {
 	const entries = await getEntries();
+	//const datosEstructurados = await getDatosEstructurados();
+	console.log("entries", entries);
 	return {
 		props: {
 			entries,
