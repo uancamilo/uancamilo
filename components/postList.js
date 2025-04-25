@@ -4,6 +4,8 @@ import { useDataBase } from "../context/DataBaseContext";
 export default function PostList() {
 	const { fetchEntries } = useDataBase();
 	const [posts, setPosts] = useState([]);
+	const [comments, setComments] = useState({});
+	const [savedComments, setSavedComments] = useState({});
 
 	useEffect(() => {
 		const loadPosts = async () => {
@@ -15,7 +17,6 @@ export default function PostList() {
 	}, [fetchEntries]);
 
 	const handleLike = (postId) => {
-		// Actualiza los likes para el post con el postId
 		setPosts((prevPosts) =>
 			prevPosts.map((post) =>
 				post.sys.id === postId
@@ -26,6 +27,28 @@ export default function PostList() {
 					: post
 			)
 		);
+	};
+
+	const handleCommentChange = (postId, comment) => {
+		setComments((prevComments) => ({
+			...prevComments,
+			[postId]: comment,
+		}));
+	};
+
+	const handleSaveComment = (postId) => {
+		setSavedComments((prevSavedComments) => ({
+			...prevSavedComments,
+			[postId]: [
+				...(prevSavedComments[postId] || []),
+				comments[postId], 
+			],
+		}));
+
+		setComments((prevComments) => ({
+			...prevComments,
+			[postId]: "",
+		}));
 	};
 
 	return (
@@ -65,6 +88,41 @@ export default function PostList() {
 						>
 							Leer más
 						</button>
+
+						<div className="mt-6">
+							<h4 className="text-lg font-semibold text-gray-800">
+								Comentarios
+							</h4>
+							<textarea
+								className="w-full mt-2 p-2 border rounded-md"
+								placeholder="Deja un comentario..."
+								value={comments[item.sys.id] || ""}
+								onChange={(e) =>
+									handleCommentChange(item.sys.id, e.target.value)
+								}
+							/>
+							<button
+								className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+								onClick={() => handleSaveComment(item.sys.id)}
+							>
+								Guardar comentario
+							</button>
+
+							{savedComments[item.sys.id] && (
+								<div className="mt-4 p-4 bg-gray-100 rounded-md">
+									<h5 className="font-semibold text-gray-800">
+										Comentarios Guardados:
+									</h5>
+									<ul className="list-disc pl-6 mt-2">
+										{savedComments[item.sys.id].map((comment, index) => (
+											<li key={index} className="text-gray-700">
+												{comment}
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</div>
 					</li>
 				))}
 			</ul>
