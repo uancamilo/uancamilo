@@ -1,14 +1,14 @@
 export default function Intro() {
 	return (
 		<header className="bg-[#F8F9FA]">
-			<section className="min-h-screen flex flex-col-reverse lg:flex-row items-center justify-between px-6 sm:px-10 lg:px-20 py-16 bg-[#F8F9FA] gap-10">
+			<section className="min-h-screen pt-[64px] flex flex-col-reverse lg:flex-row items-center justify-center px-6 gap-10 sm:px-10 lg:px-20 pb-10 bg-[#F8F9FA]">
 				<div className="w-full lg:w-1/2 text-center lg:text-left">
 					<h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight text-[#2F2F2F]">
 						Crea tu página web profesional y haz crecer tu presencia online
 					</h1>
 					<p className="text-base sm:text-lg lg:text-xl mb-6 text-[#2F2F2F]">
 						Diseñamos sitios modernos, rápidos y adaptados a tu negocio para que
-						conectes con más con comunidades y audiencias.
+						conectes con más comunidades y audiencias.
 					</p>
 					<a
 						href="https://wa.me/573105038505"
@@ -22,14 +22,12 @@ export default function Intro() {
 					</a>
 				</div>
 
-				<div className="w-full lg:w-1/2 flex justify-center">
+				<div className="w-full lg:w-1/2 flex justify-center lg:mb-0">
 					<img
 						src="/images/doodle.png"
 						alt="Desarrollador trabajando en soluciones web"
-						width="400"
-						height="400"
 						loading="lazy"
-						className="w-60 sm:w-72 lg:w-96 max-w-full h-auto"
+						className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-auto"
 					/>
 				</div>
 			</section>
