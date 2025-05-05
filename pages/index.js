@@ -5,6 +5,7 @@ import Container from "../components/container";
 import { getServices, getDatosEstructurados } from "../lib/contentful";
 import ListServices from "../components/list-services";
 import Stack from "../components/stack";
+import Usp from "../components/usp";
 
 export default function Index({ services, structuredData }) {
 	return (
@@ -74,6 +75,7 @@ export default function Index({ services, structuredData }) {
 					)}
 				</Container>
 				<Stack />
+				<Usp/>
 			</Layout>
 		</>
 	);

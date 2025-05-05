@@ -15,7 +15,7 @@ export default function Stack() {
 
 	return (
 		<section className="bg-white py-8 px-6 md:px-16 overflow-hidden">
-			<h2 className="text-center text-xl font-semibold text-[#2F2F2F] mb-6">
+			<h2 className="text-2xl sm:text-3xl font-bold text-center text-[#2F2F2F] mb-12">
 				Tecnologías
 			</h2>
 
