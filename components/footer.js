@@ -2,9 +2,9 @@ import Link from "next/link";
 
 export default function Footer() {
 	return (
-		<footer className="min-h-screen bg-[#F1F5F9] text-[#2F2F2F] flex flex-col">
+		<footer className="min-h-screen bg-[#F8F9FA] text-[#2F2F2F] flex flex-col">
 			{/* Contenido principal centrado verticalmente */}
-			<div className="flex-grow flex flex-col justify-center">
+			<div className="flex-grow flex flex-col justify-end md:justify-center">
 				{/* Marca y frase */}
 				<div className="text-center mb-12 px-6">
 					<h2 className="text-3xl font-bold">Lybre</h2>
