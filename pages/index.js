@@ -1,11 +1,11 @@
 import Head from "next/head";
-import Layout from "../components/layout";
-import Intro from "../components/intro";
-import Container from "../components/container";
-import { getServices, getDatosEstructurados } from "../lib/contentful";
-import ListServices from "../components/list-services";
-import Stack from "../components/stack";
 import Usp from "../components/usp";
+import Intro from "../components/intro";
+import Stack from "../components/stack";
+import Layout from "../components/layout";
+import Container from "../components/container";
+import ListServices from "../components/list-services";
+import { getServices, getDatosEstructurados } from "../lib/contentful";
 
 export default function Index({ services, structuredData }) {
 	return (
@@ -30,6 +30,7 @@ export default function Index({ services, structuredData }) {
 					property="og:description"
 					content="Diseñamos páginas web claras, rápidas y adaptadas a tu negocio para que conectes con más personas y destaques en Internet con confianza."
 				/>
+				<meta property="og:site_name" content="Lybre" />
 				<meta property="og:url" content="https://uancamilo.vercel.app/" />
 				<meta property="og:type" content="website" />
 				<meta
@@ -64,6 +65,7 @@ export default function Index({ services, structuredData }) {
 										title={service.title}
 										descripcion={service.descripcion}
 										imagen={service.imagen?.url || "/images/default.svg"}
+										alt={service.title || "Imagen de servicio"}
 									/>
 								))}
 							</div>
@@ -75,7 +77,7 @@ export default function Index({ services, structuredData }) {
 					)}
 				</Container>
 				<Stack />
-				<Usp/>
+				<Usp />
 			</Layout>
 		</>
 	);
@@ -90,39 +92,24 @@ export async function getStaticProps() {
 			services,
 			structuredData: {
 				"@context": "https://schema.org",
-				"@type": "Person",
-				name: "Juan Camilo Serna",
+				"@type": "Organization",
+				name: "Lybre",
 				url: "https://uancamilo.vercel.app/",
-				image: "https://avatars.githubusercontent.com/u/36907625?v=4",
-				jobTitle: "Desarrollador Fullstack",
-				worksFor: {
-					"@type": "Organization",
-					name: "Freelance",
-				},
+				logo: "https://avatars.githubusercontent.com/u/36907625?v=4",
 				sameAs: [
-					"https://www.linkedin.com/in/uancamilo/",
+					"https://www.linkedin.com/company/lybredev/",
+					"https://www.facebook.com/lybredev",
 					"https://github.com/uancamilo",
-					"https://www.facebook.com/uancamilo",
-					"https://www.instagram.com/uancamilo/",
-					"https://twitter.com/uancamilo",
-					"https://www.tiktok.com/@uancamilo",
-				],
-				knowsAbout: [
-					"React",
-					"Next.js",
-					"Node.js",
-					"JavaScript",
-					"Tailwind CSS",
-					"HTML",
-					"CSS",
-					"Bootstrap",
-					"Python",
-					"Spring Boot",
-					"Java",
-					"SQL",
 				],
 				description:
-					"Soy Juan Camilo Serna, desarrollador fullstack con experiencia en interfaces modernas, desarrollo web con React, Spring Boot, y optimización de sitios para performance y SEO.",
+					"Diseñamos páginas web claras, rápidas y adaptadas a tu negocio para que conectes con más personas y destaques en Internet con confianza.",
+				contactPoint: {
+					"@type": "ContactPoint",
+					telephone: "+57-310-5038505",
+					contactType: "customer support",
+					areaServed: "CO",
+					availableLanguage: ["Spanish", "English"],
+				},
 			},
 		},
 		revalidate: 1,

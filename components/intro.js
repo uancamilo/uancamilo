@@ -4,11 +4,12 @@ export default function Intro() {
 			<section className="min-h-screen pt-[64px] flex flex-col-reverse lg:flex-row items-center justify-center px-6 gap-10 sm:px-10 lg:px-20 pb-10 bg-[#F8F9FA]">
 				<div className="w-full lg:w-1/2 text-center lg:text-left">
 					<h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 leading-tight text-[#2F2F2F]">
-						Crea tu página web profesional y haz crecer tu presencia online
+						Impulsa tu negocio con un sitio web profesional y fortalece tu
+						presencia en Internet
 					</h1>
 					<p className="text-base sm:text-lg lg:text-xl mb-6 text-[#2F2F2F]">
-						Diseñamos sitios modernos, rápidos y adaptados a tu negocio para que
-						conectes con más comunidades y audiencias.
+						Diseñamos sitios web modernos, veloces y alineados con tu propuesta
+						de valor para que conectes con tus clientes ideales.
 					</p>
 					<a
 						href="https://wa.me/573105038505"
