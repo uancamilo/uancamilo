@@ -21,7 +21,7 @@ export default function Index({ services, structuredData }) {
 				/>
 				<meta name="robots" content="index, follow" />
 				<link rel="canonical" href="https://uancamilo.vercel.app/" />
-				<link rel="icon" href="/images/logo.ico" type="image/x-icon" />
+				<link rel="icon" href="/images/logo_ly.ico" type="image/x-icon" />
 				<meta
 					property="og:title"
 					content="Crear tu página web profesional para destacar tu presencia online | Lybre"

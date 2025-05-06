@@ -41,9 +41,9 @@ export default function Navbar() {
 									<Link href="/">
 										<Image
 											className="h-8 w-auto"
-											src="/images/logo_jc.svg"
-											width={30}
-											height={30}
+											src="/images/logo_lybre.png"
+											width={120}
+											height={120}
 											alt="Logo Lybre"
 										/>
 									</Link>
