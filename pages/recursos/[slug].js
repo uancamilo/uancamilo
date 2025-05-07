@@ -13,7 +13,7 @@ import {
 	getEntriesWithSlug,
 } from "../../lib/contentful";
 
-export default function Estatica({
+export default function Recurso({
 	contenido,
 	masContenido,
 	preview,
@@ -125,7 +125,7 @@ export async function getStaticProps({ params, preview = false }) {
 export async function getStaticPaths() {
 	const allEntries = await getEntriesWithSlug();
 	return {
-		paths: allEntries?.map(({ slug }) => `/pagina/${slug}`) ?? [],
+		paths: allEntries?.map(({ slug }) => `/recursos/${slug}`) ?? [],
 		fallback: true,
 	};
 }
