@@ -22,12 +22,11 @@ export default function LoginPage() {
 					},
 					credentials: "include",
 					body: JSON.stringify({
-						username: email,
+						email,
 						password,
 					}),
 				}
 			);
-
 
 			if (response.status === 401) {
 				setError("Credenciales incorrectas");
@@ -39,7 +38,9 @@ export default function LoginPage() {
 				return;
 			}
 
-			router.push("/dashboard");
+			if (response.ok) {
+				router.push("/dashboard");
+			}
 		} catch (err) {
 			console.error(err);
 			setError("Error de red o servidor no disponible");
@@ -50,16 +51,19 @@ export default function LoginPage() {
 		<Layout>
 			<div className="max-w-md mx-auto pt-16">
 				<h2 className="text-2xl font-bold mb-6 text-center">Iniciar sesión</h2>
-				<form
-					onSubmit={handleSubmit}
-					className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-				>
+				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
-						<label className="block text-gray-700 text-sm font-bold mb-2">
+						<label
+							htmlFor="email"
+							className="block text-gray-700 text-sm font-bold mb-2"
+						>
 							Email
 						</label>
 						<input
+							id="email"
+							name="email"
 							type="email"
+							autoComplete="email"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
@@ -68,11 +72,17 @@ export default function LoginPage() {
 					</div>
 
 					<div className="mb-6">
-						<label className="block text-gray-700 text-sm font-bold mb-2">
+						<label
+							htmlFor="password"
+							className="block text-gray-700 text-sm font-bold mb-2"
+						>
 							Contraseña
 						</label>
 						<input
+							id="password"
+							name="password"
 							type="password"
+							autoComplete="current-password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							required
