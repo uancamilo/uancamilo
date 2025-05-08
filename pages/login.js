@@ -13,20 +13,16 @@ export default function LoginPage() {
 		setError("");
 
 		try {
-			const response = await fetch(
-				"https://proyecto-530p.onrender.com/auth/login",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: "include",
-					body: JSON.stringify({
-						email,
-						password,
-					}),
-				}
-			);
+			const response = await fetch("http://localhost:8080/auth/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({ email, password }),
+			});
+
+			console.log("STATUS", response.status);
 
 			if (response.status === 401) {
 				setError("Credenciales incorrectas");
@@ -34,15 +30,16 @@ export default function LoginPage() {
 			}
 
 			if (!response.ok) {
+				const text = await response.text();
+				console.log("ERROR RESPUESTA", text);
 				setError("Error inesperado en la autenticación");
 				return;
 			}
 
-			if (response.ok) {
-				router.push("/dashboard");
-			}
+			console.log("✅ Login exitoso, redirigiendo...");
+			router.push("/dashboard");
 		} catch (err) {
-			console.error(err);
+			console.error("Error de red o fetch:", err);
 			setError("Error de red o servidor no disponible");
 		}
 	};

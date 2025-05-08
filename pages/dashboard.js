@@ -1,5 +1,23 @@
 import Layout from "../components/layout";
 
+export async function getServerSideProps({ req }) {
+	const cookie = req.headers.cookie || "";
+
+	if (!cookie.includes("jwt=")) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
+}
+
+
 export default function Dashboard() {
 	return (
 		<Layout>
