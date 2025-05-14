@@ -1,11 +1,12 @@
-import { DataBaseProvider } from "../context/DataBaseContext";
+import { AuthProvider } from "../context/AuthContext";
+
 import "../styles/index.css";
 import Script from "next/script";
 import { GTM_ID } from "../lib/gtm";
 
 function MyApp({ Component, pageProps }) {
 	return (
-		<DataBaseProvider>
+		<AuthProvider>
 			<Script
 				strategy="afterInteractive"
 				dangerouslySetInnerHTML={{
@@ -24,7 +25,7 @@ function MyApp({ Component, pageProps }) {
 				type="text/javascript"
 			/>
 			<Component {...pageProps} />
-		</DataBaseProvider>
+		</AuthProvider>
 	);
 }
 

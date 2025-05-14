@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Layout from "../components/layout";
+import { DataBaseProvider } from "../context/DataBaseContext";
 import { getSkills } from "../lib/contentful";
 import { useRecursos } from "../hooks/useRecursos";
 
@@ -12,7 +13,7 @@ export default function Recursos({ skills }) {
 	console.log(recursos);
 
 	return (
-		<>
+		<DataBaseProvider>
 			<Head>
 				{/* <title>Recursos | Lybre</title>
 				<meta
@@ -112,7 +113,7 @@ export default function Recursos({ skills }) {
 					</div>
 				</div>
 			</Layout>
-		</>
+		</DataBaseProvider>
 	);
 }
 
