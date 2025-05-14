@@ -1,12 +1,11 @@
-import { AuthProvider } from "../context/AuthContext";
-
+import { SessionProvider } from "next-auth/react";
 import "../styles/index.css";
 import Script from "next/script";
 import { GTM_ID } from "../lib/gtm";
 
 function MyApp({ Component, pageProps }) {
 	return (
-		<AuthProvider>
+		<SessionProvider>
 			<Script
 				strategy="afterInteractive"
 				dangerouslySetInnerHTML={{
@@ -25,7 +24,7 @@ function MyApp({ Component, pageProps }) {
 				type="text/javascript"
 			/>
 			<Component {...pageProps} />
-		</AuthProvider>
+		</SessionProvider>
 	);
 }
 

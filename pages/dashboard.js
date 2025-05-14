@@ -1,30 +1,30 @@
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import Layout from "../components/layout";
 
-export async function getServerSideProps({ req }) {
-	const cookie = req.headers.cookie || "";
-
-	if (!cookie.includes("jwt=")) {
-		return {
-			redirect: {
-				destination: "/login",
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {},
-	};
-}
-
-
 export default function Dashboard() {
+		const { data: session, status } = useSession();
+		const router = useRouter();
+
+		useEffect(() => {
+			if (status === "loading") return;
+
+			if (!session) {
+				router.replace("/login");
+			} else if (session.user.role !== "ROLE_ADMIN") {
+				router.replace("/proyectos");
+			}
+		}, [session, status, router]);
+
+		if (status === "loading" || !session) {
+			return <p>Cargando...</p>;
+		}
 	return (
 		<Layout>
 			<div className="px-4 sm:px-6 lg:px-8 py-6">
 				<h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
 
-				{/* Tarjetas resumen */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 					<div className="bg-white shadow rounded-lg p-5">
 						<h3 className="text-lg font-medium text-gray-700">
@@ -42,7 +42,6 @@ export default function Dashboard() {
 					</div>
 				</div>
 
-				{/* Tabla de muestra */}
 				<div className="bg-white shadow rounded-lg p-5">
 					<h2 className="text-lg font-medium text-gray-700 mb-4">
 						Últimos registros
