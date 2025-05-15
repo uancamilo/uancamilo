@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -16,6 +17,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+	const { data: session, status } = useSession();
 	const router = useRouter();
 	return (
 		<Disclosure as="nav" className="bg-[#F8F9FA] fixed z-50 w-full">
@@ -69,26 +71,33 @@ export default function Navbar() {
 								</div>
 							</div>
 
-							{/* Ícono derecho */}
 							<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-								<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-									{/* Botón de login */}
+								{!session && router.pathname !== "/login" && (
 									<Link
 										href="/login"
 										className="mr-4 px-4 py-2 rounded-md text-sm font-medium text-white bg-[#34A853] hover:bg-[#2f9c48] transition-colors duration-200"
 									>
 										Iniciar sesión
 									</Link>
+								)}
 
-									{/* Botón de notificaciones */}
-									<button
-										type="button"
-										className="rounded-full bg-transparent p-1 text-[#2F2F2F] hover:text-[#34A853] focus:outline-none focus:ring-2 focus:ring-[#34A853]"
-									>
-										<span className="sr-only">Ver notificaciones</span>
-										<BellIcon className="h-6 w-6" aria-hidden="true" />
-									</button>
-								</div>
+								{session && (
+									<div className="flex items-center gap-4">
+										<span className="text-sm text-[#2F2F2F]">
+											Hola, {session.user.name}
+										</span>
+										<button
+											onClick={() =>
+												signOut({ redirect: false }).then(() => {
+													router.push("/login");
+												})
+											}
+											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200"
+										>
+											Cerrar sesión
+										</button>
+									</div>
+								)}
 							</div>
 						</div>
 					</div>

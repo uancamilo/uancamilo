@@ -1,6 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+if (process.env.NODE_ENV === "production" && !process.env.NEXTAUTH_SECRET) {
+	throw new Error("❌ NEXTAUTH_SECRET es obligatorio en producción.");
+}
+
 export default NextAuth({
 	providers: [
 		CredentialsProvider({
@@ -18,20 +22,18 @@ export default NextAuth({
 							email: credentials.email,
 							password: credentials.password,
 						}),
-						credentials: "include", // Necesario para recibir cookie JWT
+						credentials: "include",
 					});
 
 					if (!res.ok) return null;
 
 					const data = await res.json();
 
-					const user = {
+					return {
 						name: data.user.nombre,
 						email: data.user.email,
 						role: data.user.rol,
 					};
-
-					return user;
 				} catch (err) {
 					console.error("Error en authorize():", err);
 					return null;
@@ -43,6 +45,8 @@ export default NextAuth({
 	session: {
 		strategy: "jwt",
 	},
+
+	secret: process.env.NEXTAUTH_SECRET,
 
 	callbacks: {
 		async jwt({ token, user }) {
@@ -64,4 +68,6 @@ export default NextAuth({
 	pages: {
 		signIn: "/login",
 	},
+
+	debug: process.env.NODE_ENV === "development",
 });
