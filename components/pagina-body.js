@@ -6,9 +6,9 @@ import Author from "./author";
 import DateComponent from "./date";
 import markdownStyles from "./markdown-styles.module.css";
 import RichTextAsset from "./rich-text-asset";
-import Button from "./button";
+// import Button from "./button";
 
-const customMarkdownOptions = (content) => ({
+const customMarkdownOptions = (contenido) => ({
 	renderNode: {
 		[INLINES.HYPERLINK]: (node, children) => (
 			<a
@@ -23,21 +23,21 @@ const customMarkdownOptions = (content) => ({
 		[BLOCKS.EMBEDDED_ASSET]: (node) => (
 			<RichTextAsset
 				id={node.data.target.sys.id}
-				assets={content.links.assets.block}
+				assets={contenido.links.assets.block}
 			/>
 		),
 	},
 });
 
-export default function PaginaBody({ content, date, author, contenido }) {
+export default function PaginaBody({ contenido }) {
 	return (
 		<div className="container">
 			<div className="flex justify-between">
 				<div className="flex gap-5">
-					<Avatar picture={author.picture} name={author.name} />
+					{/* <Avatar picture={author.picture} name={author.name} /> */}
 					<div>
-						<Author name={author.name} />
-						<DateComponent dateString={date} />
+						{/* <Author name={author.name} />
+						<DateComponent dateString={date} /> */}
 					</div>
 				</div>
 				<div>
@@ -47,7 +47,8 @@ export default function PaginaBody({ content, date, author, contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href={`https://twitter.com/intent/tweet?text=${contenido.title}&url=https://uancamilo.vercel.app/pagina/${contenido.slug} via @uancamilo`}
+								// href={`https://twitter.com/intent/tweet?text=${contenido.title}&url=https://uancamilo.vercel.app/pagina/${contenido.slug} via @uancamilo`}
+								href="/"
 								aria-label="twitter"
 							>
 								<svg
@@ -66,15 +67,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-									`https://uancamilo.vercel.app/pagina/${contenido.slug}`
-								)}&title=${encodeURIComponent(
-									contenido.title
-								)}&summary=${encodeURIComponent(
-									contenido.excerpt
-								)}&source=${encodeURIComponent(
-									"https://uancamilo.vercel.app/"
-									)}`}
+								href="/"
 								aria-label="linkedin"
 							>
 								<svg
@@ -93,7 +86,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href={`https://www.facebook.com/sharer.php?quote=${contenido.title}&u=https://uancamilo.vercel.app/pagina/${contenido.slug}`}
+								href="/"
 								aria-label="facebook"
 							>
 								<svg
@@ -112,9 +105,7 @@ export default function PaginaBody({ content, date, author, contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href={`https://web.whatsapp.com/send?text=${encodeURIComponent(
-									`Te comparto post sobre "${contenido.title}" que encontré en la página https://uancamilo.vercel.app/pagina/${contenido.slug}`
-								)}`}
+								href="/"
 								aria-label="WhatsApp"
 							>
 								<svg
@@ -134,11 +125,11 @@ export default function PaginaBody({ content, date, author, contenido }) {
 			</div>
 			<div className={`${markdownStyles["markdown"]} text-justify`}>
 				{documentToReactComponents(
-					content.json,
-					customMarkdownOptions(content)
+					contenido.json,
+					customMarkdownOptions(contenido)
 				)}
 			</div>
-			<Button />
+			{/* <Button /> */}
 		</div>
 	);
 }

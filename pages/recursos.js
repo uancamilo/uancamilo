@@ -98,7 +98,7 @@ export default function Recursos({ skills }) {
 												</td>
 												<td className="px-6 py-4 whitespace-nowrap text-sm">
 													<a
-														href={`/recursos/${recurso.slug}`}
+														href={`/recurso/${recurso.slug}`}
 														className="inline-block px-4 py-1 text-sm text-white bg-green-600 hover:bg-green-700 rounded-md transition"
 													>
 														Ver
