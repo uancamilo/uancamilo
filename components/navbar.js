@@ -42,7 +42,7 @@ export default function Navbar() {
 
 							{/* Logo + navegación */}
 							<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-								<div className="flex flex-shrink-0 items-center">
+								<div className="flex flex-shrink-0 items-center relative z-10">
 									<Link href="/">
 										<Image
 											className="h-8 w-auto"
@@ -89,8 +89,8 @@ export default function Navbar() {
 									)}
 
 								{session && !isPublicRoute && (
-									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0 pointer-events-none">
-										<span className="text-sm text-[#2F2F2F] pointer-events-auto truncate">
+									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0 relative z-10">
+										<span className="text-sm text-[#2F2F2F] truncate">
 											Hola, {session.user.name}
 										</span>
 										<button
@@ -99,7 +99,7 @@ export default function Navbar() {
 													router.push("/login");
 												})
 											}
-											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200 truncate"
+											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-[#1E7E34] hover:bg-[#18632B] transition-colors duration-200 truncate"
 										>
 											Cerrar sesión
 										</button>
