@@ -131,24 +131,6 @@ export default function Navbar() {
 								</Link>
 							))}
 
-							{/* Botón cerrar sesión */}
-							{session && !isPublicRoute && (
-								<div className="w-full flex flex-col items-center space-y-2">
-									<span className="text-sm text-[#2F2F2F]">
-										Hola, {session.user.name}
-									</span>
-									<button
-										onClick={() =>
-											signOut({ redirect: false }).then(() => {
-												router.push("/login");
-											})
-										}
-										className="w-full px-3 py-2 rounded-md text-base font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200"
-									>
-										Cerrar sesión
-									</button>
-								</div>
-							)}
 						</div>
 					</Disclosure.Panel>
 				</>

@@ -32,8 +32,22 @@ export default function LoginPage() {
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		setIsSubmitting(true);
 		setError("");
+
+		if (!email.trim()) {
+			setError("El correo es obligatorio");
+			return;
+		}
+		if (!/\S+@\S+\.\S+/.test(email)) {
+			setError("El correo no es válido");
+			return;
+		}
+		if (!password.trim()) {
+			setError("La contraseña es obligatoria");
+			return;
+		}
+
+		setIsSubmitting(true);
 
 		try {
 			const result = await signIn("credentials", {
@@ -61,10 +75,11 @@ export default function LoginPage() {
 		}
 	};
 
+
 	return (
 		<>
 			<Layout>
-				<div className="max-w-md mx-auto pt-16">
+				<div className="max-w-md mx-auto px-4 pt-[80px] pb-10 sm:pt-[96px] sm:pb-16">
 					<h2 className="text-2xl font-bold mb-6 text-center">
 						Iniciar sesión
 					</h2>
