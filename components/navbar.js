@@ -20,7 +20,6 @@ function classNames(...classes) {
 export default function Navbar() {
 	const { data: session } = useSession();
 	const router = useRouter();
-
 	const isPublicRoute = publicRoutes.includes(router.pathname);
 
 	return (
@@ -30,7 +29,7 @@ export default function Navbar() {
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="relative flex h-16 items-center justify-between">
 							{/* Botón mobile */}
-							<div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+							<div className="absolute inset-y-0 left-0 flex items-center sm:hidden z-50">
 								<Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-[#2F2F2F] hover:text-[#34A853] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#34A853]">
 									<span className="sr-only">Abrir menú principal</span>
 									{open ? (
@@ -90,8 +89,8 @@ export default function Navbar() {
 									)}
 
 								{session && !isPublicRoute && (
-									<div className="flex items-center gap-4">
-										<span className="text-sm text-[#2F2F2F]">
+									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0 pointer-events-none">
+										<span className="text-sm text-[#2F2F2F] pointer-events-auto truncate">
 											Hola, {session.user.name}
 										</span>
 										<button
@@ -100,7 +99,7 @@ export default function Navbar() {
 													router.push("/login");
 												})
 											}
-											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200"
+											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200 truncate"
 										>
 											Cerrar sesión
 										</button>
@@ -130,7 +129,6 @@ export default function Navbar() {
 									{item.name}
 								</Link>
 							))}
-
 						</div>
 					</Disclosure.Panel>
 				</>
