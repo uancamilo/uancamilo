@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { signIn, getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 import Layout from "../components/layout";
 import RegisterModal from "../components/registerModal";
 
@@ -10,25 +9,11 @@ export default function LoginPage() {
 	const [error, setError] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [showRegister, setShowRegister] = useState(false);
-	const router = useRouter();
 
 	const ROL_REDIRECCIONES = {
 		ROLE_ADMIN: "/dashboard",
 		ROLE_USER: "/proyectos",
 	};
-
-	useEffect(() => {
-		const checkSession = async () => {
-			const session = await getSession();
-			const userRole = session?.user?.role;
-
-			if (session && userRole && ROL_REDIRECCIONES[userRole]) {
-				router.replace(ROL_REDIRECCIONES[userRole]);
-			}
-		};
-
-		checkSession();
-	}, [router]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -60,21 +45,13 @@ export default function LoginPage() {
 				throw new Error("Credenciales incorrectas");
 			}
 
-			const session = await getSession();
-			const userRole = session?.user?.role;
-
-			if (!userRole || !ROL_REDIRECCIONES[userRole]) {
-				throw new Error("Rol de usuario no reconocido");
-			}
-
-			router.push(ROL_REDIRECCIONES[userRole]);
+			window.location.reload(); 
 		} catch (err) {
 			setError(err.message || "Error al iniciar sesión");
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
-
 
 	return (
 		<>
@@ -158,4 +135,30 @@ export default function LoginPage() {
 			/>
 		</>
 	);
+}
+
+import { getSession } from "next-auth/react";
+
+export async function getServerSideProps(context) {
+	const session = await getSession(context);
+
+	if (session?.user?.role === "ROLE_ADMIN") {
+		return {
+			redirect: {
+				destination: "/dashboard",
+				permanent: false,
+			},
+		};
+	}
+
+	if (session?.user?.role === "ROLE_USER") {
+		return {
+			redirect: {
+				destination: "/proyectos",
+				permanent: false,
+			},
+		};
+	}
+
+	return { props: {} };
 }
