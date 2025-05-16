@@ -42,7 +42,7 @@ export default function Navbar() {
 
 							{/* Logo + navegación */}
 							<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-								<div className="flex flex-shrink-0 items-center relative z-10">
+								<div className="flex flex-shrink-0 items-center z-10 relative">
 									<Link href="/">
 										<Image
 											className="h-8 w-auto"
@@ -77,7 +77,7 @@ export default function Navbar() {
 							</div>
 
 							{/* Botones login/logout */}
-							<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+							<div className="absolute inset-y-0 right-0 left-auto flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 								{(!session || isPublicRoute) &&
 									router.pathname !== "/login" && (
 										<Link
@@ -89,7 +89,7 @@ export default function Navbar() {
 									)}
 
 								{session && !isPublicRoute && (
-									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0 relative z-10">
+									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0">
 										<span className="text-sm text-[#2F2F2F] truncate">
 											Hola, {session.user.name}
 										</span>
