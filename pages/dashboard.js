@@ -1,25 +1,7 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { getSession } from "next-auth/react";
 import Layout from "../components/layout";
 
 export default function Dashboard() {
-		const { data: session, status } = useSession();
-		const router = useRouter();
-
-		useEffect(() => {
-			if (status === "loading") return;
-
-			if (!session) {
-				router.replace("/login");
-			} else if (session.user.role !== "ROLE_ADMIN") {
-				router.replace("/proyectos");
-			}
-		}, [session, status, router]);
-
-		if (status === "loading" || !session) {
-			return <p>Cargando...</p>;
-		}
 	return (
 		<Layout>
 			<div className="px-4 sm:px-6 lg:px-8 py-6">
@@ -91,4 +73,31 @@ export default function Dashboard() {
 			</div>
 		</Layout>
 	);
+}
+
+// ✅ Protección SSR
+export async function getServerSideProps(context) {
+	const session = await getSession(context);
+
+	if (!session) {
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+	}
+
+	if (session.user.role !== "ROLE_ADMIN") {
+		return {
+			redirect: {
+				destination: "/proyectos",
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
 }
