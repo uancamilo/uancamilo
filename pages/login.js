@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Layout from "../components/layout";
@@ -16,6 +16,19 @@ export default function LoginPage() {
 		ROLE_ADMIN: "/dashboard",
 		ROLE_USER: "/proyectos",
 	};
+
+	useEffect(() => {
+		const checkSession = async () => {
+			const session = await getSession();
+			const userRole = session?.user?.role;
+
+			if (session && userRole && ROL_REDIRECCIONES[userRole]) {
+				router.replace(ROL_REDIRECCIONES[userRole]);
+			}
+		};
+
+		checkSession();
+	}, [router]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();

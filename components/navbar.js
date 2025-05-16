@@ -3,21 +3,26 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navigation = [
-	{ name: "Inicio", href: "/", current: true },
-	{ name: "Recursos", href: "/recursos", current: false },
-	{ name: "Contacto", href: "/contacto", current: false },
+	{ name: "Inicio", href: "/" },
+	{ name: "Recursos", href: "/recursos" },
+	{ name: "Contacto", href: "/contacto" },
 ];
+
+const publicRoutes = navigation.map((item) => item.href);
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 	const router = useRouter();
+
+	const isPublicRoute = publicRoutes.includes(router.pathname);
+
 	return (
 		<Disclosure as="nav" className="bg-[#F8F9FA] fixed z-50 w-full">
 			{({ open }) => (
@@ -61,7 +66,9 @@ export default function Navbar() {
 														: "text-[#2F2F2F] hover:text-[#34A853]",
 													"px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
 												)}
-												aria-current={item.current ? "page" : undefined}
+												aria-current={
+													router.pathname === item.href ? "page" : undefined
+												}
 											>
 												{item.name}
 											</Link>
@@ -70,17 +77,19 @@ export default function Navbar() {
 								</div>
 							</div>
 
+							{/* Botones login/logout */}
 							<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-								{!session && router.pathname !== "/login" && (
-									<Link
-										href="/login"
-										className="mr-4 px-4 py-2 rounded-md text-sm font-medium text-white bg-[#34A853] hover:bg-[#2f9c48] transition-colors duration-200"
-									>
-										Iniciar sesión
-									</Link>
-								)}
+								{(!session || isPublicRoute) &&
+									router.pathname !== "/login" && (
+										<Link
+											href="/login"
+											className="mr-0 px-4 py-2 rounded-md text-sm font-medium text-white bg-[#34A853] hover:bg-[#2f9c48] transition-colors duration-200"
+										>
+											Iniciar sesión
+										</Link>
+									)}
 
-								{session && (
+								{session && !isPublicRoute && (
 									<div className="flex items-center gap-4">
 										<span className="text-sm text-[#2F2F2F]">
 											Hola, {session.user.name}
@@ -103,7 +112,7 @@ export default function Navbar() {
 
 					{/* Menú móvil */}
 					<Disclosure.Panel className="sm:hidden">
-						<div className="space-y-1 px-2 pt-2 pb-3">
+						<div className="space-y-2 px-2 pt-2 pb-3">
 							{navigation.map((item) => (
 								<Link
 									key={item.name}
@@ -114,11 +123,32 @@ export default function Navbar() {
 											: "text-[#2F2F2F] hover:text-[#34A853]",
 										"block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
 									)}
-									aria-current={item.current ? "page" : undefined}
+									aria-current={
+										router.pathname === item.href ? "page" : undefined
+									}
 								>
 									{item.name}
 								</Link>
 							))}
+
+							{/* Botón cerrar sesión */}
+							{session && !isPublicRoute && (
+								<div className="w-full flex flex-col items-center space-y-2">
+									<span className="text-sm text-[#2F2F2F]">
+										Hola, {session.user.name}
+									</span>
+									<button
+										onClick={() =>
+											signOut({ redirect: false }).then(() => {
+												router.push("/login");
+											})
+										}
+										className="w-full px-3 py-2 rounded-md text-base font-medium text-white bg-red-500 hover:bg-red-600 transition-colors duration-200"
+									>
+										Cerrar sesión
+									</button>
+								</div>
+							)}
 						</div>
 					</Disclosure.Panel>
 				</>
