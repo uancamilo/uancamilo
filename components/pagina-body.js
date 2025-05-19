@@ -29,15 +29,20 @@ const customMarkdownOptions = (contenido) => ({
 	},
 });
 
-export default function PaginaBody({ contenido }) {
+export default function PaginaBody({ contenido, autor, fecha, extracto, slug, titulo }) {
 	return (
 		<div className="container">
-			<div className="flex justify-between">
-				<div className="flex gap-5">
-					{/* <Avatar picture={author.picture} name={author.name} /> */}
-					<div>
-						{/* <Author name={author.name} />
-						<DateComponent dateString={date} /> */}
+			<div className="flex justify-between ">
+				<div className="flex items-center gap-4 text-sm text-gray-600">
+					<Avatar picture={autor.picture} name={autor.name} />
+					<div className="flex flex-col">
+						<div className="flex items-center gap-1">
+							<span className="text-lg">Por:</span>
+							<Author name={autor.name} />
+						</div>
+						<div className="text-lg">
+							<DateComponent dateString={fecha} />
+						</div>
 					</div>
 				</div>
 				<div>
@@ -47,8 +52,11 @@ export default function PaginaBody({ contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								// href={`https://twitter.com/intent/tweet?text=${contenido.title}&url=https://uancamilo.vercel.app/pagina/${contenido.slug} via @uancamilo`}
-								href="/"
+								href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+									extracto
+								)}&url=${encodeURIComponent(
+									`https://uancamilo.vercel.app/recurso/${slug}`
+								)}&via=uancamilo`}
 								aria-label="twitter"
 							>
 								<svg
@@ -67,7 +75,15 @@ export default function PaginaBody({ contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href="/"
+								href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+									`https://uancamilo.vercel.app/recurso/${slug}`
+								)}&title=${encodeURIComponent(
+									titulo
+								)}&summary=${encodeURIComponent(
+									extracto
+								)}&source=${encodeURIComponent(
+									"https://uancamilo.vercel.app/"
+								)}`}
 								aria-label="linkedin"
 							>
 								<svg
@@ -86,7 +102,11 @@ export default function PaginaBody({ contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href="/"
+								href={`https://www.facebook.com/sharer.php?quote=${encodeURIComponent(
+									extracto
+								)}&u=${encodeURIComponent(
+									`https://uancamilo.vercel.app/recurso/${slug}`
+								)}`}
 								aria-label="facebook"
 							>
 								<svg
@@ -105,7 +125,9 @@ export default function PaginaBody({ contenido }) {
 							<Link
 								target="_blank"
 								rel="noopener noreferrer"
-								href="/"
+								href={`https://web.whatsapp.com/send?text=${encodeURIComponent(
+									`Te comparto post sobre "${extracto}" que encontré en la página https://uancamilo.vercel.app/recurso/${slug}`
+								)}`}
 								aria-label="WhatsApp"
 							>
 								<svg
