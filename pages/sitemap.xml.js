@@ -1,51 +1,50 @@
-//pages/sitemap.xml.js
-
 import { getEntriesWithSlug } from "../lib/contentful";
 
-const EXTERNAL_DATA_URL = "https://uancamilo.vercel.app";
+const EXTERNAL_DATA_URL = "https://uancamilo.vercel.app/recursos";
 
-function generateSiteMap(estaticas) {
+export default function generateSiteMap(recursos) {
 	return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     <url>
-       <loc>https://uancamilo.vercel.app/</loc>
-       <priority>0.8</priority>
-       <lastmod>2024-03-01</lastmod>
-     </url>
-     <url>
-       <loc>https://uancamilo.vercel.app/perfil</loc>
-       <priority>1.0</priority>
-     </url>
-     <url>
-       <loc>https://uancamilo.vercel.app/contacto</loc>
-       <priority>0.7</priority>
-     </url>
-     ${estaticas
-				.map(({ slug }) => {
-					return `
-    <url>
-        <loc>${`${EXTERNAL_DATA_URL}/${slug}`}</loc>
-    </url>
-     `;
-				})
-				.join("")}
-   </urlset>
- `;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://uancamilo.vercel.app/</loc>
+    <priority>0.8</priority>
+    <lastmod>2024-03-01</lastmod>
+  </url>
+  <url>
+    <loc>https://uancamilo.vercel.app/recursos</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://uancamilo.vercel.app/contacto</loc>
+    <priority>0.7</priority>
+  </url>
+  ${recursos
+		.map((entry) => {
+			const slug = entry.fields?.slug ?? entry.slug ?? "sin-slug";
+			const lastmod = entry.sys?.updatedAt
+				? new Date(entry.sys.updatedAt).toISOString()
+				: new Date().toISOString();
+
+			return `<url>
+    <loc>${EXTERNAL_DATA_URL}/${slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>`;
+		})
+		.join("\n")}
+</urlset>`;
 }
 
 function SiteMap() {
-	// getServerSideProps will do the heavy lifting
+	return null;
 }
 
 export async function getServerSideProps({ res }) {
-	// We make an API call to gather the URLs for our site
 	const request = await getEntriesWithSlug();
-
-	// We generate the XML sitemap with the estaticas data
 	const sitemap = generateSiteMap(request);
 
 	res.setHeader("Content-Type", "text/xml");
-	// we send the XML to the browser
 	res.write(sitemap);
 	res.end();
 
@@ -53,5 +52,3 @@ export async function getServerSideProps({ res }) {
 		props: {},
 	};
 }
-
-export default SiteMap;
