@@ -30,7 +30,6 @@ export default function Recurso({ recurso, preview }) {
 			<Container>
 				<article className="max-w-3xl mx-auto pt-24">
 					<h1 className="text-3xl font-bold mb-4">{recurso.titulo}</h1>
-					{/* Puedes agregar más campos como fecha, imagen, autor, etc. aquí */}
 					<PaginaBody contenido={recurso.contenido} />
 				</article>
 			</Container>
