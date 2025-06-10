@@ -1,573 +1,659 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, useReducer } from "react";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import Layout from "../components/layout";
 
-export default function Dashboard() {
-	const [proyectos, setProyectos] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const [filtroEstado, setFiltroEstado] = useState("TODOS");
-	const [busqueda, setBusqueda] = useState("");
+const initialState = {
+	proyectos: [],
+	loading: true,
+	error: null,
+	currentPage: 0,
+	totalPages: 0,
+	totalItems: 0,
+	hasNext: false,
+	hasPrevious: false,
+};
 
-	// Estados de paginación
-	const [currentPage, setCurrentPage] = useState(0);
-	const [pageSize, setPageSize] = useState(10);
-	const [totalPages, setTotalPages] = useState(0);
-	const [totalItems, setTotalItems] = useState(0);
-	const [hasNext, setHasNext] = useState(false);
-	const [hasPrevious, setHasPrevious] = useState(false);
+const proyectosReducer = (state, action) => {
+	switch (action.type) {
+		case "SET_LOADING":
+			return { ...state, loading: action.payload, error: null };
+		case "SET_ERROR":
+			return { ...state, error: action.payload, loading: false };
+		case "SET_PROYECTOS":
+			return {
+				...state,
+				proyectos: action.payload.proyectos || [],
+				currentPage: action.payload.currentPage || 0,
+				totalPages: action.payload.totalPages || 0,
+				totalItems: action.payload.totalItems || 0,
+				hasNext: action.payload.hasNext || false,
+				hasPrevious: action.payload.hasPrevious || false,
+				loading: false,
+				error: null,
+			};
+		case "RESET":
+			return initialState;
+		default:
+			return state;
+	}
+};
 
-	// Estados para ordenamiento
-	const [sortField, setSortField] = useState("fechaPublicacion");
-	const [sortDirection, setSortDirection] = useState("desc");
+const useDebounce = (value, delay) => {
+	const [debouncedValue, setDebouncedValue] = useState(value);
 
-	// Estados para modales
-	const [showCreateModal, setShowCreateModal] = useState(false);
-	const [showEditModal, setShowEditModal] = useState(false);
-	const [editingProject, setEditingProject] = useState(null);
-	const [modalLoading, setModalLoading] = useState(false);
-
-	// Estados para notificaciones
-	const [notification, setNotification] = useState(null);
-
-	// Obtener proyectos del backend con paginación
 	useEffect(() => {
-		fetchProyectos();
-	}, [currentPage, pageSize, filtroEstado, busqueda, sortField, sortDirection]);
+		const handler = setTimeout(() => {
+			setDebouncedValue(value);
+		}, delay);
 
-	const fetchProyectos = async () => {
-		try {
-			setLoading(true);
-			setError(null);
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [value, delay]);
 
-			// Construir URL con parámetros de paginación y filtros
-			const params = new URLSearchParams({
-				page: currentPage.toString(),
-				size: pageSize.toString(),
-				sort: sortField,
-				direction: sortDirection,
-			});
+	return debouncedValue;
+};
 
-			if (filtroEstado !== "TODOS") {
-				params.append("estado", filtroEstado);
-			}
+export default function Dashboard() {
+	const router = useRouter();
+	const [state, dispatch] = useReducer(proyectosReducer, initialState);
 
-			if (busqueda.trim()) {
-				params.append("busqueda", busqueda.trim());
-			}
+	const [filters, setFilters] = useState({
+		estado: "TODOS",
+		busqueda: "",
+		pageSize: 10,
+		sortField: "fechaPublicacion",
+		sortDirection: "desc",
+	});
 
-			const response = await fetch(
-				`http://localhost:8080/proyectos/paginado?${params}`,
-				{
-					method: "GET",
-					credentials: "include",
-					headers: {
-						"Content-Type": "application/json",
-					},
+	const [modals, setModals] = useState({
+		showCreate: false,
+		showEdit: false,
+		editingProject: null,
+		loading: false,
+	});
+
+	const [notification, setNotification] = useState(null);
+	const debouncedBusqueda = useDebounce(filters.busqueda, 500);
+
+	const fetchProyectos = useCallback(
+		async (showLoading = true) => {
+			try {
+				if (showLoading) {
+					dispatch({ type: "SET_LOADING", payload: true });
 				}
-			);
 
-			// Si obtenemos 403, intentar login automático
-			if (response.status === 403) {
-				console.log("🔐 Intentando login automático...");
-
-				const loginResponse = await fetch("http://localhost:8080/auth/login", {
-					method: "POST",
-					credentials: "include",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						email: "admin@email.com",
-						password: "admin123",
-					}),
+				const params = new URLSearchParams({
+					page: state.currentPage.toString(),
+					size: filters.pageSize.toString(),
+					sort: filters.sortField,
+					direction: filters.sortDirection,
 				});
 
-				if (loginResponse.ok) {
-					// Reintentar carga de proyectos después del login
-					const retryResponse = await fetch(
-						`http://localhost:8080/proyectos/paginado?${params}`,
-						{
-							method: "GET",
-							credentials: "include",
-							headers: { "Content-Type": "application/json" },
-						}
-					);
+				if (filters.estado !== "TODOS") {
+					params.append("estado", filters.estado);
+				}
 
-					if (retryResponse.ok) {
-						const data = await retryResponse.json();
-						updatePaginationState(data);
-						return;
+				if (debouncedBusqueda.trim()) {
+					params.append("busqueda", debouncedBusqueda.trim());
+				}
+
+				const response = await fetch(
+					`http://localhost:8080/proyectos/paginado?${params}`,
+					{
+						method: "GET",
+						credentials: "include",
+						headers: {
+							"Content-Type": "application/json",
+						},
 					}
+				);
+
+				if (response.status === 401 || response.status === 403) {
+					router.push("/login");
+					return;
 				}
 
-				throw new Error("No se pudo autenticar con el backend");
-			}
+				if (!response.ok) {
+					throw new Error(`Error al cargar proyectos: ${response.status}`);
+				}
 
-			if (!response.ok) {
-				throw new Error(`Error al cargar proyectos: ${response.status}`);
+				const data = await response.json();
+				dispatch({ type: "SET_PROYECTOS", payload: data });
+			} catch (err) {
+				console.error("Error fetching proyectos:", err);
+				dispatch({ type: "SET_ERROR", payload: err.message });
 			}
+		},
+		[
+			state.currentPage,
+			filters.pageSize,
+			filters.sortField,
+			filters.sortDirection,
+			filters.estado,
+			debouncedBusqueda,
+			router,
+		]
+	);
 
-			const data = await response.json();
-			updatePaginationState(data);
-		} catch (err) {
-			setError(err.message);
-			console.error("Error fetching proyectos:", err);
-		} finally {
-			setLoading(false);
+	useEffect(() => {
+		fetchProyectos();
+	}, [fetchProyectos]);
+
+	useEffect(() => {
+		if (notification) {
+			const timer = setTimeout(() => setNotification(null), 4000);
+			return () => clearTimeout(timer);
 		}
-	};
+	}, [notification]);
 
-	const updatePaginationState = (data) => {
-		setProyectos(data.proyectos || []);
-		setCurrentPage(data.currentPage || 0);
-		setTotalPages(data.totalPages || 0);
-		setTotalItems(data.totalItems || 0);
-		setHasNext(data.hasNext || false);
-		setHasPrevious(data.hasPrevious || false);
-	};
-
-	// Mostrar notificación
-	const showNotification = (message, type = "success") => {
+	const showNotification = useCallback((message, type = "success") => {
 		setNotification({ message, type });
-		setTimeout(() => setNotification(null), 4000);
-	};
+	}, []);
 
-	// Crear proyecto
-	const handleCreateProject = async (formData) => {
-		try {
-			setModalLoading(true);
-			const response = await fetch("http://localhost:8080/proyectos", {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
+	const validateProjectForm = (formData) => {
+		const errors = [];
 
-			if (!response.ok) {
-				throw new Error("Error al crear proyecto");
-			}
-
-			setShowCreateModal(false);
-			showNotification("Proyecto creado exitosamente");
-			fetchProyectos(); // Recargar lista
-		} catch (error) {
-			showNotification("Error al crear proyecto: " + error.message, "error");
-		} finally {
-			setModalLoading(false);
+		if (!formData.nombre?.trim()) {
+			errors.push("El nombre es requerido");
 		}
-	};
-
-	// Actualizar proyecto
-	const handleUpdateProject = async (formData) => {
-		try {
-			setModalLoading(true);
-			const response = await fetch(
-				`http://localhost:8080/proyectos/${editingProject.id}`,
-				{
-					method: "PUT",
-					credentials: "include",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
-				}
-			);
-
-			if (!response.ok) {
-				throw new Error("Error al actualizar proyecto");
-			}
-
-			setShowEditModal(false);
-			setEditingProject(null);
-			showNotification("Proyecto actualizado exitosamente");
-			fetchProyectos(); // Recargar lista
-		} catch (error) {
-			showNotification(
-				"Error al actualizar proyecto: " + error.message,
-				"error"
-			);
-		} finally {
-			setModalLoading(false);
+		if (!formData.descripcion?.trim()) {
+			errors.push("La descripción es requerida");
 		}
-	};
-
-	// Eliminar proyecto
-	const handleDeleteProject = async (proyecto) => {
+		if (!formData.fechaPostulacion) {
+			errors.push("La fecha de postulación es requerida");
+		}
+		if (!formData.fechaEntrega) {
+			errors.push("La fecha de entrega es requerida");
+		}
 		if (
-			!confirm(`¿Estás seguro de eliminar el proyecto "${proyecto.nombre}"?`)
+			formData.fechaPostulacion &&
+			formData.fechaEntrega &&
+			new Date(formData.fechaPostulacion) >= new Date(formData.fechaEntrega)
 		) {
-			return;
-		}
-
-		try {
-			const response = await fetch(
-				`http://localhost:8080/proyectos/${proyecto.id}`,
-				{
-					method: "DELETE",
-					credentials: "include",
-				}
+			errors.push(
+				"La fecha de entrega debe ser posterior a la fecha de postulación"
 			);
+		}
 
-			if (!response.ok) {
-				throw new Error("Error al eliminar proyecto");
+		return errors;
+	};
+
+	const handleCrudOperation = useCallback(
+		async (operation, data = null) => {
+			try {
+				setModals((prev) => ({ ...prev, loading: true }));
+
+				let url, method, body;
+
+				switch (operation) {
+					case "create":
+						const createErrors = validateProjectForm(data);
+						if (createErrors.length > 0) {
+							throw new Error(createErrors.join(", "));
+						}
+						url = "http://localhost:8080/proyectos";
+						method = "POST";
+						body = JSON.stringify(data);
+						break;
+
+					case "update":
+						const updateErrors = validateProjectForm(data.formData);
+						if (updateErrors.length > 0) {
+							throw new Error(updateErrors.join(", "));
+						}
+						url = `http://localhost:8080/proyectos/${data.id}`;
+						method = "PUT";
+						body = JSON.stringify(data.formData);
+						break;
+
+					case "delete":
+						if (
+							!confirm(
+								`¿Estás seguro de eliminar el proyecto "${data.nombre}"?`
+							)
+						) {
+							return;
+						}
+						url = `http://localhost:8080/proyectos/${data.id}`;
+						method = "DELETE";
+						break;
+
+					default:
+						throw new Error("Operación no válida");
+				}
+
+				const response = await fetch(url, {
+					method,
+					credentials: "include",
+					headers:
+						method !== "DELETE" ? { "Content-Type": "application/json" } : {},
+					...(body && { body }),
+				});
+
+				if (response.status === 401 || response.status === 403) {
+					router.push("/login");
+					return;
+				}
+
+				if (!response.ok) {
+					throw new Error(`Error en la operación: ${response.status}`);
+				}
+
+				setModals({
+					showCreate: false,
+					showEdit: false,
+					editingProject: null,
+					loading: false,
+				});
+
+				const messages = {
+					create: "Proyecto creado exitosamente",
+					update: "Proyecto actualizado exitosamente",
+					delete: "Proyecto eliminado exitosamente",
+				};
+				showNotification(messages[operation]);
+
+				fetchProyectos(false);
+			} catch (error) {
+				showNotification(`Error: ${error.message}`, "error");
+				setModals((prev) => ({ ...prev, loading: false }));
 			}
+		},
+		[fetchProyectos, showNotification, router]
+	);
 
-			showNotification("Proyecto eliminado exitosamente");
-			fetchProyectos(); // Recargar lista
-		} catch (error) {
-			showNotification("Error al eliminar proyecto: " + error.message, "error");
-		}
-	};
+	const handleFilterChange = useCallback(
+		(filterType, value) => {
+			setFilters((prev) => ({ ...prev, [filterType]: value }));
 
-	// Abrir modal de edición
-	const handleEditProject = (proyecto) => {
-		setEditingProject(proyecto);
-		setShowEditModal(true);
-	};
+			if (filterType !== "pageSize") {
+				dispatch({
+					type: "SET_PROYECTOS",
+					payload: { ...state, currentPage: 0 },
+				});
+			}
+		},
+		[state]
+	);
 
-	// Manejar cambio de página
-	const handlePageChange = (newPage) => {
-		if (newPage >= 0 && newPage < totalPages) {
-			setCurrentPage(newPage);
-		}
-	};
+	const handleSortChange = useCallback(
+		(field) => {
+			setFilters((prev) => ({
+				...prev,
+				sortField: field,
+				sortDirection:
+					prev.sortField === field && prev.sortDirection === "desc"
+						? "asc"
+						: "desc",
+			}));
+			dispatch({
+				type: "SET_PROYECTOS",
+				payload: { ...state, currentPage: 0 },
+			});
+		},
+		[state]
+	);
 
-	// Manejar cambio de filtros (resetear a página 0)
-	const handleFilterChange = (newFilter, value) => {
-		setCurrentPage(0);
-		if (newFilter === "estado") {
-			setFiltroEstado(value);
-		} else if (newFilter === "busqueda") {
-			setBusqueda(value);
-		} else if (newFilter === "pageSize") {
-			setPageSize(parseInt(value));
-		}
-	};
+	const handlePageChange = useCallback(
+		(newPage) => {
+			if (newPage >= 0 && newPage < state.totalPages) {
+				dispatch({
+					type: "SET_PROYECTOS",
+					payload: { ...state, currentPage: newPage },
+				});
+			}
+		},
+		[state]
+	);
 
-	// Manejar cambio de ordenamiento
-	const handleSortChange = (field) => {
-		if (sortField === field) {
-			setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-		} else {
-			setSortField(field);
-			setSortDirection("desc");
-		}
-		setCurrentPage(0);
-	};
-
-	// Calcular métricas - total de todos los proyectos, contadores de la página actual
-	const calcularMetricas = () => {
-		const total = totalItems; // Total de todos los proyectos
-		const publicados = proyectos.filter((p) => p.estado === "PUBLICADO").length;
-		const enCurso = proyectos.filter((p) => p.estado === "EN_CURSO").length;
-		const finalizados = proyectos.filter(
+	const metricas = useMemo(() => {
+		const total = state.totalItems;
+		const publicados = state.proyectos.filter(
+			(p) => p.estado === "PUBLICADO"
+		).length;
+		const enCurso = state.proyectos.filter(
+			(p) => p.estado === "EN_CURSO"
+		).length;
+		const finalizados = state.proyectos.filter(
 			(p) => p.estado === "FINALIZADO"
 		).length;
-		const cancelados = proyectos.filter((p) => p.estado === "CANCELADO").length;
-		const valorTotal = proyectos.reduce(
+		const cancelados = state.proyectos.filter(
+			(p) => p.estado === "CANCELADO"
+		).length;
+		const valorTotal = state.proyectos.reduce(
 			(sum, p) => sum + (p.valorMonetario || 0),
 			0
 		);
 
 		return { total, publicados, enCurso, finalizados, cancelados, valorTotal };
-	};
+	}, [state.proyectos, state.totalItems]);
 
-	const metricas = calcularMetricas();
+	const EstadoBadge = useMemo(
+		() =>
+			({ estado }) => {
+				const colores = {
+					PUBLICADO: "bg-green-100 text-green-800",
+					EN_CURSO: "bg-blue-100 text-blue-800",
+					FINALIZADO: "bg-gray-100 text-gray-800",
+					CANCELADO: "bg-red-100 text-red-800",
+				};
 
-	// Badge de estado con colores
-	const EstadoBadge = ({ estado }) => {
-		const colores = {
-			PUBLICADO: "bg-green-100 text-green-800",
-			EN_CURSO: "bg-blue-100 text-blue-800",
-			FINALIZADO: "bg-gray-100 text-gray-800",
-			CANCELADO: "bg-red-100 text-red-800",
-		};
-
-		return (
-			<span
-				className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-					colores[estado] || "bg-gray-100 text-gray-800"
-				}`}
-			>
-				{estado.replace("_", " ")}
-			</span>
-		);
-	};
-
-	// Componente de notificación
-	const NotificationComponent = () => {
-		if (!notification) return null;
-
-		const bgColor =
-			notification.type === "success" ? "bg-green-500" : "bg-red-500";
-
-		return (
-			<div
-				className={`fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center`}
-			>
-				<span>{notification.message}</span>
-				<button
-					onClick={() => setNotification(null)}
-					className="ml-3 text-white hover:text-gray-200"
-				>
-					✕
-				</button>
-			</div>
-		);
-	};
-
-	// Modal para crear/editar proyecto
-	const ProjectModal = ({
-		isEdit = false,
-		project = null,
-		onClose,
-		onSubmit,
-	}) => {
-		const [formData, setFormData] = useState({
-			nombre: project?.nombre || "",
-			descripcion: project?.descripcion || "",
-			estado: project?.estado || "PUBLICADO",
-			fechaPostulacion: project?.fechaPostulacion || "",
-			fechaEntrega: project?.fechaEntrega || "",
-			valorMonetario: project?.valorMonetario || "",
-		});
-
-		const handleSubmit = (e) => {
-			e.preventDefault();
-			onSubmit(formData);
-		};
-
-		const handleChange = (field, value) => {
-			setFormData((prev) => ({ ...prev, [field]: value }));
-		};
-
-		return (
-			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-				<div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-					<div className="p-6">
-						<div className="flex justify-between items-center mb-4">
-							<h2 className="text-xl font-bold text-gray-900">
-								{isEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
-							</h2>
-							<button
-								onClick={onClose}
-								className="text-gray-400 hover:text-gray-600"
-							>
-								<svg
-									className="w-6 h-6"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							</button>
-						</div>
-
-						<form onSubmit={handleSubmit} className="space-y-4">
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
-									Nombre del proyecto *
-								</label>
-								<input
-									type="text"
-									value={formData.nombre}
-									onChange={(e) => handleChange("nombre", e.target.value)}
-									className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-									required
-								/>
-							</div>
-
-							<div>
-								<label className="block text-sm font-medium text-gray-700 mb-1">
-									Descripción *
-								</label>
-								<textarea
-									value={formData.descripcion}
-									onChange={(e) => handleChange("descripcion", e.target.value)}
-									className="w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-									required
-								/>
-							</div>
-
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Estado
-									</label>
-									<select
-										value={formData.estado}
-										onChange={(e) => handleChange("estado", e.target.value)}
-										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-									>
-										<option value="PUBLICADO">Publicado</option>
-										<option value="EN_CURSO">En Curso</option>
-										<option value="FINALIZADO">Finalizado</option>
-										<option value="CANCELADO">Cancelado</option>
-									</select>
-								</div>
-
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Valor Monetario
-									</label>
-									<input
-										type="number"
-										step="0.01"
-										value={formData.valorMonetario}
-										onChange={(e) =>
-											handleChange("valorMonetario", e.target.value)
-										}
-										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-									/>
-								</div>
-							</div>
-
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Fecha de Postulación *
-									</label>
-									<input
-										type="date"
-										value={formData.fechaPostulacion}
-										onChange={(e) =>
-											handleChange("fechaPostulacion", e.target.value)
-										}
-										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-										required
-									/>
-								</div>
-
-								<div>
-									<label className="block text-sm font-medium text-gray-700 mb-1">
-										Fecha de Entrega *
-									</label>
-									<input
-										type="date"
-										value={formData.fechaEntrega}
-										onChange={(e) =>
-											handleChange("fechaEntrega", e.target.value)
-										}
-										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
-										required
-									/>
-								</div>
-							</div>
-
-							<div className="flex justify-end space-x-3 pt-4">
-								<button
-									type="button"
-									onClick={onClose}
-									className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-									disabled={modalLoading}
-								>
-									Cancelar
-								</button>
-								<button
-									type="submit"
-									className="px-4 py-2 bg-[#34A853] text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
-									disabled={modalLoading}
-								>
-									{modalLoading
-										? "Procesando..."
-										: isEdit
-										? "Actualizar"
-										: "Crear Proyecto"}
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		);
-	};
-
-	// Componente de paginación
-	const Pagination = () => {
-		const getPageNumbers = () => {
-			const pages = [];
-			const maxVisible = 5;
-
-			let start = Math.max(0, currentPage - Math.floor(maxVisible / 2));
-			let end = Math.min(totalPages - 1, start + maxVisible - 1);
-
-			if (end - start < maxVisible - 1) {
-				start = Math.max(0, end - maxVisible + 1);
-			}
-
-			for (let i = start; i <= end; i++) {
-				pages.push(i);
-			}
-
-			return pages;
-		};
-
-		if (totalPages <= 1) return null;
-
-		return (
-			<div className="flex items-center justify-between px-6 py-3 bg-white border-t border-gray-200">
-				<div className="flex items-center text-sm text-gray-500">
-					<span>
-						Mostrando {currentPage * pageSize + 1} a{" "}
-						{Math.min((currentPage + 1) * pageSize, totalItems)} de {totalItems}{" "}
-						proyectos
-					</span>
-				</div>
-
-				<div className="flex items-center space-x-2">
-					{/* Botón anterior */}
-					<button
-						onClick={() => handlePageChange(currentPage - 1)}
-						disabled={!hasPrevious}
-						className={`px-3 py-2 text-sm font-medium rounded-md ${
-							hasPrevious
-								? "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
-								: "text-gray-300 bg-gray-100 border border-gray-200 cursor-not-allowed"
+				return (
+					<span
+						className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+							colores[estado] || "bg-gray-100 text-gray-800"
 						}`}
 					>
-						← Anterior
-					</button>
+						{estado.replace("_", " ")}
+					</span>
+				);
+			},
+		[]
+	);
 
-					{/* Números de página */}
-					{getPageNumbers().map((pageNum) => (
+	const NotificationComponent = useMemo(
+		() => () => {
+			if (!notification) return null;
+
+			const bgColor =
+				notification.type === "success" ? "bg-green-500" : "bg-red-500";
+
+			return (
+				<div
+					className={`fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center`}
+				>
+					<span>{notification.message}</span>
+					<button
+						onClick={() => setNotification(null)}
+						className="ml-3 text-white hover:text-gray-200"
+					>
+						✕
+					</button>
+				</div>
+			);
+		},
+		[notification]
+	);
+
+	const ProjectModal = useMemo(
+		() =>
+			({ isEdit = false, project = null, onClose, onSubmit }) => {
+				const [formData, setFormData] = useState({
+					nombre: project?.nombre || "",
+					descripcion: project?.descripcion || "",
+					estado: project?.estado || "PUBLICADO",
+					fechaPostulacion: project?.fechaPostulacion || "",
+					fechaEntrega: project?.fechaEntrega || "",
+					valorMonetario: project?.valorMonetario || "",
+				});
+
+				const [formErrors, setFormErrors] = useState([]);
+
+				const handleSubmit = (e) => {
+					e.preventDefault();
+					const errors = validateProjectForm(formData);
+
+					if (errors.length > 0) {
+						setFormErrors(errors);
+						return;
+					}
+
+					setFormErrors([]);
+					onSubmit(formData);
+				};
+
+				const handleChange = (field, value) => {
+					setFormData((prev) => ({ ...prev, [field]: value }));
+					if (formErrors.length > 0) {
+						setFormErrors([]);
+					}
+				};
+
+				return (
+					<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+							<div className="p-6">
+								<div className="flex justify-between items-center mb-4">
+									<h2 className="text-xl font-bold text-gray-900">
+										{isEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
+									</h2>
+									<button
+										onClick={onClose}
+										className="text-gray-400 hover:text-gray-600"
+									>
+										<svg
+											className="w-6 h-6"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M6 18L18 6M6 6l12 12"
+											/>
+										</svg>
+									</button>
+								</div>
+
+								{formErrors.length > 0 && (
+									<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+										<ul className="text-sm text-red-600 list-disc list-inside">
+											{formErrors.map((error, index) => (
+												<li key={index}>{error}</li>
+											))}
+										</ul>
+									</div>
+								)}
+
+								<form onSubmit={handleSubmit} className="space-y-4">
+									<div>
+										<label className="block text-sm font-medium text-gray-700 mb-1">
+											Nombre del proyecto *
+										</label>
+										<input
+											type="text"
+											value={formData.nombre}
+											onChange={(e) => handleChange("nombre", e.target.value)}
+											className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+											required
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium text-gray-700 mb-1">
+											Descripción *
+										</label>
+										<textarea
+											value={formData.descripcion}
+											onChange={(e) =>
+												handleChange("descripcion", e.target.value)
+											}
+											className="w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+											required
+										/>
+									</div>
+
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div>
+											<label className="block text-sm font-medium text-gray-700 mb-1">
+												Estado
+											</label>
+											<select
+												value={formData.estado}
+												onChange={(e) => handleChange("estado", e.target.value)}
+												className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+											>
+												<option value="PUBLICADO">Publicado</option>
+												<option value="EN_CURSO">En Curso</option>
+												<option value="FINALIZADO">Finalizado</option>
+												<option value="CANCELADO">Cancelado</option>
+											</select>
+										</div>
+
+										<div>
+											<label className="block text-sm font-medium text-gray-700 mb-1">
+												Valor Monetario
+											</label>
+											<input
+												type="number"
+												step="0.01"
+												min="0"
+												value={formData.valorMonetario}
+												onChange={(e) =>
+													handleChange("valorMonetario", e.target.value)
+												}
+												className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+											/>
+										</div>
+									</div>
+
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										<div>
+											<label className="block text-sm font-medium text-gray-700 mb-1">
+												Fecha de Postulación *
+											</label>
+											<input
+												type="date"
+												value={formData.fechaPostulacion}
+												onChange={(e) =>
+													handleChange("fechaPostulacion", e.target.value)
+												}
+												className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+												required
+											/>
+										</div>
+
+										<div>
+											<label className="block text-sm font-medium text-gray-700 mb-1">
+												Fecha de Entrega *
+											</label>
+											<input
+												type="date"
+												value={formData.fechaEntrega}
+												onChange={(e) =>
+													handleChange("fechaEntrega", e.target.value)
+												}
+												className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+												required
+											/>
+										</div>
+									</div>
+
+									<div className="flex justify-end space-x-3 pt-4">
+										<button
+											type="button"
+											onClick={onClose}
+											className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+											disabled={modals.loading}
+										>
+											Cancelar
+										</button>
+										<button
+											type="submit"
+											className="px-4 py-2 bg-[#34A853] text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+											disabled={modals.loading}
+										>
+											{modals.loading
+												? "Procesando..."
+												: isEdit
+												? "Actualizar"
+												: "Crear Proyecto"}
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				);
+			},
+		[modals.loading, validateProjectForm]
+	);
+
+	const Pagination = useMemo(
+		() => () => {
+			const getPageNumbers = () => {
+				const pages = [];
+				const maxVisible = 5;
+
+				let start = Math.max(0, state.currentPage - Math.floor(maxVisible / 2));
+				let end = Math.min(state.totalPages - 1, start + maxVisible - 1);
+
+				if (end - start < maxVisible - 1) {
+					start = Math.max(0, end - maxVisible + 1);
+				}
+
+				for (let i = start; i <= end; i++) {
+					pages.push(i);
+				}
+
+				return pages;
+			};
+
+			if (state.totalPages <= 1) return null;
+
+			return (
+				<div className="flex items-center justify-between px-6 py-3 bg-white border-t border-gray-200">
+					<div className="flex items-center text-sm text-gray-500">
+						<span>
+							Mostrando {state.currentPage * filters.pageSize + 1} a{" "}
+							{Math.min(
+								(state.currentPage + 1) * filters.pageSize,
+								state.totalItems
+							)}{" "}
+							de {state.totalItems} proyectos
+						</span>
+					</div>
+
+					<div className="flex items-center space-x-2">
 						<button
-							key={pageNum}
-							onClick={() => handlePageChange(pageNum)}
+							onClick={() => handlePageChange(state.currentPage - 1)}
+							disabled={!state.hasPrevious}
 							className={`px-3 py-2 text-sm font-medium rounded-md ${
-								currentPage === pageNum
-									? "text-white bg-[#34A853] border border-[#34A853]"
-									: "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+								state.hasPrevious
+									? "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+									: "text-gray-300 bg-gray-100 border border-gray-200 cursor-not-allowed"
 							}`}
 						>
-							{pageNum + 1}
+							← Anterior
 						</button>
-					))}
 
-					{/* Botón siguiente */}
-					<button
-						onClick={() => handlePageChange(currentPage + 1)}
-						disabled={!hasNext}
-						className={`px-3 py-2 text-sm font-medium rounded-md ${
-							hasNext
-								? "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
-								: "text-gray-300 bg-gray-100 border border-gray-200 cursor-not-allowed"
-						}`}
-					>
-						Siguiente →
-					</button>
+						{getPageNumbers().map((pageNum) => (
+							<button
+								key={pageNum}
+								onClick={() => handlePageChange(pageNum)}
+								className={`px-3 py-2 text-sm font-medium rounded-md ${
+									state.currentPage === pageNum
+										? "text-white bg-[#34A853] border border-[#34A853]"
+										: "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+								}`}
+							>
+								{pageNum + 1}
+							</button>
+						))}
+
+						<button
+							onClick={() => handlePageChange(state.currentPage + 1)}
+							disabled={!state.hasNext}
+							className={`px-3 py-2 text-sm font-medium rounded-md ${
+								state.hasNext
+									? "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+									: "text-gray-300 bg-gray-100 border border-gray-200 cursor-not-allowed"
+							}`}
+						>
+							Siguiente →
+						</button>
+					</div>
 				</div>
-			</div>
-		);
-	};
+			);
+		},
+		[state, filters.pageSize, handlePageChange]
+	);
 
-	if (loading) {
+	if (state.loading) {
 		return (
 			<Layout>
 				<div className="flex items-center justify-center h-64">
@@ -578,7 +664,7 @@ export default function Dashboard() {
 		);
 	}
 
-	if (error) {
+	if (state.error) {
 		return (
 			<Layout>
 				<div className="max-w-2xl mx-auto mt-8">
@@ -602,15 +688,14 @@ export default function Dashboard() {
 									Error al cargar proyectos
 								</h3>
 								<div className="mt-2 text-sm text-red-700">
-									<p>{error}</p>
+									<p>{state.error}</p>
 									<p className="mt-1 text-xs">
-										💡 Verifica que el backend esté ejecutándose en
-										localhost:8080
+										💡 Verifica que el backend esté ejecutándose
 									</p>
 								</div>
 								<div className="mt-4">
 									<button
-										onClick={fetchProyectos}
+										onClick={() => fetchProyectos()}
 										className="bg-red-100 hover:bg-red-200 text-red-800 px-4 py-2 rounded text-sm font-medium transition-colors"
 									>
 										🔄 Reintentar
@@ -627,7 +712,6 @@ export default function Dashboard() {
 	return (
 		<Layout>
 			<div className="px-4 sm:px-6 lg:px-8 py-6">
-				{/* Notificación */}
 				<NotificationComponent />
 
 				{/* Header */}
@@ -643,7 +727,9 @@ export default function Dashboard() {
 						</div>
 						<div className="flex-shrink-0">
 							<button
-								onClick={() => setShowCreateModal(true)}
+								onClick={() =>
+									setModals((prev) => ({ ...prev, showCreate: true }))
+								}
 								className="bg-[#34A853] hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
 							>
 								<svg
@@ -826,7 +912,7 @@ export default function Dashboard() {
 					</div>
 				</div>
 
-				{/* Controles de filtrado y paginación */}
+				{/* Controles de filtrado */}
 				<div className="bg-white shadow-sm rounded-lg mb-6">
 					<div className="px-6 py-4 border-b border-gray-200">
 						<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -835,7 +921,7 @@ export default function Dashboard() {
 									<input
 										type="text"
 										placeholder="Buscar proyectos..."
-										value={busqueda}
+										value={filters.busqueda}
 										onChange={(e) =>
 											handleFilterChange("busqueda", e.target.value)
 										}
@@ -843,7 +929,7 @@ export default function Dashboard() {
 									/>
 								</div>
 								<select
-									value={filtroEstado}
+									value={filters.estado}
 									onChange={(e) => handleFilterChange("estado", e.target.value)}
 									className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
 								>
@@ -859,9 +945,9 @@ export default function Dashboard() {
 								<div className="flex items-center gap-2">
 									<label className="text-sm text-gray-500">Mostrar:</label>
 									<select
-										value={pageSize}
+										value={filters.pageSize}
 										onChange={(e) =>
-											handleFilterChange("pageSize", e.target.value)
+											handleFilterChange("pageSize", parseInt(e.target.value))
 										}
 										className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
 									>
@@ -872,7 +958,7 @@ export default function Dashboard() {
 									</select>
 								</div>
 								<button
-									onClick={fetchProyectos}
+									onClick={() => fetchProyectos(false)}
 									className="bg-[#34A853] hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
 								>
 									🔄 Actualizar
@@ -886,11 +972,11 @@ export default function Dashboard() {
 				<div className="bg-white shadow-sm rounded-lg overflow-hidden">
 					<div className="px-6 py-4 border-b border-gray-200">
 						<h2 className="text-lg font-semibold text-gray-900">
-							Proyectos ({totalItems} total)
+							Proyectos ({state.totalItems} total)
 						</h2>
 					</div>
 
-					{proyectos.length === 0 ? (
+					{state.proyectos.length === 0 ? (
 						<div className="text-center py-12">
 							<svg
 								className="mx-auto h-12 w-12 text-gray-400"
@@ -904,7 +990,7 @@ export default function Dashboard() {
 								No hay proyectos
 							</h3>
 							<p className="mt-1 text-sm text-gray-500">
-								{busqueda || filtroEstado !== "TODOS"
+								{filters.busqueda || filters.estado !== "TODOS"
 									? "No se encontraron proyectos con los filtros aplicados."
 									: "Comienza creando tu primer proyecto."}
 							</p>
@@ -920,9 +1006,9 @@ export default function Dashboard() {
 										>
 											<div className="flex items-center space-x-1">
 												<span>Proyecto</span>
-												{sortField === "nombre" && (
+												{filters.sortField === "nombre" && (
 													<span className="text-[#34A853]">
-														{sortDirection === "asc" ? "↑" : "↓"}
+														{filters.sortDirection === "asc" ? "↑" : "↓"}
 													</span>
 												)}
 											</div>
@@ -933,9 +1019,9 @@ export default function Dashboard() {
 										>
 											<div className="flex items-center space-x-1">
 												<span>Estado</span>
-												{sortField === "estado" && (
+												{filters.sortField === "estado" && (
 													<span className="text-[#34A853]">
-														{sortDirection === "asc" ? "↑" : "↓"}
+														{filters.sortDirection === "asc" ? "↑" : "↓"}
 													</span>
 												)}
 											</div>
@@ -946,9 +1032,9 @@ export default function Dashboard() {
 										>
 											<div className="flex items-center space-x-1">
 												<span>Valor</span>
-												{sortField === "valorMonetario" && (
+												{filters.sortField === "valorMonetario" && (
 													<span className="text-[#34A853]">
-														{sortDirection === "asc" ? "↑" : "↓"}
+														{filters.sortDirection === "asc" ? "↑" : "↓"}
 													</span>
 												)}
 											</div>
@@ -959,9 +1045,9 @@ export default function Dashboard() {
 										>
 											<div className="flex items-center space-x-1">
 												<span>Fechas</span>
-												{sortField === "fechaPublicacion" && (
+												{filters.sortField === "fechaPublicacion" && (
 													<span className="text-[#34A853]">
-														{sortDirection === "asc" ? "↑" : "↓"}
+														{filters.sortDirection === "asc" ? "↑" : "↓"}
 													</span>
 												)}
 											</div>
@@ -975,7 +1061,7 @@ export default function Dashboard() {
 									</tr>
 								</thead>
 								<tbody className="bg-white divide-y divide-gray-200">
-									{proyectos.map((proyecto) => (
+									{state.proyectos.map((proyecto) => (
 										<tr key={proyecto.id} className="hover:bg-gray-50">
 											<td className="px-6 py-4">
 												<div>
@@ -1015,13 +1101,21 @@ export default function Dashboard() {
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 												<div className="flex justify-end space-x-2">
 													<button
-														onClick={() => handleEditProject(proyecto)}
+														onClick={() =>
+															setModals((prev) => ({
+																...prev,
+																showEdit: true,
+																editingProject: proyecto,
+															}))
+														}
 														className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
 													>
 														✏️ Editar
 													</button>
 													<button
-														onClick={() => handleDeleteProject(proyecto)}
+														onClick={() =>
+															handleCrudOperation("delete", proyecto)
+														}
 														className="text-red-600 hover:text-red-700 font-medium transition-colors"
 													>
 														🗑️ Eliminar
@@ -1035,27 +1129,36 @@ export default function Dashboard() {
 						</div>
 					)}
 
-					{/* Componente de paginación */}
 					<Pagination />
 				</div>
 
 				{/* Modales */}
-				{showCreateModal && (
+				{modals.showCreate && (
 					<ProjectModal
-						onClose={() => setShowCreateModal(false)}
-						onSubmit={handleCreateProject}
+						onClose={() =>
+							setModals((prev) => ({ ...prev, showCreate: false }))
+						}
+						onSubmit={(formData) => handleCrudOperation("create", formData)}
 					/>
 				)}
 
-				{showEditModal && editingProject && (
+				{modals.showEdit && modals.editingProject && (
 					<ProjectModal
 						isEdit={true}
-						project={editingProject}
-						onClose={() => {
-							setShowEditModal(false);
-							setEditingProject(null);
-						}}
-						onSubmit={handleUpdateProject}
+						project={modals.editingProject}
+						onClose={() =>
+							setModals((prev) => ({
+								...prev,
+								showEdit: false,
+								editingProject: null,
+							}))
+						}
+						onSubmit={(formData) =>
+							handleCrudOperation("update", {
+								id: modals.editingProject.id,
+								formData,
+							})
+						}
 					/>
 				)}
 			</div>
@@ -1063,7 +1166,6 @@ export default function Dashboard() {
 	);
 }
 
-// ✅ Protección SSR
 export async function getServerSideProps(context) {
 	const session = await getSession(context);
 
