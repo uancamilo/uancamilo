@@ -1,7 +1,8 @@
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Layout from "../components/layout";
 import RegisterModal from "../components/registerModal";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -10,10 +11,20 @@ export default function LoginPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [showRegister, setShowRegister] = useState(false);
 
+	const { login, user, loading } = useAuth();
+	const router = useRouter();
+
 	const ROL_REDIRECCIONES = {
 		ROLE_ADMIN: "/dashboard",
 		ROLE_USER: "/proyectos",
 	};
+
+	useEffect(() => {
+		if (!loading && user) {
+			const destination = ROL_REDIRECCIONES[user.role] || "/dashboard";
+			router.push(destination);
+		}
+	}, [user, loading, router]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -23,10 +34,12 @@ export default function LoginPage() {
 			setError("El correo es obligatorio");
 			return;
 		}
+
 		if (!/\S+@\S+\.\S+/.test(email)) {
 			setError("El correo no es válido");
 			return;
 		}
+
 		if (!password.trim()) {
 			setError("La contraseña es obligatoria");
 			return;
@@ -35,23 +48,36 @@ export default function LoginPage() {
 		setIsSubmitting(true);
 
 		try {
-			const result = await signIn("credentials", {
-				redirect: false,
-				email,
-				password,
-			});
+			const result = await login(email, password);
 
-			if (!result.ok) {
-				throw new Error("Credenciales incorrectas");
+			if (!result.success) {
+				setError(result.error || "Error al iniciar sesión");
 			}
-
-			window.location.reload(); 
 		} catch (err) {
 			setError(err.message || "Error al iniciar sesión");
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
+
+	// Mostrar loading mientras verifica autenticación
+	if (loading) {
+		return (
+			<Layout>
+				<div className="max-w-md mx-auto px-4 pt-[80px] pb-10 sm:pt-[96px] sm:pb-16">
+					<div className="flex items-center justify-center">
+						<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#34A853]"></div>
+						<span className="ml-3 text-gray-600">Verificando sesión...</span>
+					</div>
+				</div>
+			</Layout>
+		);
+	}
+
+	// No mostrar login si ya está autenticado
+	if (user) {
+		return null;
+	}
 
 	return (
 		<>
@@ -79,7 +105,6 @@ export default function LoginPage() {
 								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							/>
 						</div>
-
 						<div className="mb-6">
 							<label
 								htmlFor="password"
@@ -98,7 +123,6 @@ export default function LoginPage() {
 								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							/>
 						</div>
-
 						<div className="flex items-center justify-between">
 							<button
 								type="submit"
@@ -109,11 +133,9 @@ export default function LoginPage() {
 							</button>
 						</div>
 					</form>
-
 					{error && (
 						<p className="text-red-500 text-sm text-center mt-4">{error}</p>
 					)}
-
 					<div className="mt-4 text-center">
 						<p className="text-sm">
 							¿No tienes una cuenta?{" "}
@@ -128,37 +150,10 @@ export default function LoginPage() {
 					</div>
 				</div>
 			</Layout>
-
 			<RegisterModal
 				open={showRegister}
 				onClose={() => setShowRegister(false)}
 			/>
 		</>
 	);
-}
-
-import { getSession } from "next-auth/react";
-
-export async function getServerSideProps(context) {
-	const session = await getSession(context);
-
-	if (session?.user?.role === "ROLE_ADMIN") {
-		return {
-			redirect: {
-				destination: "/dashboard",
-				permanent: false,
-			},
-		};
-	}
-
-	if (session?.user?.role === "ROLE_USER") {
-		return {
-			redirect: {
-				destination: "/proyectos",
-				permanent: false,
-			},
-		};
-	}
-
-	return { props: {} };
 }

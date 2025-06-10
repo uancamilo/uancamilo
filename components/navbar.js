@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -18,7 +18,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-	const { data: session } = useSession();
+	const { user, logout } = useAuth();
 	const router = useRouter();
 	const isPublicRoute = publicRoutes.includes(router.pathname);
 
@@ -78,27 +78,23 @@ export default function Navbar() {
 
 							{/* Botones login/logout */}
 							<div className="absolute inset-y-0 right-0 left-auto flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-								{(!session || isPublicRoute) &&
-									router.pathname !== "/login" && (
-										<Link
-											href="/login"
-											className="mr-0 px-4 py-2 rounded-md text-sm font-medium text-white bg-[#34A853] hover:bg-[#2f9c48] transition-colors duration-200"
-										>
-											Iniciar sesión
-										</Link>
-									)}
+								{(!user || isPublicRoute) && router.pathname !== "/login" && (
+									<Link
+										href="/login"
+										className="mr-0 px-4 py-2 rounded-md text-sm font-medium text-white bg-[#34A853] hover:bg-[#2f9c48] transition-colors duration-200"
+									>
+										Iniciar sesión {/* CORREGIDO: quitado la 'a' extra */}
+									</Link>
+								)}
 
-								{session && !isPublicRoute && (
+								{/* CAMBIO: user en lugar de session */}
+								{user && !isPublicRoute && (
 									<div className="flex items-center gap-4 w-screen sm:w-full justify-between md:justify-normal pl-20 sm:ml-4 sm:pr-0">
 										<span className="text-sm text-[#2F2F2F] truncate">
-											Hola, {session.user.name}
+											Hola, {user.name}
 										</span>
 										<button
-											onClick={() =>
-												signOut({ redirect: false }).then(() => {
-													router.push("/login");
-												})
-											}
+											onClick={() => logout()}
 											className="px-4 py-2 rounded-md text-sm font-medium text-white bg-[#1E7E34] hover:bg-[#18632B] transition-colors duration-200 truncate"
 										>
 											Cerrar sesión
