@@ -21,6 +21,15 @@ export default function Dashboard() {
 	const [sortField, setSortField] = useState("fechaPublicacion");
 	const [sortDirection, setSortDirection] = useState("desc");
 
+	// Estados para modales
+	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showEditModal, setShowEditModal] = useState(false);
+	const [editingProject, setEditingProject] = useState(null);
+	const [modalLoading, setModalLoading] = useState(false);
+
+	// Estados para notificaciones
+	const [notification, setNotification] = useState(null);
+
 	// Obtener proyectos del backend con paginación
 	useEffect(() => {
 		fetchProyectos();
@@ -116,6 +125,107 @@ export default function Dashboard() {
 		setHasPrevious(data.hasPrevious || false);
 	};
 
+	// Mostrar notificación
+	const showNotification = (message, type = "success") => {
+		setNotification({ message, type });
+		setTimeout(() => setNotification(null), 4000);
+	};
+
+	// Crear proyecto
+	const handleCreateProject = async (formData) => {
+		try {
+			setModalLoading(true);
+			const response = await fetch("http://localhost:8080/proyectos", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+
+			if (!response.ok) {
+				throw new Error("Error al crear proyecto");
+			}
+
+			setShowCreateModal(false);
+			showNotification("Proyecto creado exitosamente");
+			fetchProyectos(); // Recargar lista
+		} catch (error) {
+			showNotification("Error al crear proyecto: " + error.message, "error");
+		} finally {
+			setModalLoading(false);
+		}
+	};
+
+	// Actualizar proyecto
+	const handleUpdateProject = async (formData) => {
+		try {
+			setModalLoading(true);
+			const response = await fetch(
+				`http://localhost:8080/proyectos/${editingProject.id}`,
+				{
+					method: "PUT",
+					credentials: "include",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Error al actualizar proyecto");
+			}
+
+			setShowEditModal(false);
+			setEditingProject(null);
+			showNotification("Proyecto actualizado exitosamente");
+			fetchProyectos(); // Recargar lista
+		} catch (error) {
+			showNotification(
+				"Error al actualizar proyecto: " + error.message,
+				"error"
+			);
+		} finally {
+			setModalLoading(false);
+		}
+	};
+
+	// Eliminar proyecto
+	const handleDeleteProject = async (proyecto) => {
+		if (
+			!confirm(`¿Estás seguro de eliminar el proyecto "${proyecto.nombre}"?`)
+		) {
+			return;
+		}
+
+		try {
+			const response = await fetch(
+				`http://localhost:8080/proyectos/${proyecto.id}`,
+				{
+					method: "DELETE",
+					credentials: "include",
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Error al eliminar proyecto");
+			}
+
+			showNotification("Proyecto eliminado exitosamente");
+			fetchProyectos(); // Recargar lista
+		} catch (error) {
+			showNotification("Error al eliminar proyecto: " + error.message, "error");
+		}
+	};
+
+	// Abrir modal de edición
+	const handleEditProject = (proyecto) => {
+		setEditingProject(proyecto);
+		setShowEditModal(true);
+	};
+
 	// Manejar cambio de página
 	const handlePageChange = (newPage) => {
 		if (newPage >= 0 && newPage < totalPages) {
@@ -182,6 +292,200 @@ export default function Dashboard() {
 			>
 				{estado.replace("_", " ")}
 			</span>
+		);
+	};
+
+	// Componente de notificación
+	const NotificationComponent = () => {
+		if (!notification) return null;
+
+		const bgColor =
+			notification.type === "success" ? "bg-green-500" : "bg-red-500";
+
+		return (
+			<div
+				className={`fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center`}
+			>
+				<span>{notification.message}</span>
+				<button
+					onClick={() => setNotification(null)}
+					className="ml-3 text-white hover:text-gray-200"
+				>
+					✕
+				</button>
+			</div>
+		);
+	};
+
+	// Modal para crear/editar proyecto
+	const ProjectModal = ({
+		isEdit = false,
+		project = null,
+		onClose,
+		onSubmit,
+	}) => {
+		const [formData, setFormData] = useState({
+			nombre: project?.nombre || "",
+			descripcion: project?.descripcion || "",
+			estado: project?.estado || "PUBLICADO",
+			fechaPostulacion: project?.fechaPostulacion || "",
+			fechaEntrega: project?.fechaEntrega || "",
+			valorMonetario: project?.valorMonetario || "",
+		});
+
+		const handleSubmit = (e) => {
+			e.preventDefault();
+			onSubmit(formData);
+		};
+
+		const handleChange = (field, value) => {
+			setFormData((prev) => ({ ...prev, [field]: value }));
+		};
+
+		return (
+			<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+				<div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+					<div className="p-6">
+						<div className="flex justify-between items-center mb-4">
+							<h2 className="text-xl font-bold text-gray-900">
+								{isEdit ? "Editar Proyecto" : "Crear Nuevo Proyecto"}
+							</h2>
+							<button
+								onClick={onClose}
+								className="text-gray-400 hover:text-gray-600"
+							>
+								<svg
+									className="w-6 h-6"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M6 18L18 6M6 6l12 12"
+									/>
+								</svg>
+							</button>
+						</div>
+
+						<form onSubmit={handleSubmit} className="space-y-4">
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									Nombre del proyecto *
+								</label>
+								<input
+									type="text"
+									value={formData.nombre}
+									onChange={(e) => handleChange("nombre", e.target.value)}
+									className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+									required
+								/>
+							</div>
+
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									Descripción *
+								</label>
+								<textarea
+									value={formData.descripcion}
+									onChange={(e) => handleChange("descripcion", e.target.value)}
+									className="w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+									required
+								/>
+							</div>
+
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div>
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Estado
+									</label>
+									<select
+										value={formData.estado}
+										onChange={(e) => handleChange("estado", e.target.value)}
+										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+									>
+										<option value="PUBLICADO">Publicado</option>
+										<option value="EN_CURSO">En Curso</option>
+										<option value="FINALIZADO">Finalizado</option>
+										<option value="CANCELADO">Cancelado</option>
+									</select>
+								</div>
+
+								<div>
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Valor Monetario
+									</label>
+									<input
+										type="number"
+										step="0.01"
+										value={formData.valorMonetario}
+										onChange={(e) =>
+											handleChange("valorMonetario", e.target.value)
+										}
+										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+									/>
+								</div>
+							</div>
+
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div>
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Fecha de Postulación *
+									</label>
+									<input
+										type="date"
+										value={formData.fechaPostulacion}
+										onChange={(e) =>
+											handleChange("fechaPostulacion", e.target.value)
+										}
+										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+										required
+									/>
+								</div>
+
+								<div>
+									<label className="block text-sm font-medium text-gray-700 mb-1">
+										Fecha de Entrega *
+									</label>
+									<input
+										type="date"
+										value={formData.fechaEntrega}
+										onChange={(e) =>
+											handleChange("fechaEntrega", e.target.value)
+										}
+										className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#34A853] focus:border-transparent"
+										required
+									/>
+								</div>
+							</div>
+
+							<div className="flex justify-end space-x-3 pt-4">
+								<button
+									type="button"
+									onClick={onClose}
+									className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+									disabled={modalLoading}
+								>
+									Cancelar
+								</button>
+								<button
+									type="submit"
+									className="px-4 py-2 bg-[#34A853] text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50"
+									disabled={modalLoading}
+								>
+									{modalLoading
+										? "Procesando..."
+										: isEdit
+										? "Actualizar"
+										: "Crear Proyecto"}
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 		);
 	};
 
@@ -323,14 +627,42 @@ export default function Dashboard() {
 	return (
 		<Layout>
 			<div className="px-4 sm:px-6 lg:px-8 py-6">
+				{/* Notificación */}
+				<NotificationComponent />
+
 				{/* Header */}
-				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900">
-						Dashboard de Proyectos
-					</h1>
-					<p className="mt-2 text-gray-600">
-						Gestión y seguimiento de todos los proyectos
-					</p>
+				<div className="mb-8 mt-16">
+					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+						<div>
+							<h1 className="text-3xl font-bold text-gray-900">
+								Dashboard de Proyectos
+							</h1>
+							<p className="mt-2 text-gray-600">
+								Gestión y seguimiento de todos los proyectos
+							</p>
+						</div>
+						<div className="flex-shrink-0">
+							<button
+								onClick={() => setShowCreateModal(true)}
+								className="bg-[#34A853] hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
+							>
+								<svg
+									className="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M12 4v16m8-8H4"
+									/>
+								</svg>
+								<span>Crear Proyecto</span>
+							</button>
+						</div>
+					</div>
 				</div>
 
 				{/* Métricas */}
@@ -682,11 +1014,17 @@ export default function Dashboard() {
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 												<div className="flex justify-end space-x-2">
-													<button className="text-[#34A853] hover:text-green-700 font-medium transition-colors">
-														👁️ Ver
-													</button>
-													<button className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+													<button
+														onClick={() => handleEditProject(proyecto)}
+														className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+													>
 														✏️ Editar
+													</button>
+													<button
+														onClick={() => handleDeleteProject(proyecto)}
+														className="text-red-600 hover:text-red-700 font-medium transition-colors"
+													>
+														🗑️ Eliminar
 													</button>
 												</div>
 											</td>
@@ -700,6 +1038,26 @@ export default function Dashboard() {
 					{/* Componente de paginación */}
 					<Pagination />
 				</div>
+
+				{/* Modales */}
+				{showCreateModal && (
+					<ProjectModal
+						onClose={() => setShowCreateModal(false)}
+						onSubmit={handleCreateProject}
+					/>
+				)}
+
+				{showEditModal && editingProject && (
+					<ProjectModal
+						isEdit={true}
+						project={editingProject}
+						onClose={() => {
+							setShowEditModal(false);
+							setEditingProject(null);
+						}}
+						onSubmit={handleUpdateProject}
+					/>
+				)}
 			</div>
 		</Layout>
 	);
