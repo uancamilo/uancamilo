@@ -1,6 +1,0 @@
-# Permitir el acceso a todo el sitio por parte de todos los bots
-User-agent: *
-Allow: /
-
-# Sitemap oficial
-Sitemap: https://uancamilo.vercel.app/sitemap.xml

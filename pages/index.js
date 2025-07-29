@@ -1,117 +1,129 @@
-import Head from "next/head";
-import Usp from "../components/usp";
-import Intro from "../components/intro";
-import Stack from "../components/stack";
-import Layout from "../components/layout";
-import Container from "../components/container";
-import ListServices from "../components/list-services";
-import { getServices, getDatosEstructurados } from "../lib/contentful";
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { getGitHubProfile, getGitHubRepos, getGitHubLanguages } from '../lib/github';
+import { getAllCVData } from '../lib/contentful';
+import { personalInfo } from '../data/personal-info';
 
-export default function Index({ services, structuredData }) {
-	return (
-		<>
-			<Head>
-				<title>
-					Crear tu página web profesional para destacar tu presencia online |
-					Lybre
-				</title>
-				<meta
-					name="description"
-					content="Diseñamos páginas web claras, rápidas y adaptadas a tu negocio para que conectes con más personas y destaques en Internet con confianza."
-				/>
-				<meta name="robots" content="index, follow" />
-				<link rel="canonical" href="https://uancamilo.vercel.app/" />
-				<link rel="icon" href="/images/logo_ly.ico" type="image/x-icon" />
-				<meta
-					property="og:title"
-					content="Crear tu página web profesional para destacar tu presencia online | Lybre"
-				/>
-				<meta
-					property="og:description"
-					content="Diseñamos páginas web claras, rápidas y adaptadas a tu negocio para que conectes con más personas y destaques en Internet con confianza."
-				/>
-				<meta property="og:site_name" content="Lybre" />
-				<meta property="og:url" content="https://uancamilo.vercel.app/" />
-				<meta property="og:type" content="website" />
-				<meta
-					property="og:image"
-					content="https://uancamilo.vercel.app/images/og-image-lybre.png"
-				/>
-				<meta property="og:image:type" content="image/png" />
-				<meta property="og:image:width" content="1200" />
-				<meta property="og:image:height" content="630" />
+import GitHubProfile from '../components/GitHubProfile';
+import GitHubRepos from '../components/GitHubRepos';
+import LanguageStats from '../components/LanguageStats';
+import ProfessionalSummary from '../components/ProfessionalSummary';
+import Experience from '../components/Experience';
+import Education from '../components/Education';
+import Skills from '../components/Skills';
+import Certifications from '../components/Certifications';
+import SocialLinks from '../components/SocialLinks';
 
-				<script
-					key="structured-data"
-					type="application/ld+json"
-					dangerouslySetInnerHTML={{
-						__html: JSON.stringify(structuredData),
-					}}
-				/>
-			</Head>
-			<Layout>
-				<Intro />
-				<Container>
-					{services && services.length > 0 ? (
-						<section className="py-20 px-6 md:px-16">
-							<h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#2F2F2F]">
-								Servicios
-							</h2>
+// Dynamic import to avoid SSR issues with html2pdf.js
+const CVDownloadButton = dynamic(() => import('../components/CVDownloadButton'), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed top-4 right-4 z-50">
+      <div className="px-6 py-3 bg-gray-200 rounded-lg animate-pulse">
+        <div className="h-6 w-24 bg-gray-300 rounded"></div>
+      </div>
+    </div>
+  )
+});
 
-							<div className="flex flex-wrap justify-center gap-10 max-w-6xl mx-auto">
-								{services.map((service, index) => (
-									<ListServices
-										key={index}
-										title={service.title}
-										descripcion={service.descripcion}
-										imagen={service.imagen?.url || "/images/default.svg"}
-										alt={service.title || "Imagen de servicio"}
-									/>
-								))}
-							</div>
-						</section>
-					) : (
-						<p className="text-center text-xl text-[#2F2F2F]">
-							No hay servicios disponibles en este momento.
-						</p>
-					)}
-				</Container>
-				<Stack />
-				<Usp />
-			</Layout>
-		</>
-	);
-}
-export async function getStaticProps() {
-	const services = await getServices();
-	const datosEstructurados = await getDatosEstructurados();
+export default function Home() {
+  const [profile, setProfile] = useState(null);
+  const [repos, setRepos] = useState(null);
+  const [languages, setLanguages] = useState(null);
+  const [cvData, setCvData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-	console.log(datosEstructurados[0].name);
-	return {
-		props: {
-			services,
-			structuredData: {
-				"@context": "https://schema.org",
-				"@type": "Organization",
-				name: "Lybre",
-				url: "https://uancamilo.vercel.app/",
-				logo: "https://avatars.githubusercontent.com/u/36907625?v=4",
-				sameAs: [
-					"https://www.linkedin.com/company/lybredev/",
-					"https://www.facebook.com/lybredev",
-					"https://github.com/uancamilo",
-				],
-				description:
-					"Diseñamos páginas web claras, rápidas y adaptadas a tu negocio para que conectes con más personas y destaques en Internet con confianza.",
-				contactPoint: {
-					"@type": "ContactPoint",
-					telephone: "+57-310-5038505",
-					contactType: "customer support",
-					areaServed: "CO",
-					availableLanguage: ["Spanish", "English"],
-				},
-			},
-		},
-		revalidate: 1,
-	};
+  useEffect(() => {
+    async function fetchAllData() {
+      try {
+        const [profileData, reposData, languagesData, contentfulData] = await Promise.all([
+          getGitHubProfile(),
+          getGitHubRepos(),
+          getGitHubLanguages(),
+          getAllCVData()
+        ]);
+        
+        setProfile(profileData);
+        setRepos(reposData);
+        setLanguages(languagesData);
+        setCvData(contentfulData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchAllData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-lg text-gray-600">Loading portfolio data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Use Contentful data if available, otherwise fallback to static data
+  const currentPersonalInfo = cvData?.personalInfo?.fields || personalInfo;
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      {/* Download Button - Fixed position */}
+      <CVDownloadButton personalInfo={currentPersonalInfo} />
+      
+      {/* Main CV Content */}
+      <div id="cv-content" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section with GitHub Profile */}
+        <GitHubProfile profile={profile} />
+        
+        {/* Professional Summary */}
+        <ProfessionalSummary 
+          summary={personalInfo.summary} 
+          contentfulSummary={cvData?.summary}
+        />
+        
+        {/* Contact & Social Links */}
+        <SocialLinks personalInfo={currentPersonalInfo} showContactInfo={true} />
+        
+        {/* Experience Section */}
+        <Experience 
+          experience={personalInfo.experience}
+          contentfulExperience={cvData?.experience}
+        />
+        
+        {/* Education Section */}
+        <Education 
+          education={personalInfo.education}
+          contentfulEducation={cvData?.education}
+        />
+        
+        {/* Skills and Projects Grid */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2">
+            <GitHubRepos repos={repos} />
+          </div>
+          <div className="space-y-8">
+            <LanguageStats languages={languages} />
+          </div>
+        </div>
+        
+        {/* Skills Section */}
+        <Skills 
+          skills={personalInfo.skills}
+          contentfulSkills={cvData?.skills}
+        />
+        
+        {/* Certifications */}
+        <Certifications 
+          certifications={personalInfo.certifications}
+          contentfulCertifications={cvData?.certifications}
+        />
+      </div>
+    </div>
+  );
 }
