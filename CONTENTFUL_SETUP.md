@@ -9,6 +9,7 @@
    - Content Delivery API - access token
 
 4. Crea el archivo `.env.local` basado en `.env.local.example`:
+
 ```bash
 cp .env.local.example .env.local
 ```
@@ -18,13 +19,15 @@ cp .env.local.example .env.local
 ## 2. Modelos de contenido a crear
 
 ### Personal Info (personalInfo)
+
 - **fullName** (Short text)
-- **title** (Short text) 
+- **title** (Short text)
 - **email** (Short text)
 - **phone** (Short text)
 - **location** (Short text)
 - **website** (Short text)
 - **socialLinks** (JSON object) con estructura:
+
 ```json
 {
   "github": "https://github.com/usuario",
@@ -36,9 +39,11 @@ cp .env.local.example .env.local
 ```
 
 ### Professional Summary (professionalSummary)
+
 - **content** (Rich text) - Tu resumen profesional en markdown/rich text
 
 ### Experience (experience)
+
 - **position** (Short text)
 - **company** (Short text)
 - **location** (Short text)
@@ -49,6 +54,7 @@ cp .env.local.example .env.local
 - **technologies** (Short text, multiple values)
 
 ### Education (education)
+
 - **degree** (Short text)
 - **institution** (Short text)
 - **location** (Short text)
@@ -59,6 +65,7 @@ cp .env.local.example .env.local
 - **achievements** (Short text, multiple values)
 
 ### Certification (certification)
+
 - **name** (Short text)
 - **issuer** (Short text)
 - **issueDate** (Date)
@@ -67,15 +74,18 @@ cp .env.local.example .env.local
 - **url** (Short text) - opcional
 
 ### Skills (skills)
+
 - **technical** (Short text, multiple values)
 - **tools** (Short text, multiple values)
 - **languages** (JSON object) con estructura:
+
 ```json
 [
-  {"language": "Spanish", "level": "Native"},
-  {"language": "English", "level": "Advanced"}
+  { "language": "Spanish", "level": "Native" },
+  { "language": "English", "level": "Advanced" }
 ]
 ```
+
 - **soft** (Short text, multiple values)
 
 ## 3. Cómo agregar contenido
@@ -105,7 +115,7 @@ Si Contentful no está configurado o falla, la app usa los datos dummy en `/data
 ## 7. Estructura recomendada
 
 - **1 entrada** de Personal Info
-- **1 entrada** de Professional Summary  
+- **1 entrada** de Professional Summary
 - **1 entrada** de Skills
 - **Múltiples entradas** de Experience (una por trabajo)
 - **Múltiples entradas** de Education (una por título/certificado)

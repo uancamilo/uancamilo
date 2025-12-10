@@ -3,12 +3,15 @@ export default function LanguageStats({ languages }) {
     return <div>Cargando estadísticas de lenguajes...</div>;
   }
 
-  const totalBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0);
+  const totalBytes = Object.values(languages).reduce(
+    (sum, bytes) => sum + bytes,
+    0
+  );
   const languagePercentages = Object.entries(languages)
     .map(([lang, bytes]) => ({
       name: lang,
       bytes,
-      percentage: ((bytes / totalBytes) * 100).toFixed(1)
+      percentage: ((bytes / totalBytes) * 100).toFixed(1),
     }))
     .sort((a, b) => b.bytes - a.bytes)
     .slice(0, 8);
@@ -31,15 +34,17 @@ export default function LanguageStats({ languages }) {
       Ruby: '#cc342d',
       Shell: '#89e051',
       Vue: '#4fc08d',
-      React: '#61dafb'
+      React: '#61dafb',
     };
     return colors[language] || '#6b7280';
   };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Lenguajes de Programación</h2>
-      
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        Lenguajes de Programación
+      </h2>
+
       <div className="mb-6">
         <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
           {languagePercentages.map((lang, index) => (
@@ -48,7 +53,7 @@ export default function LanguageStats({ languages }) {
               className="h-full"
               style={{
                 width: `${lang.percentage}%`,
-                backgroundColor: getLanguageColor(lang.name)
+                backgroundColor: getLanguageColor(lang.name),
               }}
               title={`${lang.name}: ${lang.percentage}%`}
             />

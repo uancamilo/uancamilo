@@ -1,31 +1,46 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaGlobe, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFacebook } from 'react-icons/fa';
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaInstagram,
+  FaGlobe,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaFacebook,
+} from 'react-icons/fa';
 
-export default function ProfileHeader({ profile, personalInfo, contentfulSummary }) {
-  const summaryData = contentfulSummary?.fields?.content || personalInfo.summary;
+export default function ProfileHeader({
+  profile,
+  personalInfo,
+  contentfulSummary,
+}) {
+  const summaryData =
+    contentfulSummary?.fields?.content || personalInfo.summary;
 
-      const socialIcons = {
-        github: FaGithub,
-        linkedin: FaLinkedin,
-        twitter: FaTwitter,
-        instagram: FaInstagram,
-        portfolio: FaGlobe,
-        website: FaGlobe,
-        facebook: FaFacebook,
-      };
-  
-      const getSocialColor = (platform) => {
-        const colors = {
-          github: 'hover:text-gray-900',
-          linkedin: 'hover:text-blue-600',
-          twitter: 'hover:text-blue-400',
-          instagram: 'hover:text-pink-600',
-          portfolio: 'hover:text-purple-600',
-          website: 'hover:text-purple-600',
-          facebook: 'hover:text-blue-700',
-        };
-        return colors[platform] || 'hover:text-gray-600';
-      };
+  const socialIcons = {
+    github: FaGithub,
+    linkedin: FaLinkedin,
+    twitter: FaTwitter,
+    instagram: FaInstagram,
+    portfolio: FaGlobe,
+    website: FaGlobe,
+    facebook: FaFacebook,
+  };
+
+  const getSocialColor = (platform) => {
+    const colors = {
+      github: 'hover:text-gray-900',
+      linkedin: 'hover:text-blue-600',
+      twitter: 'hover:text-blue-400',
+      instagram: 'hover:text-pink-600',
+      portfolio: 'hover:text-purple-600',
+      website: 'hover:text-purple-600',
+      facebook: 'hover:text-blue-700',
+    };
+    return colors[platform] || 'hover:text-gray-600';
+  };
   if (!profile || !personalInfo) return <div>Cargando perfil...</div>;
 
   return (
@@ -49,13 +64,13 @@ export default function ProfileHeader({ profile, personalInfo, contentfulSummary
               <p className="text-md text-gray-500 mt-1">@{profile.login}</p>
             </div>
           </div>
-          
+
           {profile.bio && (
             <p className="text-gray-700 mt-4 text-lg">{profile.bio}</p>
           )}
 
           <div className="mt-6">
-             <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
               {typeof summaryData === 'string' ? (
                 <p>{summaryData}</p>
               ) : (
@@ -69,17 +84,25 @@ export default function ProfileHeader({ profile, personalInfo, contentfulSummary
         <div className="space-y-6">
           {/* Contacto */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Contacto</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Contacto
+            </h3>
             <div className="space-y-3">
               <div className="flex items-center text-gray-700">
                 <FaEnvelope className="w-5 h-5 mr-3 text-gray-400" />
-                <a href={`mailto:${personalInfo.email}`} className="hover:text-blue-600 transition-colors">
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  className="hover:text-blue-600 transition-colors"
+                >
                   {personalInfo.email}
                 </a>
               </div>
               <div className="flex items-center text-gray-700">
                 <FaPhone className="w-5 h-5 mr-3 text-gray-400" />
-                <a href={`tel:${personalInfo.phone}`} className="hover:text-blue-600 transition-colors">
+                <a
+                  href={`tel:${personalInfo.phone}`}
+                  className="hover:text-blue-600 transition-colors"
+                >
                   {personalInfo.phone}
                 </a>
               </div>
@@ -89,28 +112,33 @@ export default function ProfileHeader({ profile, personalInfo, contentfulSummary
               </div>
             </div>
           </div>
-          
+
           {/* Redes Sociales */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Redes Sociales</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Redes Sociales
+            </h3>
             <div className="flex flex-wrap gap-3">
-              {personalInfo.socialLinks && Object.entries(personalInfo.socialLinks).map(([platform, url]) => {
-                if (!url) return null;
-                const IconComponent = socialIcons[platform];
-                if (!IconComponent) return null;
-                return (
-                  <a
-                    key={platform}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={platform}
-                    className={`p-2 rounded-full border border-gray-200 text-gray-500 transition-colors ${getSocialColor(platform)}`}
-                  >
-                    <IconComponent className="w-6 h-6" />
-                  </a>
-                );
-              })}
+              {personalInfo.socialLinks &&
+                Object.entries(personalInfo.socialLinks).map(
+                  ([platform, url]) => {
+                    if (!url) return null;
+                    const IconComponent = socialIcons[platform];
+                    if (!IconComponent) return null;
+                    return (
+                      <a
+                        key={platform}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={platform}
+                        className={`p-2 rounded-full border border-gray-200 text-gray-500 transition-colors ${getSocialColor(platform)}`}
+                      >
+                        <IconComponent className="w-6 h-6" />
+                      </a>
+                    );
+                  }
+                )}
             </div>
           </div>
         </div>
@@ -118,4 +146,3 @@ export default function ProfileHeader({ profile, personalInfo, contentfulSummary
     </div>
   );
 }
-
