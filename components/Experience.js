@@ -10,7 +10,7 @@ export default function Experience({ experience, contentfulExperience }) {
         company: item.fields.company,
         location: item.fields.location,
         startDate: item.fields.startDate,
-        endDate: item.fields.endDate || 'Present',
+        endDate: item.fields.endDate || 'Presente',
         description: item.fields.description,
         achievements: item.fields.achievements || [],
         technologies: item.fields.technologies || [],
@@ -23,7 +23,7 @@ export default function Experience({ experience, contentfulExperience }) {
         <svg className="w-6 h-6 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6z" />
         </svg>
-        Professional Experience
+        Experiencia Profesional
       </h2>
       
       <div className="space-y-8">
@@ -58,7 +58,7 @@ export default function Experience({ experience, contentfulExperience }) {
             
             {exp.achievements && exp.achievements.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">Key Achievements:</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2">Logros Clave:</h4>
                 <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                   {exp.achievements.map((achievement, index) => (
                     <li key={index}>{achievement}</li>
@@ -69,7 +69,7 @@ export default function Experience({ experience, contentfulExperience }) {
             
             {exp.technologies && exp.technologies.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">Technologies Used:</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2">Tecnologías Utilizadas:</h4>
                 <div className="flex flex-wrap gap-2">
                   {exp.technologies.map((tech, index) => (
                     <span

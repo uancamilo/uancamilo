@@ -1,5 +1,5 @@
 export default function GitHubRepos({ repos }) {
-  if (!repos || repos.length === 0) return <div>Loading repositories...</div>;
+  if (!repos || repos.length === 0) return <div>Cargando repositorios...</div>;
 
   const featuredRepos = repos
     .filter(repo => !repo.fork)
@@ -8,7 +8,7 @@ export default function GitHubRepos({ repos }) {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Projects</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Proyectos Destacados</h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {featuredRepos.map((repo) => (
           <div key={repo.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
@@ -25,7 +25,7 @@ export default function GitHubRepos({ repos }) {
               </h3>
               {repo.private && (
                 <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                  Private
+                  Privado
                 </span>
               )}
             </div>

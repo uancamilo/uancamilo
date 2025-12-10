@@ -1,6 +1,6 @@
 export default function LanguageStats({ languages }) {
   if (!languages || Object.keys(languages).length === 0) {
-    return <div>Loading language stats...</div>;
+    return <div>Cargando estadísticas de lenguajes...</div>;
   }
 
   const totalBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0);
@@ -38,7 +38,7 @@ export default function LanguageStats({ languages }) {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Programming Languages</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Lenguajes de Programación</h2>
       
       <div className="mb-6">
         <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">

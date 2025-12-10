@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function GitHubProfile({ profile }) {
-  if (!profile) return <div>Loading profile...</div>;
+  if (!profile) return <div>Cargando perfil...</div>;
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -39,7 +39,7 @@ export default function GitHubProfile({ profile }) {
                   <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                   <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                 </svg>
-                Website
+                Sitio Web
               </a>
             )}
           </div>
@@ -49,15 +49,15 @@ export default function GitHubProfile({ profile }) {
       <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
         <div className="text-center">
           <div className="text-2xl font-bold text-gray-900">{profile.public_repos}</div>
-          <div className="text-sm text-gray-500">Repositories</div>
+          <div className="text-sm text-gray-500">Repositorios</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-gray-900">{profile.followers}</div>
-          <div className="text-sm text-gray-500">Followers</div>
+          <div className="text-sm text-gray-500">Seguidores</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-gray-900">{profile.following}</div>
-          <div className="text-sm text-gray-500">Following</div>
+          <div className="text-sm text-gray-500">Siguiendo</div>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default function Education({ education, contentfulEducation }) {
         institution: item.fields.institution,
         location: item.fields.location,
         startDate: item.fields.startDate,
-        endDate: item.fields.endDate || 'Present',
+        endDate: item.fields.endDate || 'Presente',
         gpa: item.fields.gpa,
         description: item.fields.description,
         achievements: item.fields.achievements || [],
@@ -24,7 +24,7 @@ export default function Education({ education, contentfulEducation }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
         </svg>
-        Education
+        Educación
       </h2>
       
       <div className="space-y-6">
@@ -47,7 +47,7 @@ export default function Education({ education, contentfulEducation }) {
                 {edu.gpa && (
                   <>
                     <span className="mx-2">•</span>
-                    <span>GPA: {edu.gpa}</span>
+                    <span>Promedio: {edu.gpa}</span>
                   </>
                 )}
               </div>
@@ -65,7 +65,7 @@ export default function Education({ education, contentfulEducation }) {
             
             {edu.achievements && edu.achievements.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">Key Achievements:</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-2">Logros Clave:</h4>
                 <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                   {edu.achievements.map((achievement, index) => (
                     <li key={index}>{achievement}</li>

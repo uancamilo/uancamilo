@@ -29,14 +29,14 @@ export default function Skills({ skills, contentfulSkills }) {
         <svg className="w-6 h-6 mr-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
-        Skills & Expertise
+        Habilidades y Conocimientos
       </h2>
       
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           {skillsData.technical && (
             <SkillCategory
-              title="Technical Skills"
+              title="Habilidades Técnicas"
               skills={skillsData.technical}
               colorClass="text-blue-700"
               icon={
@@ -49,7 +49,7 @@ export default function Skills({ skills, contentfulSkills }) {
           
           {skillsData.tools && (
             <SkillCategory
-              title="Tools & Platforms"
+              title="Herramientas y Plataformas"
               skills={skillsData.tools}
               colorClass="text-green-700"
               icon={
@@ -65,7 +65,7 @@ export default function Skills({ skills, contentfulSkills }) {
         <div>
           {skillsData.languages && (
             <SkillCategory
-              title="Languages"
+              title="Idiomas"
               skills={skillsData.languages}
               colorClass="text-purple-700"
               icon={
@@ -78,7 +78,7 @@ export default function Skills({ skills, contentfulSkills }) {
           
           {skillsData.soft && (
             <SkillCategory
-              title="Soft Skills"
+              title="Habilidades Blandas"
               skills={skillsData.soft}
               colorClass="text-pink-700"
               icon={
@@ -92,11 +92,11 @@ export default function Skills({ skills, contentfulSkills }) {
       </div>
       
       <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Professional Focus</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Enfoque Profesional</h3>
         <p className="text-sm text-gray-600">
-          Specialized in modern web development with a strong emphasis on user experience, 
-          performance optimization, and scalable architecture. Always eager to learn new 
-          technologies and best practices.
+          Especializado en el desarrollo web moderno con un fuerte énfasis en la experiencia del usuario,
+          la optimización del rendimiento y la arquitectura escalable. Siempre dispuesto a aprender nuevas
+          tecnologías y mejores prácticas.
         </p>
       </div>
     </div>
