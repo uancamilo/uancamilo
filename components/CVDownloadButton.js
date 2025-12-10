@@ -14,7 +14,7 @@ export default function CVDownloadButton({ personalInfo }) {
       const element = document.getElementById('cv-content');
 
       if (!element) {
-        alert('Contenido del CV no encontrado. Por favor, intenta de nuevo.');
+        alert('Contenido del CV no encontrado. 'Por favor, inténtalo de nuevo.'');
         setIsGenerating(false);
         return;
       }
@@ -43,7 +43,7 @@ export default function CVDownloadButton({ personalInfo }) {
       await html2pdf().set(opt).from(element).save();
     } catch (error) {
       console.error('Error generando PDF:', error);
-      alert('Error generando PDF. Por favor, intenta de nuevo.');
+      alert('Error generando PDF. 'Por favor, inténtalo de nuevo.'');
     } finally {
       setIsGenerating(false);
     }

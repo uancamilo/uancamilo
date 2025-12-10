@@ -25,8 +25,8 @@ export const personalInfo = {
   education: [
     {
       id: 1,
-      degree: 'Tecnologia en Sistemas',
-      institution: 'institution Universitaria Salazar y Herrera',
+      degree: 'Tecnología en Sistemas',
+      institution: 'Institución Universitaria Salazar y Herrera',
       location: 'Medellín, Colombia',
       startDate: '2025',
       endDate: 'En curso',
@@ -66,7 +66,7 @@ export const personalInfo = {
       startDate: 'Junio 2024',
       endDate: 'Diciembre 2024',
       description:
-        'Líder de desarrollo responsable de arquitecturar e implementar aplicaciones web modernas utilizando el ecosistema de React y Node.js.',
+        'Líder de desarrollo responsable de diseñar la arquitectura e implementar aplicaciones web modernas utilizando el ecosistema de React y Node.js.',
       achievements: [
         'Desarrollé e implementé más de 5 aplicaciones web importantes sirviendo a más de 10,000 usuarios',
         'Reduje el tiempo de carga de aplicaciones en un 40% mediante técnicas de optimización',
