@@ -55,11 +55,11 @@ export default function CVDownloadButton({ personalInfo }) {
         onClick={generatePDF}
         disabled={isGenerating}
         className={`
-          flex items-center px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 shadow-lg
+          flex items-center px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200
           ${
             isGenerating
               ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:shadow-xl transform hover:scale-105'
+              : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform hover:scale-105'
           }
         `}
       >

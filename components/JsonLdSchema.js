@@ -1,8 +1,7 @@
 // components/JsonLdSchema.js
 
 const JsonLdSchema = ({ personalInfo, profile, repos }) => {
-  // Construimos el objeto del schema.org
-  const schema = {
+    const schema = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: personalInfo.fullName,
