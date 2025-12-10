@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import {
@@ -16,6 +17,7 @@ import Education from '../components/Education';
 import Skills from '../components/Skills';
 import Certifications from '../components/Certifications';
 import LoadingSpinner from '../components/LoadingSpinner';
+import JsonLdSchema from '../components/JsonLdSchema';
 
 // Dynamic import to avoid SSR issues with html2pdf.js
 const CVDownloadButton = dynamic(
@@ -72,53 +74,70 @@ export default function Home() {
   const currentPersonalInfo = cvData?.personalInfo?.fields || personalInfo;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      {/* Download Button - Fixed position */}
-      <CVDownloadButton personalInfo={currentPersonalInfo} />
-
-      {/* Main CV Content */}
-      <div id="cv-content" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section with GitHub Profile */}
-        <ProfileHeader
-          profile={profile}
-          personalInfo={currentPersonalInfo}
-          contentfulSummary={cvData?.summary}
+    <>
+      <Head>
+        <title>Juan Camilo Serna | Desarrollador Full Stack</title>
+        <meta
+          name="description"
+          content="Portafolio de Juan Camilo Serna, Desarrollador Full Stack con experiencia en el ciclo de vida completo del software. Experto en el ecosistema JavaScript (React, Next.js, Node.js) y en la aplicación de buenas prácticas para crear software de calidad."
         />
+        {/* Renderiza el schema JSON-LD si los datos están disponibles */}
+        {profile && currentPersonalInfo && (
+          <JsonLdSchema
+            personalInfo={currentPersonalInfo}
+            profile={profile}
+            repos={repos}
+          />
+        )}
+      </Head>
+      <div className="min-h-screen bg-gray-50 py-8">
+        {/* Download Button - Fixed position */}
+        <CVDownloadButton personalInfo={currentPersonalInfo} />
 
-        {/* Experience Section */}
-        <Experience
-          experience={personalInfo.experience}
-          contentfulExperience={cvData?.experience}
-        />
+        {/* Main CV Content */}
+        <div id="cv-content" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Section with GitHub Profile */}
+          <ProfileHeader
+            profile={profile}
+            personalInfo={currentPersonalInfo}
+            contentfulSummary={cvData?.summary}
+          />
 
-        {/* Education Section */}
-        <Education
-          education={personalInfo.education}
-          contentfulEducation={cvData?.education}
-        />
+          {/* Experience Section */}
+          <Experience
+            experience={personalInfo.experience}
+            contentfulExperience={cvData?.experience}
+          />
 
-        {/* Skills and Projects Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-8">
-          <div className="lg:col-span-2">
-            <GitHubRepos repos={repos} />
+          {/* Education Section */}
+          <Education
+            education={personalInfo.education}
+            contentfulEducation={cvData?.education}
+          />
+
+          {/* Skills and Projects Grid */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-8">
+            <div className="lg:col-span-2">
+              <GitHubRepos repos={repos} />
+            </div>
+            <div className="space-y-8">
+              <LanguageStats languages={languages} />
+            </div>
           </div>
-          <div className="space-y-8">
-            <LanguageStats languages={languages} />
-          </div>
+
+          {/* Skills Section */}
+          <Skills
+            skills={personalInfo.skills}
+            contentfulSkills={cvData?.skills}
+          />
+
+          {/* Certifications */}
+          <Certifications
+            certifications={personalInfo.certifications}
+            contentfulCertifications={cvData?.certifications}
+          />
         </div>
-
-        {/* Skills Section */}
-        <Skills
-          skills={personalInfo.skills}
-          contentfulSkills={cvData?.skills}
-        />
-
-        {/* Certifications */}
-        <Certifications
-          certifications={personalInfo.certifications}
-          contentfulCertifications={cvData?.certifications}
-        />
       </div>
-    </div>
+    </>
   );
 }
