@@ -46,7 +46,17 @@ export default function LanguageStats({ languages }) {
       </h2>
 
       <div className="mb-6">
-        <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className="flex h-4 bg-gray-200 rounded-full overflow-hidden"
+          role="progressbar"
+          aria-label="Distribución de lenguajes de programación"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={languagePercentages.reduce(
+            (acc, lang) => acc + parseFloat(lang.percentage),
+            0
+          )}
+        >
           {languagePercentages.map((lang, index) => (
             <div
               key={lang.name}
@@ -56,6 +66,7 @@ export default function LanguageStats({ languages }) {
                 backgroundColor: getLanguageColor(lang.name),
               }}
               title={`${lang.name}: ${lang.percentage}%`}
+              aria-label={`${lang.name}: ${lang.percentage}%`}
             />
           ))}
         </div>

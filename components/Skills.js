@@ -12,18 +12,18 @@ export default function Skills({ skills, contentfulSkills }) {
         {icon}
         {title}
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <ul className="flex flex-wrap gap-2">
         {skills.map((skill, index) => (
-          <span
+          <li
             key={index}
             className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full border hover:bg-gray-200 transition-colors"
           >
             {typeof skill === 'object'
               ? `${skill.language} (${skill.level})`
               : skill}
-          </span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 

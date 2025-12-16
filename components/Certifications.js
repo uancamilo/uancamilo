@@ -54,6 +54,7 @@ export default function Certifications({
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 flex-shrink-0"
                 >
+                  <span className="sr-only">Ver credencial</span>
                   <svg
                     className="w-5 h-5"
                     fill="none"

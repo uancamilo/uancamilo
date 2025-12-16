@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import {
   FaGithub,
@@ -49,10 +50,12 @@ export default function ProfileHeader({
         {/* Columna Izquierda: Información Principal */}
         <div className="md:col-span-2">
           <div className="flex items-start space-x-6">
-            <img
+            <Image
               src={profile.avatar_url}
               alt={profile.name || profile.login}
-              className="w-24 h-24 rounded-full border-4 border-gray-200"
+              width={96}
+              height={96}
+              className="rounded-full border-4 border-gray-200"
             />
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900">
@@ -135,6 +138,7 @@ export default function ProfileHeader({
                         className={`p-2 rounded-full border border-gray-200 text-gray-500 transition-colors ${getSocialColor(platform)}`}
                       >
                         <IconComponent className="w-6 h-6" />
+                        <span className="sr-only">{platform}</span>
                       </a>
                     );
                   }
