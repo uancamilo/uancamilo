@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    // Advertencia: Esto permite que las compilaciones de producción se completen con éxito incluso si
+    // tu proyecto tiene errores de ESLint.
     ignoreDuringBuilds: true,
   },
   images: {
