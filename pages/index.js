@@ -3,6 +3,7 @@ import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
 
 import ProfileHeader from '../components/sections/ProfileHeader';
+import ContactSection from '../components/sections/ContactSection'; // Importar el nuevo componente
 
 export default function Home({ personalInfo }) {
   return (
@@ -13,6 +14,7 @@ export default function Home({ personalInfo }) {
       </Head>
       <main id="cv-content">
         <ProfileHeader personalInfo={personalInfo} />
+        <ContactSection personalInfo={personalInfo} />
       </main>
     </>
   );
