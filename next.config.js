@@ -1,10 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    // Advertencia: Esto permite que las compilaciones de producción se completen con éxito incluso si
-    // tu proyecto tiene errores de ESLint.
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {
@@ -15,6 +10,7 @@ const nextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ['10.177.158.144:3000', '10.177.158.144'],
 };
 
 module.exports = nextConfig;
