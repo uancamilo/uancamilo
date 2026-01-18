@@ -1,18 +1,4 @@
-import { createClient } from 'contentful';
-
-// Solo crear el cliente si las variables de entorno están configuradas correctamente.
-// Nota: El cliente 'createClient' de Contentful no se utiliza directamente en la función fetchContent,
-// ya que esta última realiza peticiones GraphQL directamente con fetch.
-// Se mantiene por si se desea usar el cliente JS de Contentful para otras operaciones.
-const client =
-  process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN
-    ? createClient({
-        space: process.env.CONTENTFUL_SPACE_ID,
-        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-      })
-    : null;
-
-// Función genérica para peticiones GraphQL.
+// Función genérica para peticiones GraphQL a Contentful.
 export async function fetchContent(query) {
   const spaceId = process.env.CONTENTFUL_SPACE_ID;
   const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;

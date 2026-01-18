@@ -18,6 +18,7 @@
  *   website: string;
  *   socialLinks: { name: string; url: string }[];
  *   sameAs: string[];
+ *   profileImage: { url: string; width: number; height: number } | null;
  * }} Los datos de información personal transformados.
  */
 export function adaptPersonalInfo(rawData) {
@@ -33,6 +34,7 @@ export function adaptPersonalInfo(rawData) {
       website: '',
       socialLinks: [],
       sameAs: [],
+      profileImage: null,
     };
   }
 
@@ -41,6 +43,14 @@ export function adaptPersonalInfo(rawData) {
 
   const locationParts = rawData.location?.split(',').map(part => part.trim());
   const city = locationParts?.length > 1 ? locationParts[1] : rawData.location;
+
+  const profileImage = rawData.profileImage
+    ? {
+        url: rawData.profileImage.url,
+        width: rawData.profileImage.width,
+        height: rawData.profileImage.height,
+      }
+    : null;
 
   return {
     name: rawData.name || 'Nombre no disponible',
@@ -53,5 +63,6 @@ export function adaptPersonalInfo(rawData) {
     website: rawData.website || '',
     socialLinks,
     sameAs,
+    profileImage,
   };
 }

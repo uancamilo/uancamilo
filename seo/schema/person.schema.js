@@ -21,8 +21,8 @@ export function buildPersonSchema(data) {
     url: siteUrl,
   };
 
-  if (data.jobTitle) {
-    schema.jobTitle = data.jobTitle;
+  if (data.title) {
+    schema.jobTitle = data.title;
   }
 
   if (data.email) {

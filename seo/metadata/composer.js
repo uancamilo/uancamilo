@@ -1,5 +1,7 @@
 import { buildBaseMetadata } from './buildBaseMetadata';
 import { buildCanonicalMetadata } from './buildCanonicalMetadata';
+import { buildOpenGraphMetadata } from './buildOpenGraphMetadata';
+import { buildTwitterMetadata } from './buildTwitterMetadata';
 
 /**
  * Registro de metadata builders disponibles
@@ -11,6 +13,8 @@ import { buildCanonicalMetadata } from './buildCanonicalMetadata';
 const metadataBuilders = {
   base: buildBaseMetadata,
   canonical: buildCanonicalMetadata,
+  openGraph: buildOpenGraphMetadata,
+  twitter: buildTwitterMetadata,
 };
 
 /**
@@ -35,7 +39,7 @@ export function composeMetadata(data, types, options = {}) {
     let result;
 
     // Algunos builders necesitan opciones adicionales
-    if (type === 'canonical') {
+    if (type === 'canonical' || type === 'openGraph') {
       result = builder(data, options.path);
     } else {
       result = builder(data);

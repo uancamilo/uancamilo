@@ -1,5 +1,6 @@
 import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
+import { reflect } from '../lib/utils/promiseReflect';
 
 /**
  * Genera el sitemap XML dinámicamente
@@ -84,12 +85,6 @@ export default function Sitemap() {
 }
 
 export async function getServerSideProps({ res }) {
-  // Obtener información personal para derivar el dominio
-  const reflect = (promise) =>
-    promise
-      .then((value) => ({ status: 'fulfilled', value }))
-      .catch((error) => ({ status: 'rejected', reason: error }));
-
   const [personalInfoResult] = await Promise.all([reflect(getPersonalInfo())]);
 
   const rawPersonalInfo =

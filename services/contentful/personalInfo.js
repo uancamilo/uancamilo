@@ -14,14 +14,19 @@ query personalInfoCollectionQuery {
       phone
       location
       website
-      # socialLinksCollection {
-      #   items {
-      #     ... on SocialLink {
-      #       name
-      #       url
-      #     }
-      #   }
-      # }
+      profileImage {
+        url
+        width
+        height
+      }
+      socialLinksCollection {
+        items {
+          ... on SocialLink {
+            name
+            url
+          }
+        }
+      }
     }
   }
 }
