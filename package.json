@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint pages/ components/ logic/ services/ seo/"
+    "lint": "eslint app/ components/ logic/ services/ seo/"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.1.0",
