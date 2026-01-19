@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+
+  /* Estilos para rich text de Contentful */
+  .prose p {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  .prose a {
+    @apply text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors;
+  }
+
+  .prose ul {
+    @apply list-disc list-inside space-y-1 text-gray-600;
+  }
+
+  .prose ol {
+    @apply list-decimal list-inside space-y-1 text-gray-600;
+  }
+}

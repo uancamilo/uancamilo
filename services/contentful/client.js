@@ -20,8 +20,6 @@ export async function fetchContent(query) {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ query }),
-        // Soporte para revalidación de Next.js
-        next: { revalidate: 60 },
       }
     );
 

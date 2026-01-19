@@ -1,120 +1,120 @@
-// components/sections/ContactSection.js
 import {
   FaGithub,
   FaLinkedin,
   FaTwitter,
-  FaGlobe,
+  FaFacebook,
   FaEnvelope,
   FaPhone,
   FaMapMarkerAlt,
+  FaGlobe,
+  FaInstagram,
+  FaYoutube,
+  FaDev,
+  FaMedium,
 } from 'react-icons/fa';
+import { SiX } from 'react-icons/si';
 
-// Mapeo de íconos para redes sociales, ahora local a este componente.
+/**
+ * Mapeo de íconos para redes sociales
+ * Extensible: agregar nuevas redes aquí
+ */
 const socialIconMap = {
-  github: { icon: FaGithub },
-  linkedin: { icon: FaLinkedin },
-  twitter: { icon: FaTwitter },
+  github: FaGithub,
+  linkedin: FaLinkedin,
+  twitter: FaTwitter,
+  x: SiX,
+  facebook: FaFacebook,
+  instagram: FaInstagram,
+  youtube: FaYoutube,
+  dev: FaDev,
+  'dev.to': FaDev,
+  medium: FaMedium,
+  website: FaGlobe,
+  web: FaGlobe,
 };
 
-// Componente para mostrar ítems de información, ahora local a este componente.
-const InfoItem = ({ icon: Icon, label, value, href }) => { // Removed isAction prop
-  const content = (
-    <div>
-      <dt>{label}</dt>
-      <dd>{value}</dd>
-    </div>
-  );
+/**
+ * ContactSection - Información de contacto y redes sociales
+ *
+ * Diseño:
+ * - Se integra visualmente con el hero (parte del mismo bloque conceptual)
+ * - Separador sutil arriba
+ * - Layout horizontal en desktop, vertical en mobile
+ * - Iconos con hover states
+ */
+export default function ContactSection({ personalInfo }) {
+  const { email, phone, location, socialLinks } = personalInfo;
 
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        <div>
-          <Icon aria-hidden="true" />
-        </div>
-        {content}
-      </a>
-    );
+  // Filtrar solo las redes sociales que tenemos iconos
+  const validSocialLinks = socialLinks?.filter(
+    ({ name }) => socialIconMap[name.toLowerCase()]
+  ) || [];
+
+  // Si no hay información de contacto, no renderizar
+  if (!email && !phone && !location && validSocialLinks.length === 0) {
+    return null;
   }
 
   return (
-    <div>
-      <div>
-        <Icon aria-hidden="true" />
-      </div>
-      {content}
-    </div>
-  );
-};
+    <section
+      aria-labelledby="contact-heading"
+      className="pt-8 border-t border-gray-200"
+    >
+      <h2 id="contact-heading" className="sr-only">
+        Información de contacto
+      </h2>
 
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        {/* Información de contacto básica */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-600">
+          {email && (
+            <a
+              href={`mailto:${email}`}
+              className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+            >
+              <FaEnvelope className="w-4 h-4" aria-hidden="true" />
+              <span>{email}</span>
+            </a>
+          )}
 
-export default function ContactSection({ personalInfo }) {
-  return (
-    <section aria-labelledby="contact-heading">
-      <div>
-        <div>
-          <h2 id="contact-heading">
-            Contacto y Enlaces
-          </h2>
-          <p>
-            Puedes encontrarme en los siguientes canales.
-          </p>
-        </div>
-        <div>
-          {personalInfo.email && (
-            <InfoItem
-              icon={FaEnvelope}
-              label="Email"
-              value="Envíame un correo"
-              href={`mailto:${personalInfo.email}`}
-              // Removed isAction={true}
-            />
+          {phone && (
+            <a
+              href={`tel:${phone}`}
+              className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+            >
+              <FaPhone className="w-4 h-4" aria-hidden="true" />
+              <span>{phone}</span>
+            </a>
           )}
-          {personalInfo.website && (
-            <InfoItem
-              icon={FaGlobe}
-              label="Sitio Web"
-              value="Visita mi portafolio"
-              href={personalInfo.website}
-              // Removed isAction={true}
-            />
-          )}
-          {personalInfo.phone && (
-            <InfoItem
-              icon={FaPhone}
-              label="Teléfono"
-              value={personalInfo.phone}
-              href={`tel:${personalInfo.phone}`}
-            />
-          )}
-          {personalInfo.location && (
-            <InfoItem
-              icon={FaMapMarkerAlt}
-              label="Ubicación"
-              value={personalInfo.location}
-            />
+
+          {location && (
+            <span className="flex items-center gap-2">
+              <FaMapMarkerAlt className="w-4 h-4" aria-hidden="true" />
+              <span>{location}</span>
+            </span>
           )}
         </div>
-        
-        {/* Íconos de Redes Sociales */}
-        <div>
-          <h3>Redes Sociales</h3>
-          {personalInfo.socialLinks?.map(({ name, url }) => {
-            const social = socialIconMap[name.toLowerCase()];
-            if (!social) return null;
-            const Icon = social.icon;
-            return (
-              <a
-                key={name}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={name}
-              >
-                <Icon aria-hidden="true" />
-              </a>
-            );
-          })}
-        </div>
+
+        {/* Redes sociales */}
+        {validSocialLinks.length > 0 && (
+          <div className="flex items-center gap-4">
+            {validSocialLinks.map(({ name, url }) => {
+              const Icon = socialIconMap[name.toLowerCase()];
+              return (
+                <a
+                  key={name}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Perfil de ${name}`}
+                  className="text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                  <Icon className="w-5 h-5" aria-hidden="true" />
+                </a>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

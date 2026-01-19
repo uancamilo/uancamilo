@@ -3,13 +3,12 @@ import '../styles/globals.css';
 
 /**
  * Root Layout para App Router
- * Combina la funcionalidad de _app.js y _document.js del Pages Router
  *
- * Responsabilidades:
- * - Define estructura HTML base
- * - Carga estilos globales
- * - Integra Google Tag Manager (solo en producción)
- * - Configura Google Site Verification
+ * Estructura visual base:
+ * - Fondo neutro (gray-50)
+ * - Tipografía system con antialiasing
+ * - Contenedor centrado con max-width
+ * - Padding responsive
  */
 export default function RootLayout({ children }) {
   return (
@@ -21,7 +20,7 @@ export default function RootLayout({ children }) {
           content="SmSLs8hW6F2BOxiuyl2zJ367y1w8jxVj6fM3SBgosZo"
         />
       </head>
-      <body>
+      <body className="bg-gray-50 text-gray-900 min-h-screen">
         {process.env.NODE_ENV === 'production' && (
           <Script id="google-tag-manager" strategy="afterInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -31,7 +30,9 @@ export default function RootLayout({ children }) {
             })(window,document,'script','dataLayer','GTM-KBGT5ZFJ');`}
           </Script>
         )}
-        {children}
+        <div className="max-w-5xl mx-auto px-6 py-12 sm:py-16 md:py-20">
+          {children}
+        </div>
       </body>
     </html>
   );
