@@ -54,7 +54,7 @@ export default function ProfileHeader({ personalInfo }) {
 
           {/* Summary - texto editorial */}
           {summary?.json && (
-            <div className="mt-5 space-y-3 text-base leading-relaxed text-gray-500 sm:text-lg">
+            <div className="mt-5 space-y-3 text-base leading-relaxed text-gray-600 sm:text-lg">
               {documentToReactComponents(summary.json)}
             </div>
           )}

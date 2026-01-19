@@ -1,10 +1,13 @@
 import { getPersonalInfo } from '../services/contentful/personalInfo';
+import { getExperiences } from '../services/contentful/experience';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
+import { adaptExperiences } from '../logic/experience.logic';
 import { composeSchemas } from '../seo/schema/composer';
 import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
 
 import ProfileHeader from '../components/sections/ProfileHeader';
 import ContactSection from '../components/sections/ContactSection';
+import Experience from '../components/sections/Experience';
 
 /**
  * Obtiene y adapta la información personal desde Contentful
@@ -19,6 +22,21 @@ async function getAndAdaptPersonalInfo() {
       console.error('Error fetching personal info:', error);
     }
     return adaptPersonalInfo(null);
+  }
+}
+
+/**
+ * Obtiene y adapta las experiencias laborales desde Contentful
+ */
+async function getAndAdaptExperiences() {
+  try {
+    const rawData = await getExperiences();
+    return adaptExperiences(rawData);
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching experiences:', error);
+    }
+    return [];
   }
 }
 
@@ -58,8 +76,11 @@ function JsonLdSchema({ data }) {
  * - Pasa datos a componentes de presentación
  */
 export default async function HomePage() {
-  // Data fetching directo en Server Component
-  const personalInfo = await getAndAdaptPersonalInfo();
+  // Data fetching paralelo en Server Component
+  const [personalInfo, experiences] = await Promise.all([
+    getAndAdaptPersonalInfo(),
+    getAndAdaptExperiences(),
+  ]);
 
   // Componer schemas JSON-LD para SEO
   const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite']);
@@ -69,6 +90,7 @@ export default async function HomePage() {
       <JsonLdSchema data={schemaData} />
       <main id="cv-content">
         <ProfileHeader personalInfo={personalInfo} />
+        <Experience experiences={experiences} />
         <ContactSection personalInfo={personalInfo} />
       </main>
     </>
