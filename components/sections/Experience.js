@@ -32,12 +32,12 @@ function ExperienceCard({ experience }) {
 
         {/* Ubicación */}
         {location && (
-          <p className="mt-1 text-sm text-gray-500">{location}</p>
+          <p className="mt-1 text-sm text-gray-600">{location}</p>
         )}
       </div>
 
       {/* SECCIÓN 2: Tiempo (metadata) */}
-      <div className="mb-4 flex items-center gap-3 text-sm text-gray-500">
+      <div className="mb-4 flex items-center gap-3 text-sm text-gray-600">
         <span>{dateRange}</span>
         {duration && (
           <>

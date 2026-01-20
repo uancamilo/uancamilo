@@ -107,7 +107,7 @@ export default function ContactSection({ personalInfo }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Perfil de ${name}`}
-                  className="text-gray-500 hover:text-gray-900 transition-colors"
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
                   <Icon className="w-5 h-5" aria-hidden="true" />
                 </a>

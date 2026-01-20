@@ -17,8 +17,24 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
  * - summary → descripción (rich text)
  * - profileImage → imagen circular
  */
+/**
+ * Divide el nombre completo en dos líneas (nombres y apellidos)
+ * Asume formato: "Nombre1 Nombre2 Apellido1 Apellido2"
+ * @param {string} fullName - Nombre completo
+ * @returns {{ firstLine: string, secondLine: string }}
+ */
+function splitName(fullName) {
+  const parts = fullName.trim().split(/\s+/);
+  const midpoint = Math.ceil(parts.length / 2);
+  return {
+    firstLine: parts.slice(0, midpoint).join(' '),
+    secondLine: parts.slice(midpoint).join(' '),
+  };
+}
+
 export default function ProfileHeader({ personalInfo }) {
   const { name, title, summary, profileImage } = personalInfo;
+  const { firstLine, secondLine } = splitName(name);
 
   return (
     <section className="relative isolate py-8 sm:py-12 lg:py-16">
@@ -32,6 +48,7 @@ export default function ProfileHeader({ personalInfo }) {
               alt={`Foto de ${name}`}
               width={240}
               height={240}
+              sizes="(max-width: 639px) 176px, (max-width: 767px) 208px, 240px"
               className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-full object-cover ring-4 ring-white shadow-xl"
               priority
             />
@@ -40,9 +57,15 @@ export default function ProfileHeader({ personalInfo }) {
 
         {/* Columna derecha: Contenido textual (3/5 del ancho) */}
         <div className="text-center md:text-left md:col-span-3">
-          {/* Nombre */}
-          <h1 className="text-3xl font-semibold tracking-tight text-balance text-gray-900 sm:text-4xl lg:text-5xl">
-            {name}
+          {/* Nombre: solo en Mobile S (<320px) se divide en dos líneas */}
+          <h1 className="text-xl font-semibold tracking-tight text-gray-900 xs:whitespace-nowrap sm:text-2xl md:text-3xl lg:text-4xl">
+            <span className="block xs:inline">{firstLine}</span>
+            {secondLine && (
+              <>
+                <span className="hidden xs:inline"> </span>
+                <span className="block xs:inline">{secondLine}</span>
+              </>
+            )}
           </h1>
 
           {/* Título profesional */}

@@ -1,5 +1,6 @@
 import { buildPersonSchema } from './person.schema';
 import { buildWebSiteSchema } from './website.schema';
+import { buildProfilePageSchema } from './profilePage.schema';
 
 /**
  * Registro de builders disponibles
@@ -11,6 +12,7 @@ import { buildWebSiteSchema } from './website.schema';
 const schemaBuilders = {
   Person: buildPersonSchema,
   WebSite: buildWebSiteSchema,
+  ProfilePage: buildProfilePageSchema,
 };
 
 /**

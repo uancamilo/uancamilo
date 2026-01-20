@@ -1,3 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="50" fill="#2F80ED" />
+  <rect width="100" height="100" rx="20" fill="#2563EB"/>
+  <text x="50" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="white" text-anchor="middle">JCS</text>
 </svg>

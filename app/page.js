@@ -83,16 +83,20 @@ export default async function HomePage() {
   ]);
 
   // Componer schemas JSON-LD para SEO
-  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite']);
+  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage']);
 
   return (
     <>
       <JsonLdSchema data={schemaData} />
-      <main id="cv-content">
+      <header>
         <ProfileHeader personalInfo={personalInfo} />
+      </header>
+      <main id="cv-content">
         <Experience experiences={experiences} />
-        <ContactSection personalInfo={personalInfo} />
       </main>
+      <footer>
+        <ContactSection personalInfo={personalInfo} />
+      </footer>
     </>
   );
 }

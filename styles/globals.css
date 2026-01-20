@@ -7,6 +7,12 @@
     @apply antialiased;
   }
 
+  /* Focus states accesibles para navegación por teclado */
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-600 rounded-sm;
+  }
+
   /* Estilos para rich text de Contentful */
   .prose p {
     @apply text-gray-600 leading-relaxed;

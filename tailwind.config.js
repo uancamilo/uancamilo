@@ -6,7 +6,14 @@ module.exports = {
     './seo/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+      },
+      screens: {
+        xs: '320px',
+      },
+    },
   },
   plugins: [],
 };

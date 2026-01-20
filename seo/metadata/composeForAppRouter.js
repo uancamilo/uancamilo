@@ -40,6 +40,21 @@ export function composeMetadataForAppRouter(data, options = {}) {
     metadata.description = base.description;
   }
 
+  // Author
+  if (data?.name && !data.name.includes('no disponible')) {
+    metadata.authors = [
+      {
+        name: data.name,
+        url: data.website || undefined,
+      },
+    ];
+  }
+
+  // Keywords basadas en título profesional
+  if (data?.title && !data.title.includes('no disponible')) {
+    metadata.keywords = [data.title, data.name].filter(Boolean);
+  }
+
   // Canonical URL
   if (canonical?.canonical) {
     metadata.alternates = {
