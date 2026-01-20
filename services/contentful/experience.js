@@ -2,7 +2,7 @@ import { fetchContent } from './client';
 
 const EXPERIENCE_GRAPHQL_QUERY = `
 query experienceCollectionQuery {
-  experienceCollection(order: startDate_ASC) {
+  experienceCollection(order: startDate_DESC) {
     items {
       sys {
         id

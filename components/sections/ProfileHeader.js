@@ -32,7 +32,7 @@ export default function ProfileHeader({ personalInfo }) {
               alt={`Foto de ${name}`}
               width={240}
               height={240}
-              className="rounded-full object-cover ring-4 ring-white shadow-xl"
+              className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-full object-cover ring-4 ring-white shadow-xl"
               priority
             />
           </div>
