@@ -13,17 +13,19 @@ import { buildTwitterMetadata } from './buildTwitterMetadata';
  * @param {Object} data - Datos normalizados del adapter personalInfo
  * @param {Object} [options] - Opciones adicionales
  * @param {string} [options.path='/'] - Path de la página para canonical y og:url
+ * @param {Array} [options.skills=[]] - Array de skills para incluir en keywords
  * @returns {Object} Objeto de metadata compatible con generateMetadata de App Router
  *
  * @example
  * // En app/page.js
  * export async function generateMetadata() {
  *   const personalInfo = await getAndAdaptPersonalInfo();
- *   return composeMetadataForAppRouter(personalInfo, { path: '/' });
+ *   const skills = await getAndAdaptSkills();
+ *   return composeMetadataForAppRouter(personalInfo, { path: '/', skills });
  * }
  */
 export function composeMetadataForAppRouter(data, options = {}) {
-  const { path = '/' } = options;
+  const { path = '/', skills = [] } = options;
 
   // Obtener metadata de cada builder
   const base = buildBaseMetadata(data);
@@ -50,9 +52,15 @@ export function composeMetadataForAppRouter(data, options = {}) {
     ];
   }
 
-  // Keywords basadas en título profesional
-  if (data?.title && !data.title.includes('no disponible')) {
-    metadata.keywords = [data.title, data.name].filter(Boolean);
+  // Keywords basadas en título profesional y skills
+  const skillNames = skills.map((skill) => skill.name).filter(Boolean);
+  const baseKeywords = data?.title && !data.title.includes('no disponible')
+    ? [data.title, data.name]
+    : [];
+  const allKeywords = [...baseKeywords, ...skillNames].filter(Boolean);
+
+  if (allKeywords.length > 0) {
+    metadata.keywords = allKeywords;
   }
 
   // Canonical URL

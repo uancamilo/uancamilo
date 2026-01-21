@@ -66,11 +66,12 @@ function ExperienceCard({ experience }) {
 
         {/* Tecnologías */}
         {technologies?.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            <span className="text-xs text-gray-500">Tecnologías:</span>
             {technologies.map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-md"
+                className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-md"
               >
                 {tech}
               </span>

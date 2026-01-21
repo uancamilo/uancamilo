@@ -1,4 +1,29 @@
 /**
+ * Construye un objeto DefinedTerm para knowsAbout
+ * @param {Object} skill - Skill con name, url y description opcionales
+ * @returns {Object|string} DefinedTerm si tiene URL o description, string si no
+ */
+function buildKnowsAboutItem(skill) {
+  if (skill.url || skill.description) {
+    const term = {
+      '@type': 'DefinedTerm',
+      name: skill.name,
+    };
+
+    if (skill.description) {
+      term.description = skill.description;
+    }
+
+    if (skill.url) {
+      term.url = skill.url;
+    }
+
+    return term;
+  }
+  return skill.name;
+}
+
+/**
  * Builder para schema Person de Schema.org
  * @param {Object} data - Datos normalizados de la persona
  * @param {string} data.name - Nombre completo
@@ -10,7 +35,7 @@
  * @param {Object} [data.profileImage] - Imagen de perfil
  * @param {string} [data.profileImage.url] - URL de la imagen
  * @param {string[]} [data.sameAs] - URLs de perfiles sociales
- * @param {string[]} [data.knowsAbout] - Áreas de conocimiento
+ * @param {Array} [data.skills] - Array de skills con name y url
  * @returns {Object} Schema Person válido
  */
 export function buildPersonSchema(data) {
@@ -54,8 +79,25 @@ export function buildPersonSchema(data) {
     schema.sameAs = data.sameAs;
   }
 
-  if (data.knowsAbout?.length > 0) {
-    schema.knowsAbout = data.knowsAbout;
+  // knowsAbout con DefinedTerm (skills con URLs)
+  if (data.skills?.length > 0) {
+    schema.knowsAbout = data.skills.map(buildKnowsAboutItem);
+  }
+
+  // ContactPoint estructurado
+  if (data.email || data.phone) {
+    schema.contactPoint = {
+      '@type': 'ContactPoint',
+      contactType: 'professional',
+    };
+
+    if (data.email) {
+      schema.contactPoint.email = data.email;
+    }
+
+    if (data.phone) {
+      schema.contactPoint.telephone = data.phone;
+    }
   }
 
   return schema;

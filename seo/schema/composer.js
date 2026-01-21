@@ -19,9 +19,18 @@ const schemaBuilders = {
  * Compone múltiples schemas en un único objeto JSON-LD con @graph
  * @param {Object} data - Datos normalizados para construir los schemas
  * @param {string[]} types - Lista de tipos de schema requeridos (ej: ['Person', 'WebSite'])
+ * @param {Object} [options] - Opciones adicionales
+ * @param {Array} [options.skills] - Array de skills (con name y url) para knowsAbout del schema Person
  * @returns {Object} Objeto JSON-LD válido con @context y @graph
  */
-export function composeSchemas(data, types) {
+export function composeSchemas(data, types, options = {}) {
+  const { skills = [] } = options;
+
+  // Enriquecer data con skills para el schema Person
+  const enrichedData = skills.length > 0
+    ? { ...data, skills }
+    : data;
+
   const graph = types
     .map((type) => {
       const builder = schemaBuilders[type];
@@ -29,7 +38,7 @@ export function composeSchemas(data, types) {
         console.warn(`Schema builder para "${type}" no encontrado`);
         return null;
       }
-      return builder(data);
+      return builder(enrichedData);
     })
     .filter(Boolean);
 

@@ -58,7 +58,7 @@ export default function ContactSection({ personalInfo }) {
   return (
     <section
       aria-labelledby="contact-heading"
-      className="pt-8 border-t border-gray-200"
+      className="py-12 border-t border-gray-200"
     >
       <h2 id="contact-heading" className="sr-only">
         Información de contacto
@@ -70,7 +70,7 @@ export default function ContactSection({ personalInfo }) {
           {email && (
             <a
               href={`mailto:${email}`}
-              className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 hover:text-blue-600 transition-colors"
             >
               <FaEnvelope className="w-4 h-4" aria-hidden="true" />
               <span>{email}</span>
@@ -80,7 +80,7 @@ export default function ContactSection({ personalInfo }) {
           {phone && (
             <a
               href={`tel:${phone}`}
-              className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 hover:text-blue-600 transition-colors"
             >
               <FaPhone className="w-4 h-4" aria-hidden="true" />
               <span>{phone}</span>
@@ -107,7 +107,7 @@ export default function ContactSection({ personalInfo }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Perfil de ${name}`}
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   <Icon className="w-5 h-5" aria-hidden="true" />
                 </a>

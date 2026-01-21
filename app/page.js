@@ -1,13 +1,16 @@
 import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { getExperiences } from '../services/contentful/experience';
+import { getSkills } from '../services/contentful/skills';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
 import { adaptExperiences } from '../logic/experience.logic';
+import { adaptSkills, groupSkillsByCategory } from '../logic/skills.logic';
 import { composeSchemas } from '../seo/schema/composer';
 import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
 
 import ProfileHeader from '../components/sections/ProfileHeader';
 import ContactSection from '../components/sections/ContactSection';
 import Experience from '../components/sections/Experience';
+import Skills from '../components/sections/Skills';
 
 /**
  * Obtiene y adapta la información personal desde Contentful
@@ -41,12 +44,31 @@ async function getAndAdaptExperiences() {
 }
 
 /**
+ * Obtiene y adapta las skills desde Contentful
+ */
+async function getAndAdaptSkills() {
+  try {
+    const rawData = await getSkills();
+    return adaptSkills(rawData);
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching skills:', error);
+    }
+    return [];
+  }
+}
+
+/**
  * Genera metadata SEO para la página usando App Router API
  * Reutiliza los builders existentes a través del composer
+ * Incluye skills en keywords para mejor SEO
  */
 export async function generateMetadata() {
-  const personalInfo = await getAndAdaptPersonalInfo();
-  return composeMetadataForAppRouter(personalInfo, { path: '/' });
+  const [personalInfo, skills] = await Promise.all([
+    getAndAdaptPersonalInfo(),
+    getAndAdaptSkills(),
+  ]);
+  return composeMetadataForAppRouter(personalInfo, { path: '/', skills });
 }
 
 /**
@@ -77,13 +99,17 @@ function JsonLdSchema({ data }) {
  */
 export default async function HomePage() {
   // Data fetching paralelo en Server Component
-  const [personalInfo, experiences] = await Promise.all([
+  const [personalInfo, experiences, skills] = await Promise.all([
     getAndAdaptPersonalInfo(),
     getAndAdaptExperiences(),
+    getAndAdaptSkills(),
   ]);
 
-  // Componer schemas JSON-LD para SEO
-  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage']);
+  // Agrupar skills por categoría para la UI
+  const skillGroups = groupSkillsByCategory(skills);
+
+  // Componer schemas JSON-LD para SEO (incluye skills en knowsAbout)
+  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage'], { skills });
 
   return (
     <>
@@ -92,6 +118,7 @@ export default async function HomePage() {
         <ProfileHeader personalInfo={personalInfo} />
       </header>
       <main id="cv-content">
+        <Skills skillGroups={skillGroups} />
         <Experience experiences={experiences} />
       </main>
       <footer>
