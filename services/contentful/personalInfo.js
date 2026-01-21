@@ -4,6 +4,9 @@ const PERSONAL_INFO_GRAPHQL_QUERY = `
 query personalInfoCollectionQuery {
   personalInfoCollection(limit: 1) {
     items {
+      sys {
+        publishedAt
+      }
       name
       title
       description

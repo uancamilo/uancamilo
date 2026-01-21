@@ -22,6 +22,7 @@ export function buildOpenGraphMetadata(data, path = '/') {
 
   const metadata = {
     'og:type': 'website',
+    'og:site_name': data.name,
     'og:title': ogTitle,
     'og:description': data.description,
     'og:locale': 'es_CO',

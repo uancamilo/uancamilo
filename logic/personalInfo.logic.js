@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../services/contentful/personalInfo.service').getPersonalInfo} PersonalInfoData
+ * @typedef {import('../services/contentful/personalInfo').getPersonalInfo} PersonalInfoData
  */
 
 /**
@@ -19,6 +19,7 @@
  *   socialLinks: { name: string; url: string }[];
  *   sameAs: string[];
  *   profileImage: { url: string; width: number; height: number } | null;
+ *   lastModified: string | null;
  * }} Los datos de información personal transformados.
  */
 export function adaptPersonalInfo(rawData) {
@@ -35,6 +36,7 @@ export function adaptPersonalInfo(rawData) {
       socialLinks: [],
       sameAs: [],
       profileImage: null,
+      lastModified: null,
     };
   }
 
@@ -64,5 +66,6 @@ export function adaptPersonalInfo(rawData) {
     socialLinks,
     sameAs,
     profileImage,
+    lastModified: rawData.sys?.publishedAt || null,
   };
 }

@@ -66,6 +66,7 @@ export function composeMetadataForAppRouter(data, options = {}) {
   if (og) {
     metadata.openGraph = {
       type: og['og:type'],
+      siteName: og['og:site_name'],
       title: og['og:title'],
       description: og['og:description'],
       locale: og['og:locale'],
@@ -92,6 +93,10 @@ export function composeMetadataForAppRouter(data, options = {}) {
       title: twitter['twitter:title'],
       description: twitter['twitter:description'],
     };
+
+    if (twitter['twitter:creator']) {
+      metadata.twitter.creator = twitter['twitter:creator'];
+    }
 
     if (twitter['twitter:card']) {
       metadata.twitter.card = twitter['twitter:card'];

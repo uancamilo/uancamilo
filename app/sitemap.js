@@ -52,14 +52,18 @@ export default async function sitemap() {
   }
 
   const baseUrl = getBaseUrl(personalInfo);
-  const now = new Date();
+
+  // Usar fecha de última publicación de Contentful, o fecha actual como fallback
+  const lastModified = personalInfo?.lastModified
+    ? new Date(personalInfo.lastModified)
+    : new Date();
 
   // Rutas estáticas actuales
   const staticRoutes = [
     {
       url: baseUrl,
-      lastModified: now,
-      changeFrequency: 'daily',
+      lastModified,
+      changeFrequency: 'weekly',
       priority: 1.0,
     },
   ];

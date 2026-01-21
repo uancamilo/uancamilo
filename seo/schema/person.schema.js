@@ -7,6 +7,8 @@
  * @param {string} data.phone - Teléfono de contacto
  * @param {string} data.location - Ciudad/Localidad
  * @param {string} data.website - URL del sitio web
+ * @param {Object} [data.profileImage] - Imagen de perfil
+ * @param {string} [data.profileImage.url] - URL de la imagen
  * @param {string[]} [data.sameAs] - URLs de perfiles sociales
  * @param {string[]} [data.knowsAbout] - Áreas de conocimiento
  * @returns {Object} Schema Person válido
@@ -20,6 +22,10 @@ export function buildPersonSchema(data) {
     name: data.name,
     url: siteUrl,
   };
+
+  if (data.profileImage?.url) {
+    schema.image = data.profileImage.url;
+  }
 
   if (data.title) {
     schema.jobTitle = data.title;
