@@ -2,10 +2,12 @@ import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { getExperiences } from '../services/contentful/experience';
 import { getSkills } from '../services/contentful/skills';
 import { getEducation } from '../services/contentful/education';
+import { getGitHubProjects, extractGitHubUsername } from '../services/github/projects';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
 import { adaptExperiences } from '../logic/experience.logic';
 import { adaptSkills, groupSkillsByCategory } from '../logic/skills.logic';
 import { adaptEducation } from '../logic/education.logic';
+import { adaptProjects } from '../logic/projects.logic';
 import { composeSchemas } from '../seo/schema/composer';
 import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
 
@@ -14,6 +16,7 @@ import ContactSection from '../components/sections/ContactSection';
 import Experience from '../components/sections/Experience';
 import Skills from '../components/sections/Skills';
 import Education from '../components/sections/Education';
+import Projects from '../components/sections/Projects';
 
 /**
  * Obtiene y adapta la información personal desde Contentful
@@ -77,6 +80,22 @@ async function getAndAdaptEducation() {
 }
 
 /**
+ * Obtiene y adapta los proyectos desde GitHub API
+ * @param {string} githubUsername - Username de GitHub
+ */
+async function getAndAdaptProjects(githubUsername) {
+  try {
+    const rawData = await getGitHubProjects(githubUsername, { limit: 5 });
+    return adaptProjects(rawData);
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching projects:', error);
+    }
+    return [];
+  }
+}
+
+/**
  * Genera metadata SEO para la página usando App Router API
  * Reutiliza los builders existentes a través del composer
  * Incluye skills en keywords para mejor SEO
@@ -116,19 +135,32 @@ function JsonLdSchema({ data }) {
  * - Pasa datos a componentes de presentación
  */
 export default async function HomePage() {
+  // Primero obtener personalInfo para extraer GitHub username
+  const personalInfo = await getAndAdaptPersonalInfo();
+
+  // Extraer GitHub username de socialLinks
+  const githubLink = personalInfo.socialLinks?.find(
+    (link) => link.name.toLowerCase() === 'github'
+  );
+  const githubUsername = extractGitHubUsername(githubLink?.url);
+
   // Data fetching paralelo en Server Component
-  const [personalInfo, experiences, skills, education] = await Promise.all([
-    getAndAdaptPersonalInfo(),
+  const [experiences, skills, education, projects] = await Promise.all([
     getAndAdaptExperiences(),
     getAndAdaptSkills(),
     getAndAdaptEducation(),
+    getAndAdaptProjects(githubUsername),
   ]);
 
   // Agrupar skills por categoría para la UI
   const skillGroups = groupSkillsByCategory(skills);
 
-  // Componer schemas JSON-LD para SEO (incluye skills en knowsAbout)
-  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage'], { skills, education });
+  // Componer schemas JSON-LD para SEO
+  const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage'], {
+    skills,
+    education,
+    projects,
+  });
 
   return (
     <>
@@ -139,6 +171,7 @@ export default async function HomePage() {
       <main id="cv-content">
         <Skills skillGroups={skillGroups} />
         <Education education={education} />
+        <Projects projects={projects} />
         <Experience experiences={experiences} />
       </main>
       <footer>
