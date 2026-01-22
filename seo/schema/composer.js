@@ -21,15 +21,18 @@ const schemaBuilders = {
  * @param {string[]} types - Lista de tipos de schema requeridos (ej: ['Person', 'WebSite'])
  * @param {Object} [options] - Opciones adicionales
  * @param {Array} [options.skills] - Array de skills (con name y url) para knowsAbout del schema Person
+ * @param {Array} [options.education] - Array de formación académica para alumniOf del schema Person
  * @returns {Object} Objeto JSON-LD válido con @context y @graph
  */
 export function composeSchemas(data, types, options = {}) {
-  const { skills = [] } = options;
+  const { skills = [], education = [] } = options;
 
-  // Enriquecer data con skills para el schema Person
-  const enrichedData = skills.length > 0
-    ? { ...data, skills }
-    : data;
+  // Enriquecer data con skills y education para el schema Person
+  const enrichedData = {
+    ...data,
+    ...(skills.length > 0 && { skills }),
+    ...(education.length > 0 && { education }),
+  };
 
   const graph = types
     .map((type) => {

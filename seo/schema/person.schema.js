@@ -1,4 +1,16 @@
 /**
+ * Construye un objeto EducationalOrganization para alumniOf
+ * @param {Object} education - Educación con institution y degree
+ * @returns {Object} Schema EducationalOrganization válido
+ */
+function buildAlumniOfItem(education) {
+  return {
+    '@type': 'EducationalOrganization',
+    name: education.institution,
+  };
+}
+
+/**
  * Construye un objeto DefinedTerm para knowsAbout
  * @param {Object} skill - Skill con name, url y description opcionales
  * @returns {Object|string} DefinedTerm si tiene URL o description, string si no
@@ -36,6 +48,7 @@ function buildKnowsAboutItem(skill) {
  * @param {string} [data.profileImage.url] - URL de la imagen
  * @param {string[]} [data.sameAs] - URLs de perfiles sociales
  * @param {Array} [data.skills] - Array de skills con name y url
+ * @param {Array} [data.education] - Array de formación académica
  * @returns {Object} Schema Person válido
  */
 export function buildPersonSchema(data) {
@@ -82,6 +95,11 @@ export function buildPersonSchema(data) {
   // knowsAbout con DefinedTerm (skills con URLs)
   if (data.skills?.length > 0) {
     schema.knowsAbout = data.skills.map(buildKnowsAboutItem);
+  }
+
+  // alumniOf (formación académica)
+  if (data.education?.length > 0) {
+    schema.alumniOf = data.education.map(buildAlumniOfItem);
   }
 
   // ContactPoint estructurado
