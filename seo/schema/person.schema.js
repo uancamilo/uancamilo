@@ -11,6 +11,24 @@ function buildAlumniOfItem(education) {
 }
 
 /**
+ * Construye un objeto Language para knowsLanguage
+ * @param {Object} language - Idioma con name y level
+ * @returns {Object} Schema Language válido
+ */
+function buildLanguageItem(language) {
+  const schema = {
+    '@type': 'Language',
+    name: language.name,
+  };
+
+  if (language.level) {
+    schema.alternateName = language.level;
+  }
+
+  return schema;
+}
+
+/**
  * Construye un objeto DefinedTerm para knowsAbout
  * @param {Object} skill - Skill con name, url y description opcionales
  * @returns {Object|string} DefinedTerm si tiene URL o description, string si no
@@ -49,6 +67,7 @@ function buildKnowsAboutItem(skill) {
  * @param {string[]} [data.sameAs] - URLs de perfiles sociales
  * @param {Array} [data.skills] - Array de skills con name y url
  * @param {Array} [data.education] - Array de formación académica
+ * @param {Array} [data.languages] - Array de idiomas con name y level
  * @returns {Object} Schema Person válido
  */
 export function buildPersonSchema(data) {
@@ -100,6 +119,11 @@ export function buildPersonSchema(data) {
   // alumniOf (formación académica)
   if (data.education?.length > 0) {
     schema.alumniOf = data.education.map(buildAlumniOfItem);
+  }
+
+  // knowsLanguage (idiomas)
+  if (data.languages?.length > 0) {
+    schema.knowsLanguage = data.languages.map(buildLanguageItem);
   }
 
   // ContactPoint estructurado

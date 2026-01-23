@@ -2,11 +2,13 @@ import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { getExperiences } from '../services/contentful/experience';
 import { getSkills } from '../services/contentful/skills';
 import { getEducation } from '../services/contentful/education';
+import { getLanguages } from '../services/contentful/languages';
 import { getGitHubProjects, extractGitHubUsername } from '../services/github/projects';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
 import { adaptExperiences } from '../logic/experience.logic';
 import { adaptSkills, groupSkillsByCategory } from '../logic/skills.logic';
 import { adaptEducation } from '../logic/education.logic';
+import { adaptLanguages } from '../logic/languages.logic';
 import { adaptProjects } from '../logic/projects.logic';
 import { composeSchemas } from '../seo/schema/composer';
 import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
@@ -16,6 +18,7 @@ import ContactSection from '../components/sections/ContactSection';
 import Experience from '../components/sections/Experience';
 import Skills from '../components/sections/Skills';
 import Education from '../components/sections/Education';
+import Languages from '../components/sections/Languages';
 import Projects from '../components/sections/Projects';
 
 /**
@@ -74,6 +77,21 @@ async function getAndAdaptEducation() {
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error fetching education:', error);
+    }
+    return [];
+  }
+}
+
+/**
+ * Obtiene y adapta los idiomas desde Contentful
+ */
+async function getAndAdaptLanguages() {
+  try {
+    const rawData = await getLanguages();
+    return adaptLanguages(rawData);
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching languages:', error);
     }
     return [];
   }
@@ -145,10 +163,11 @@ export default async function HomePage() {
   const githubUsername = extractGitHubUsername(githubLink?.url);
 
   // Data fetching paralelo en Server Component
-  const [experiences, skills, education, projects] = await Promise.all([
+  const [experiences, skills, education, languages, projects] = await Promise.all([
     getAndAdaptExperiences(),
     getAndAdaptSkills(),
     getAndAdaptEducation(),
+    getAndAdaptLanguages(),
     getAndAdaptProjects(githubUsername),
   ]);
 
@@ -159,6 +178,7 @@ export default async function HomePage() {
   const schemaData = composeSchemas(personalInfo, ['Person', 'WebSite', 'ProfilePage'], {
     skills,
     education,
+    languages,
     projects,
   });
 
@@ -171,6 +191,7 @@ export default async function HomePage() {
       <main id="cv-content">
         <Skills skillGroups={skillGroups} />
         <Education education={education} />
+        <Languages languages={languages} />
         <Projects projects={projects} />
         <Experience experiences={experiences} />
       </main>

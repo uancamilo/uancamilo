@@ -48,17 +48,19 @@ function buildProjectSchema(project, personId) {
  * @param {Object} [options] - Opciones adicionales
  * @param {Array} [options.skills] - Array de skills (con name y url) para knowsAbout del schema Person
  * @param {Array} [options.education] - Array de formación académica para alumniOf del schema Person
+ * @param {Array} [options.languages] - Array de idiomas para knowsLanguage del schema Person
  * @param {Array} [options.projects] - Array de proyectos de GitHub
  * @returns {Object} Objeto JSON-LD válido con @context y @graph
  */
 export function composeSchemas(data, types, options = {}) {
-  const { skills = [], education = [], projects = [] } = options;
+  const { skills = [], education = [], languages = [], projects = [] } = options;
 
-  // Enriquecer data con skills y education para el schema Person
+  // Enriquecer data con skills, education y languages para el schema Person
   const enrichedData = {
     ...data,
     ...(skills.length > 0 && { skills }),
     ...(education.length > 0 && { education }),
+    ...(languages.length > 0 && { languages }),
   };
 
   const siteUrl = data.website || '';

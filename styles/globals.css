@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
   body {
     @apply antialiased;
   }
