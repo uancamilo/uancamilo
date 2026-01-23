@@ -13,6 +13,7 @@ import { adaptProjects } from '../logic/projects.logic';
 import { composeSchemas } from '../seo/schema/composer';
 import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
 
+import Header from '../components/layout/Header';
 import ProfileHeader from '../components/sections/ProfileHeader';
 import ContactSection from '../components/sections/ContactSection';
 import Experience from '../components/sections/Experience';
@@ -182,22 +183,52 @@ export default async function HomePage() {
     projects,
   });
 
+  // Extraer texto plano del summary para el PDF (Rich Text no se serializa bien a cliente)
+  const extractSummaryText = (summaryJson) => {
+    if (!summaryJson?.content) return '';
+    return summaryJson.content
+      .map((node) => {
+        if (node.nodeType === 'paragraph' && node.content) {
+          return node.content.map((textNode) => textNode.value || '').join('');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  };
+
+  // Datos para generar el PDF del CV
+  const cvData = {
+    personalInfo: {
+      ...personalInfo,
+      summaryText: extractSummaryText(personalInfo.summary?.json),
+    },
+    experiences,
+    skills,
+    education,
+    languages,
+    projects,
+  };
+
   return (
     <>
       <JsonLdSchema data={schemaData} />
-      <header>
-        <ProfileHeader personalInfo={personalInfo} />
-      </header>
-      <main id="cv-content">
-        <Skills skillGroups={skillGroups} />
-        <Education education={education} />
-        <Languages languages={languages} />
-        <Projects projects={projects} />
-        <Experience experiences={experiences} />
-      </main>
-      <footer>
-        <ContactSection personalInfo={personalInfo} />
-      </footer>
+      <Header cvData={cvData} />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+        <header>
+          <ProfileHeader personalInfo={personalInfo} />
+        </header>
+        <main id="cv-content">
+          <Skills skillGroups={skillGroups} />
+          <Education education={education} />
+          <Languages languages={languages} />
+          <Projects projects={projects} />
+          <Experience experiences={experiences} />
+        </main>
+        <footer>
+          <ContactSection personalInfo={personalInfo} />
+        </footer>
+      </div>
     </>
   );
 }

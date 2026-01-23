@@ -8,6 +8,8 @@
  * - Certificación si existe
  */
 function LanguageCard({ language }) {
+  if (!language) return null;
+
   const { name, level, levelKey, percentage, certification } = language;
 
   // Colores según el nivel
@@ -42,7 +44,9 @@ function LanguageCard({ language }) {
       {percentage && (
         <div className="mt-3">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-sm text-gray-600">Dominio: {percentage}%</span>
+            <span className="text-sm text-gray-600">
+              Dominio: {percentage}%
+            </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -64,6 +68,7 @@ function LanguageCard({ language }) {
             href={certification}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Ver certificación de ${name}`}
             className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
           >
             Ver certificación
@@ -89,8 +94,9 @@ export default function Languages({ languages }) {
 
   return (
     <section
+      id="idiomas"
       aria-labelledby="languages-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2
         id="languages-heading"
@@ -100,8 +106,8 @@ export default function Languages({ languages }) {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {languages.map((language) => (
-          <LanguageCard key={language.id} language={language} />
+        {languages.map((language, index) => (
+          <LanguageCard key={language?.id || `language-${index}`} language={language} />
         ))}
       </div>
     </section>

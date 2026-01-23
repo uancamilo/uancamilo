@@ -1,4 +1,9 @@
-import { FaStar, FaCodeBranch, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import {
+  FaStar,
+  FaCodeBranch,
+  FaExternalLinkAlt,
+  FaGithub,
+} from 'react-icons/fa';
 
 /**
  * ProjectCard - Tarjeta individual de proyecto
@@ -10,13 +15,15 @@ import { FaStar, FaCodeBranch, FaExternalLinkAlt, FaGithub } from 'react-icons/f
  * 4. Links: repositorio y demo
  */
 function ProjectCard({ project }) {
+  if (!project) return null;
+
   const {
     name,
     description,
     language,
     stars,
     forks,
-    topics,
+    topics = [],
     url,
     homepage,
     updatedAtFormatted,
@@ -34,7 +41,10 @@ function ProjectCard({ project }) {
       <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
         {language && (
           <span className="flex items-center gap-1">
-            <span className="w-3 h-3 rounded-full bg-blue-500" aria-hidden="true" />
+            <span
+              className="w-3 h-3 rounded-full bg-blue-500"
+              aria-hidden="true"
+            />
             {language}
           </span>
         )}
@@ -59,12 +69,12 @@ function ProjectCard({ project }) {
       </div>
 
       {/* SECCIÓN 3: Topics */}
-      {topics.length > 0 && (
+      {Array.isArray(topics) && topics.length > 0 && (
         <div className="mb-4 flex flex-wrap items-center gap-1">
           <span className="text-xs text-gray-500">Topics:</span>
-          {topics.slice(0, 4).map((topic) => (
+          {topics.slice(0, 4).map((topic, index) => (
             <span
-              key={topic}
+              key={`${name}-topic-${index}`}
               className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-50 text-blue-700 rounded"
             >
               {topic}
@@ -75,20 +85,24 @@ function ProjectCard({ project }) {
 
       {/* SECCIÓN 4: Links */}
       <div className="mt-auto pt-4 flex items-center gap-4">
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-        >
-          <FaGithub className="w-4 h-4" aria-hidden="true" />
-          Repositorio
-        </a>
+        {url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Ver repositorio de ${name}`}
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            <FaGithub className="w-4 h-4" aria-hidden="true" />
+            Repositorio
+          </a>
+        )}
         {homepage && (
           <a
             href={homepage}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Ver demo de ${name}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
           >
             <FaExternalLinkAlt className="w-4 h-4" aria-hidden="true" />
@@ -115,8 +129,9 @@ export default function Projects({ projects }) {
 
   return (
     <section
+      id="proyectos"
       aria-labelledby="projects-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2
         id="projects-heading"
@@ -126,8 +141,8 @@ export default function Projects({ projects }) {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {projects.map((project, index) => (
+          <ProjectCard key={project?.id || `project-${index}`} project={project} />
         ))}
       </div>
     </section>

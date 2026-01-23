@@ -9,6 +9,8 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
  * 3. Funciones: Descripción extensa + Tecnologías
  */
 function ExperienceCard({ experience }) {
+  if (!experience) return null;
+
   const {
     company,
     position,
@@ -16,7 +18,7 @@ function ExperienceCard({ experience }) {
     duration,
     location,
     description,
-    technologies,
+    technologies = [],
     isCurrent,
   } = experience;
 
@@ -31,9 +33,7 @@ function ExperienceCard({ experience }) {
         <p className="mt-1 text-base font-medium text-gray-700">{company}</p>
 
         {/* Ubicación */}
-        {location && (
-          <p className="mt-1 text-sm text-gray-600">{location}</p>
-        )}
+        {location && <p className="mt-1 text-sm text-gray-600">{location}</p>}
       </div>
 
       {/* SECCIÓN 2: Tiempo (metadata) */}
@@ -65,12 +65,12 @@ function ExperienceCard({ experience }) {
         )}
 
         {/* Tecnologías */}
-        {technologies?.length > 0 && (
+        {Array.isArray(technologies) && technologies.length > 0 && (
           <div className="mt-5 flex flex-wrap items-center gap-2">
             <span className="text-xs text-gray-500">Tecnologías:</span>
-            {technologies.map((tech) => (
+            {technologies.map((tech, index) => (
               <span
-                key={tech}
+                key={`${position}-tech-${index}`}
                 className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-md"
               >
                 {tech}
@@ -96,16 +96,18 @@ export default function Experience({ experiences }) {
     return null;
   }
 
-  const gridCols = experiences.length === 1
-    ? 'grid-cols-1 max-w-xl mx-auto'
-    : experiences.length === 2
-      ? 'grid-cols-1 md:grid-cols-2'
-      : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+  const gridCols =
+    experiences.length === 1
+      ? 'grid-cols-1 max-w-xl mx-auto'
+      : experiences.length === 2
+        ? 'grid-cols-1 md:grid-cols-2'
+        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
 
   return (
     <section
+      id="experiencia"
       aria-labelledby="experience-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2
         id="experience-heading"
@@ -115,11 +117,8 @@ export default function Experience({ experiences }) {
       </h2>
 
       <div className={`grid ${gridCols} gap-6`}>
-        {experiences.map((experience) => (
-          <ExperienceCard
-            key={experience.id}
-            experience={experience}
-          />
+        {experiences.map((experience, index) => (
+          <ExperienceCard key={experience?.id || `experience-${index}`} experience={experience} />
         ))}
       </div>
     </section>

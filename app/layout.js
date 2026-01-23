@@ -36,9 +36,7 @@ export default function RootLayout({ children }) {
             })(window,document,'script','dataLayer','GTM-KBGT5ZFJ');`}
           </Script>
         )}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -43,12 +43,13 @@ const socialIconMap = {
  * - Iconos con hover states
  */
 export default function ContactSection({ personalInfo }) {
+  if (!personalInfo) return null;
+
   const { email, phone, location, socialLinks } = personalInfo;
 
   // Filtrar solo las redes sociales que tenemos iconos
-  const validSocialLinks = socialLinks?.filter(
-    ({ name }) => socialIconMap[name.toLowerCase()]
-  ) || [];
+  const validSocialLinks =
+    socialLinks?.filter(({ name }) => socialIconMap[name.toLowerCase()]) || [];
 
   // Si no hay información de contacto, no renderizar
   if (!email && !phone && !location && validSocialLinks.length === 0) {
@@ -57,8 +58,9 @@ export default function ContactSection({ personalInfo }) {
 
   return (
     <section
+      id="contacto"
       aria-labelledby="contact-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2 id="contact-heading" className="sr-only">
         Información de contacto

@@ -33,8 +33,10 @@ function splitName(fullName) {
 }
 
 export default function ProfileHeader({ personalInfo }) {
+  if (!personalInfo) return null;
+
   const { name, title, summary, profileImage } = personalInfo;
-  const { firstLine, secondLine } = splitName(name);
+  const { firstLine, secondLine } = splitName(name || '');
 
   return (
     <section className="relative isolate py-8 sm:py-12 lg:py-16">

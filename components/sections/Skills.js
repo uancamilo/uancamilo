@@ -4,7 +4,9 @@
  * Muestra el nombre, nivel, descripción y features de la skill.
  */
 function SkillBar({ skill }) {
-  const { name, level, description, features, url } = skill;
+  if (!skill) return null;
+
+  const { name, level, description, features = [], url } = skill;
 
   return (
     <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm space-y-2">
@@ -15,6 +17,7 @@ function SkillBar({ skill }) {
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline transition-colors"
+            aria-label={`Ir a ${name}`}
           >
             {name}
           </a>
@@ -37,12 +40,12 @@ function SkillBar({ skill }) {
       {description && (
         <p className="text-sm text-gray-600">{description}</p>
       )}
-      {features.length > 0 && (
+      {Array.isArray(features) && features.length > 0 && (
         <div className="flex flex-wrap items-center gap-1">
           <span className="text-xs text-gray-500">Conocimiento:</span>
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <span
-              key={feature}
+              key={`${name}-feature-${index}`}
               className="inline-block px-2 py-0.5 text-xs font-medium bg-blue-50 text-blue-700 rounded"
             >
               {feature}
@@ -58,14 +61,16 @@ function SkillBar({ skill }) {
  * SkillGroup - Grupo de skills por categoría
  */
 function SkillGroup({ group }) {
-  const { label, skills } = group;
+  if (!group) return null;
+
+  const { label, skills = [] } = group;
 
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-900">{label}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {skills.map((skill) => (
-          <SkillBar key={skill.id} skill={skill} />
+        {skills.map((skill, index) => (
+          <SkillBar key={skill?.id || `${label}-skill-${index}`} skill={skill} />
         ))}
       </div>
     </div>
@@ -88,8 +93,9 @@ export default function Skills({ skillGroups }) {
 
   return (
     <section
+      id="habilidades"
       aria-labelledby="skills-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2
         id="skills-heading"

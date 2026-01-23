@@ -7,6 +7,8 @@
  * 3. Descripción: Logros o información adicional
  */
 function EducationCard({ education }) {
+  if (!education) return null;
+
   const {
     institution,
     degree,
@@ -26,12 +28,12 @@ function EducationCard({ education }) {
         <h3 className="text-lg font-semibold text-gray-900">{degree}</h3>
 
         {/* Institución */}
-        <p className="mt-1 text-base font-medium text-gray-700">{institution}</p>
+        <p className="mt-1 text-base font-medium text-gray-700">
+          {institution}
+        </p>
 
         {/* Ubicación */}
-        {location && (
-          <p className="mt-1 text-sm text-gray-600">{location}</p>
-        )}
+        {location && <p className="mt-1 text-sm text-gray-600">{location}</p>}
       </div>
 
       {/* SECCIÓN 2: Tiempo (metadata) */}
@@ -67,6 +69,7 @@ function EducationCard({ education }) {
             href={certification}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Ver certificado de ${degree}`}
             className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
           >
             Ver certificado
@@ -92,8 +95,9 @@ export default function Education({ education }) {
 
   return (
     <section
+      id="formacion"
       aria-labelledby="education-heading"
-      className="py-12 border-t border-gray-200"
+      className="py-12 border-t border-gray-200 scroll-mt-16"
     >
       <h2
         id="education-heading"
@@ -103,11 +107,8 @@ export default function Education({ education }) {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {education.map((item) => (
-          <EducationCard
-            key={item.id}
-            education={item}
-          />
+        {education.map((item, index) => (
+          <EducationCard key={item?.id || `education-${index}`} education={item} />
         ))}
       </div>
     </section>
