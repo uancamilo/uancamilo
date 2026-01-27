@@ -75,61 +75,63 @@ export default function Header({ cvData }) {
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
-      <nav
-        aria-label="Navegación principal"
-        className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
-      >
-        {/* Logo - Iniciales */}
-        <div className="flex lg:flex-1">
-          <a
-            href="#"
-            className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition-colors"
-            aria-label="Ir al inicio"
-          >
-            JC
-          </a>
-        </div>
-
-        {/* Botón menú móvil */}
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors"
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <span className="sr-only">Abrir menú principal</span>
-            <MenuIcon className="h-6 w-6" />
-          </button>
-        </div>
-
-        {/* Links de navegación - Desktop */}
-        <div className="hidden lg:flex lg:gap-x-8">
-          {navLinks.map((link) => (
+    <>
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+        <nav
+          aria-label="Navegación principal"
+          className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
+        >
+          {/* Logo - Iniciales */}
+          <div className="flex lg:flex-1">
             <a
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              href="#"
+              className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition-colors"
+              aria-label="Ir al inicio"
             >
-              {link.name}
+              JC
             </a>
-          ))}
-        </div>
+          </div>
 
-        {/* CTA - Desktop */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <DownloadCV
-            cvData={cvData}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-wait transition-colors"
-          >
-            Descargar CV
-          </DownloadCV>
-        </div>
-      </nav>
+          {/* Botón menú móvil */}
+          <div className="flex lg:hidden">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              <span className="sr-only">Abrir menú principal</span>
+              <MenuIcon className="h-6 w-6" />
+            </button>
+          </div>
 
-      {/* Menú móvil - Overlay */}
+          {/* Links de navegación - Desktop */}
+          <div className="hidden lg:flex lg:gap-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          {/* CTA - Desktop */}
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <DownloadCV
+              cvData={cvData}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-wait transition-colors"
+            >
+              Descargar CV
+            </DownloadCV>
+          </div>
+        </nav>
+      </header>
+
+      {/* Menú móvil - Overlay (fuera del header para evitar containing block de backdrop-blur) */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/20 lg:hidden"
@@ -194,6 +196,6 @@ export default function Header({ cvData }) {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

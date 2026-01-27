@@ -2,16 +2,28 @@ import Script from 'next/script';
 import { GeistSans } from 'geist/font/sans';
 import '../styles/globals.css';
 
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
+import { getCachedCvData, getCachedPersonalInfo } from '../lib/data';
+
 /**
  * Root Layout para App Router
  *
  * Estructura visual base:
- * - Fondo neutro (gray-50)
- * - Tipografía Geist Sans optimizada con next/font
- * - Contenedor centrado con max-width
- * - Padding responsive
+ * - Header sticky con navegación y botón "Descargar CV"
+ * - Contenido dinámico ({children})
+ * - Footer con contacto, redes sociales y copyright
+ *
+ * Data fetching:
+ * - Usa fetchers cacheados con React.cache() para evitar duplicación
+ *   cuando page.js también consulta los mismos datos.
  */
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const [cvData, personalInfo] = await Promise.all([
+    getCachedCvData(),
+    getCachedPersonalInfo(),
+  ]);
+
   return (
     <html lang="es-CO" className={GeistSans.variable}>
       <head>
@@ -26,7 +38,7 @@ export default function RootLayout({ children }) {
           content="SmSLs8hW6F2BOxiuyl2zJ367y1w8jxVj6fM3SBgosZo"
         />
       </head>
-      <body className={`${GeistSans.className} bg-gray-50 text-gray-900 min-h-screen`}>
+      <body className={`${GeistSans.className} bg-gray-50 text-gray-900 min-h-screen flex flex-col`}>
         {process.env.NODE_ENV === 'production' && (
           <Script id="google-tag-manager" strategy="afterInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -36,8 +48,14 @@ export default function RootLayout({ children }) {
             })(window,document,'script','dataLayer','GTM-KBGT5ZFJ');`}
           </Script>
         )}
-        {children}
+        <Header cvData={cvData} />
+        <div className="flex-1">
+          {children}
+        </div>
+        <Footer personalInfo={personalInfo} />
       </body>
     </html>
   );
 }
+
+export const revalidate = 3600;
