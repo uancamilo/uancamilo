@@ -48,7 +48,7 @@ export default function Footer({ personalInfo }) {
     );
   }
 
-  const { fullName, email, phone, location, socialLinks } = personalInfo;
+  const { name, email, phone, location, socialLinks } = personalInfo;
 
   const validSocialLinks =
     socialLinks?.filter(({ name }) => socialIconMap[name.toLowerCase()]) || [];
@@ -130,7 +130,7 @@ export default function Footer({ personalInfo }) {
 
         {/* Copyright */}
         <div className="pt-8 text-center text-sm text-gray-500">
-          &copy; {currentYear} {fullName || 'Todos los derechos reservados'}. Todos los derechos reservados.
+          &copy; {currentYear} {name}. Todos los derechos reservados.
         </div>
       </div>
     </footer>

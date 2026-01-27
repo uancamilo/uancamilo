@@ -36,10 +36,13 @@ export function composeMetadataForAppRouter(data, options = {}) {
   // Construir objeto de metadata para App Router
   const metadata = {};
 
-  // Base metadata
+  // Base metadata (con fallback si Contentful no responde)
   if (base) {
     metadata.title = base.title;
     metadata.description = base.description;
+  } else {
+    metadata.title = 'CV Profesional';
+    metadata.description = 'Portafolio y currículum profesional';
   }
 
   // Author

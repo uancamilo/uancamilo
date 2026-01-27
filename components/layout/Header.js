@@ -72,6 +72,13 @@ const navLinks = [
 export default function Header({ cvData }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const initials = cvData?.personalInfo?.name
+    ?.split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'CV';
+
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
@@ -88,7 +95,7 @@ export default function Header({ cvData }) {
               className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition-colors"
               aria-label="Ir al inicio"
             >
-              JC
+              {initials}
             </a>
           </div>
 

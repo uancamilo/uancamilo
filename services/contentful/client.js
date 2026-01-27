@@ -28,7 +28,16 @@ export async function fetchContent(query) {
       throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    if (result.errors?.length > 0 && process.env.NODE_ENV === 'development') {
+      console.warn(
+        'Contentful GraphQL respondió con errores:',
+        result.errors.map((e) => e.message).join(', ')
+      );
+    }
+
+    return result;
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error al obtener datos de Contentful GraphQL:', error);

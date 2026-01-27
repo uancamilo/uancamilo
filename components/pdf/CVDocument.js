@@ -4,8 +4,8 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
 } from '@react-pdf/renderer';
+import { extractPlainText } from '../../lib/richText';
 
 /**
  * Estilos optimizados para ATS
@@ -170,25 +170,6 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Extrae texto plano de Rich Text JSON de Contentful
- */
-function extractPlainText(richTextJson) {
-  if (!richTextJson || !richTextJson.content) return '';
-
-  return richTextJson.content
-    .map((node) => {
-      if (node.nodeType === 'paragraph' && node.content) {
-        return node.content
-          .map((textNode) => textNode.value || '')
-          .join('');
-      }
-      return '';
-    })
-    .filter(Boolean)
-    .join('\n');
-}
-
-/**
  * Componente de Experiencia
  */
 function ExperienceSection({ experiences }) {
@@ -208,7 +189,7 @@ function ExperienceSection({ experiences }) {
           </Text>
           {exp.description?.json && (
             <Text style={styles.itemDescription}>
-              {extractPlainText(exp.description.json)}
+              {extractPlainText(exp.description.json, '\n')}
             </Text>
           )}
           {exp.technologies?.length > 0 && (
