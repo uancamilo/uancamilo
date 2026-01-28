@@ -1,19 +1,4 @@
-/**
- * Formatea una fecha ISO a formato legible
- * @param {string} dateString - Fecha en formato ISO
- * @returns {string} Fecha formateada (ej: "Ene 2024")
- */
-function formatDate(dateString) {
-  if (!dateString) return null;
-
-  const date = new Date(dateString);
-  const months = [
-    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
-  ];
-
-  return `${months[date.getMonth()]} ${date.getFullYear()}`;
-}
+import { formatDate } from '../lib/dateUtils';
 
 /**
  * Transforma un repositorio de GitHub a formato de UI

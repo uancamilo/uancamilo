@@ -163,7 +163,7 @@ export default function Header({ cvData }) {
             className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg"
             aria-label="Ir al inicio"
           >
-            JC
+            {initials}
           </a>
           <button
             type="button"
