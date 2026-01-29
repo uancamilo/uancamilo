@@ -1,6 +1,8 @@
 import { buildPersonSchema } from './person.schema';
 import { buildWebSiteSchema } from './website.schema';
 import { buildProfilePageSchema } from './profilePage.schema';
+import { buildBlogPostingSchema } from './blogPosting.schema';
+import { buildBlogSchema, buildBlogContainerSchema } from './blog.schema';
 
 /**
  * Registro de builders disponibles
@@ -13,6 +15,9 @@ const schemaBuilders = {
   Person: buildPersonSchema,
   WebSite: buildWebSiteSchema,
   ProfilePage: buildProfilePageSchema,
+  BlogPosting: buildBlogPostingSchema,
+  Blog: buildBlogSchema,
+  BlogContainer: buildBlogContainerSchema,
 };
 
 /**
@@ -50,10 +55,12 @@ function buildProjectSchema(project, personId) {
  * @param {Array} [options.education] - Array de formación académica para alumniOf del schema Person
  * @param {Array} [options.languages] - Array de idiomas para knowsLanguage del schema Person
  * @param {Array} [options.projects] - Array de proyectos de GitHub
+ * @param {Array} [options.posts] - Array de posts del blog
+ * @param {string} [options.siteUrl] - URL base del sitio (para schemas de blog)
  * @returns {Object} Objeto JSON-LD válido con @context y @graph
  */
 export function composeSchemas(data, types, options = {}) {
-  const { skills = [], education = [], languages = [], projects = [] } = options;
+  const { skills = [], education = [], languages = [], projects = [], posts = [] } = options;
 
   // Enriquecer data con skills, education y languages para el schema Person
   const enrichedData = {
@@ -63,8 +70,11 @@ export function composeSchemas(data, types, options = {}) {
     ...(languages.length > 0 && { languages }),
   };
 
-  const siteUrl = data.website || '';
+  const siteUrl = options.siteUrl || data.website || '';
   const personId = `${siteUrl}#person`;
+
+  // Opciones para pasar a los builders
+  const builderOptions = { siteUrl, posts };
 
   // Construir schemas principales
   const graph = types
@@ -74,7 +84,7 @@ export function composeSchemas(data, types, options = {}) {
         console.warn(`Schema builder para "${type}" no encontrado`);
         return null;
       }
-      return builder(enrichedData);
+      return builder(enrichedData, builderOptions);
     })
     .filter(Boolean);
 

@@ -39,4 +39,78 @@
   .prose ol {
     @apply list-decimal list-inside space-y-1 text-gray-600;
   }
+
+  /* Estilos para el contenido del blog */
+  .prose-blog p {
+    @apply mb-4 text-gray-700 leading-relaxed;
+  }
+
+  .prose-blog a {
+    @apply text-blue-600 underline underline-offset-2 hover:text-blue-800 transition-colors;
+  }
+
+  .prose-blog ul {
+    @apply list-disc list-inside mb-4 space-y-2 text-gray-700;
+  }
+
+  .prose-blog ol {
+    @apply list-decimal list-inside mb-4 space-y-2 text-gray-700;
+  }
+
+  .prose-blog li {
+    @apply ml-4;
+  }
+
+  .prose-blog blockquote {
+    @apply border-l-4 border-blue-500 pl-4 my-6 italic text-gray-600;
+  }
+
+  .prose-blog h1 {
+    @apply text-3xl font-bold text-gray-900 mt-8 mb-4;
+  }
+
+  .prose-blog h2 {
+    @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+  }
+
+  .prose-blog h3 {
+    @apply text-xl font-semibold text-gray-900 mt-6 mb-3;
+  }
+
+  .prose-blog h4 {
+    @apply text-lg font-semibold text-gray-900 mt-6 mb-2;
+  }
+
+  .prose-blog hr {
+    @apply my-8 border-gray-200;
+  }
+
+  /* Estilos para Shiki (syntax highlighting) */
+  .shiki-wrapper pre {
+    @apply p-4 text-sm leading-relaxed overflow-x-auto;
+  }
+
+  .shiki-wrapper code {
+    @apply font-mono;
+  }
+
+  /* Soporte para temas claro/oscuro de Shiki */
+  .shiki,
+  .shiki span {
+    color: var(--shiki-light) !important;
+    background-color: var(--shiki-light-bg) !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .shiki,
+    .shiki span {
+      color: var(--shiki-dark) !important;
+      background-color: var(--shiki-dark-bg) !important;
+    }
+  }
+
+  /* Estilo base para bloques de código en el blog */
+  .shiki-wrapper .shiki {
+    @apply rounded-lg;
+  }
 }

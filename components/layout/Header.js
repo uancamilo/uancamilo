@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import DownloadCV from '../pdf/DownloadCV';
 
 /**
@@ -49,14 +50,16 @@ function CloseIcon({ className }) {
 
 /**
  * Links de navegación a las secciones del CV
+ * Usan prefijo /# para funcionar desde cualquier página (ej: /blog)
  */
 const navLinks = [
-  { name: 'Habilidades', href: '#habilidades' },
-  { name: 'Formación', href: '#formacion' },
-  { name: 'Idiomas', href: '#idiomas' },
-  { name: 'Proyectos', href: '#proyectos' },
-  { name: 'Experiencia', href: '#experiencia' },
-  { name: 'Contacto', href: '#contacto' },
+  { name: 'Habilidades', href: '/#habilidades' },
+  { name: 'Formación', href: '/#formacion' },
+  { name: 'Idiomas', href: '/#idiomas' },
+  { name: 'Proyectos', href: '/#proyectos' },
+  { name: 'Experiencia', href: '/#experiencia' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contacto', href: '/#contacto' },
 ];
 
 /**
@@ -90,13 +93,13 @@ export default function Header({ cvData }) {
         >
           {/* Logo - Iniciales */}
           <div className="flex lg:flex-1">
-            <a
-              href="#"
+            <Link
+              href="/"
               className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition-colors"
               aria-label="Ir al inicio"
             >
               {initials}
-            </a>
+            </Link>
           </div>
 
           {/* Botón menú móvil */}
@@ -157,14 +160,14 @@ export default function Header({ cvData }) {
       >
         {/* Header del menú móvil */}
         <div className="flex items-center justify-between">
-          <a
-            href="#"
+          <Link
+            href="/"
             onClick={closeMobileMenu}
             className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg"
             aria-label="Ir al inicio"
           >
             {initials}
-          </a>
+          </Link>
           <button
             type="button"
             onClick={closeMobileMenu}

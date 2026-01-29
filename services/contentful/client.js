@@ -1,5 +1,5 @@
 // Función genérica para peticiones GraphQL a Contentful.
-export async function fetchContent(query) {
+export async function fetchContent(query, variables = {}) {
   const spaceId = process.env.CONTENTFUL_SPACE_ID;
   const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
@@ -19,7 +19,7 @@ export async function fetchContent(query) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, variables }),
       }
     );
 

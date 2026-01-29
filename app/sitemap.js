@@ -1,5 +1,6 @@
 import { getPersonalInfo } from '../services/contentful/personalInfo';
 import { adaptPersonalInfo } from '../logic/personalInfo.logic';
+import { getCachedBlogSlugs } from '../lib/blogData';
 
 /**
  * Obtiene la URL base del sitio
@@ -66,21 +67,32 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 1.0,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
   ];
 
-  // Futuras rutas dinámicas (blog, proyectos, etc.)
-  // Ejemplo de cómo agregar rutas de blog:
-  //
-  // const blogPosts = await getBlogPosts();
-  // const blogRoutes = blogPosts.map((post) => ({
-  //   url: `${baseUrl}/blog/${post.slug}`,
-  //   lastModified: new Date(post.updatedAt),
-  //   changeFrequency: 'weekly',
-  //   priority: 0.8,
-  // }));
+  // Rutas dinámicas del blog
+  let blogRoutes = [];
+  try {
+    const blogSlugs = await getCachedBlogSlugs();
+    blogRoutes = blogSlugs.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.lastModified ? new Date(post.lastModified) : lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }));
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching blog slugs for sitemap:', error);
+    }
+  }
 
   return [
     ...staticRoutes,
-    // ...blogRoutes, // Descomentar cuando exista blog
+    ...blogRoutes,
   ];
 }
