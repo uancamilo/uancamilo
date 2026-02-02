@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import BlogCategoryBadge from './BlogCategoryBadge';
+import ShareButtons from './ShareButtons';
 import { renderBlogRichText } from '../../lib/renderBlogRichText';
 
 /**
@@ -50,8 +51,9 @@ function ClockIcon({ className }) {
  *
  * @param {Object} props
  * @param {Object} props.post - Post completo adaptado
+ * @param {string} props.postUrl - URL completa del artículo para compartir
  */
-export default async function BlogPostContent({ post }) {
+export default async function BlogPostContent({ post, postUrl }) {
   // Renderizar el contenido Rich Text con syntax highlighting
   const content = post.content ? await renderBlogRichText(post.content) : null;
 
@@ -123,6 +125,16 @@ export default async function BlogPostContent({ post }) {
             ))}
           </div>
         )}
+
+        {/* Botones de compartir - Header */}
+        <div className="mt-6 pt-4 border-t border-gray-100">
+          <ShareButtons
+            url={postUrl}
+            title={post.title}
+            excerpt={post.excerpt}
+            variant="compact"
+          />
+        </div>
       </header>
 
       {/* Imagen de portada */}
@@ -148,6 +160,16 @@ export default async function BlogPostContent({ post }) {
 
       {/* Footer del post */}
       <footer className="mt-12 pt-8 border-t border-gray-200">
+        {/* Botones de compartir - Footer */}
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <p className="text-gray-600 text-sm">¿Te gustó este artículo? Compártelo</p>
+          <ShareButtons
+            url={postUrl}
+            title={post.title}
+            excerpt={post.excerpt}
+          />
+        </div>
+
         <div className="text-center">
           <Link
             href="/blog"

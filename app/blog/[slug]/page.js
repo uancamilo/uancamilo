@@ -87,6 +87,9 @@ export default async function BlogPostPage({ params }) {
     '@graph': [buildBlogPostingSchema(post, { siteUrl })],
   };
 
+  // URL completa del artículo para compartir
+  const postUrl = `${siteUrl}/blog/${post.slug}`;
+
   return (
     <>
       {/* JSON-LD */}
@@ -96,7 +99,7 @@ export default async function BlogPostPage({ params }) {
       />
 
       <main className="px-4 py-12 sm:px-6 lg:px-8">
-        <BlogPostContent post={post} />
+        <BlogPostContent post={post} postUrl={postUrl} />
 
         {/* Posts relacionados */}
         <div className="max-w-3xl mx-auto">
