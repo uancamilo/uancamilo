@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getCachedBlogPosts, getCachedBlogCategories } from '../../lib/blogData';
 import { getCachedPersonalInfo } from '../../lib/data';
 import BlogHeader from '../../components/blog/BlogHeader';
@@ -81,9 +82,17 @@ export default async function BlogPage({ searchParams }) {
 
         {posts.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">
+            <p className="text-gray-500 text-lg mb-6">
               {getEmptyMessage()}
             </p>
+            {(searchQuery || categorySlug) && (
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+              >
+                Limpiar filtros
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

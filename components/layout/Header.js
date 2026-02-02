@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import DownloadCV from '../pdf/DownloadCV';
 
 /**
@@ -74,6 +75,81 @@ const navLinks = [
  */
 export default function Header({ cvData }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
+  const pathname = usePathname();
+
+  /**
+   * Detecta la sección visible en el viewport usando IntersectionObserver
+   */
+  useEffect(() => {
+    // Solo observar secciones en la página principal
+    if (pathname !== '/') {
+      setActiveSection(null);
+      return;
+    }
+
+    // Obtener IDs de secciones desde los links de navegación
+    const sectionIds = navLinks
+      .filter((link) => link.href.startsWith('/#'))
+      .map((link) => link.href.replace('/#', ''));
+
+    // Map para trackear la visibilidad de cada sección
+    const visibilityMap = new Map();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.id;
+          if (entry.isIntersecting) {
+            visibilityMap.set(id, entry.intersectionRatio);
+          } else {
+            visibilityMap.delete(id);
+          }
+        });
+
+        // Encontrar la sección más visible
+        let mostVisible = null;
+        let highestRatio = 0;
+        visibilityMap.forEach((ratio, id) => {
+          if (ratio > highestRatio) {
+            highestRatio = ratio;
+            mostVisible = id;
+          }
+        });
+
+        setActiveSection(mostVisible);
+      },
+      {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        rootMargin: '-80px 0px -40% 0px', // Ajuste para header sticky
+      }
+    );
+
+    // Observar cada sección
+    sectionIds.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  /**
+   * Determina si un link está activo según la ruta o sección visible
+   */
+  const isLinkActive = (href) => {
+    if (href === '/blog') {
+      return pathname.startsWith('/blog');
+    }
+    // Para links de secciones, verificar si es la sección visible
+    if (href.startsWith('/#') && pathname === '/') {
+      const sectionId = href.replace('/#', '');
+      return activeSection === sectionId;
+    }
+    return false;
+  };
 
   const initials = cvData?.personalInfo?.name
     ?.split(' ')
@@ -118,15 +194,23 @@ export default function Header({ cvData }) {
 
           {/* Links de navegación - Desktop */}
           <div className="hidden lg:flex lg:gap-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = isLinkActive(link.href);
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'text-blue-600 underline underline-offset-4'
+                      : 'text-gray-700 hover:text-blue-600'
+                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
           </div>
 
           {/* CTA - Desktop */}
@@ -182,16 +266,24 @@ export default function Header({ cvData }) {
         <div className="mt-6 flow-root">
           <div className="-my-6 divide-y divide-gray-200">
             <div className="space-y-1 py-6">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={closeMobileMenu}
-                  className="block rounded-lg px-3 py-2.5 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = isLinkActive(link.href);
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    className={`block rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
+                      isActive
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
             </div>
 
             {/* CTA móvil */}

@@ -55,16 +55,7 @@ export default function BlogPostLoading() {
 
         {/* Footer skeleton */}
         <footer className="mt-12 pt-8 border-t border-gray-200">
-          <div className="flex items-start gap-4 p-6 bg-gray-50 rounded-xl">
-            <div className="h-16 w-16 bg-gray-200 rounded-full animate-pulse" />
-            <div>
-              <div className="h-3 w-16 bg-gray-200 rounded mb-2 animate-pulse" />
-              <div className="h-5 w-32 bg-gray-200 rounded mb-2 animate-pulse" />
-              <div className="h-4 w-40 bg-gray-200 rounded animate-pulse" />
-            </div>
-          </div>
-
-          <div className="mt-8 text-center">
+          <div className="text-center">
             <div className="h-12 w-40 bg-gray-200 rounded-lg mx-auto animate-pulse" />
           </div>
         </footer>

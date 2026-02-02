@@ -14,7 +14,7 @@ export function buildBlogSchema(data, options = {}) {
     '@type': 'CollectionPage',
     '@id': `${blogUrl}#webpage`,
     name: 'Blog',
-    description: 'Artículos sobre desarrollo de software, buenas prácticas y tecnología.',
+    description: 'Artículos, apuntes y recursos sobre programación y tecnología.',
     url: blogUrl,
     inLanguage: 'es-CO',
     isPartOf: {
@@ -62,7 +62,7 @@ export function buildBlogContainerSchema(data, options = {}) {
     '@type': 'Blog',
     '@id': `${blogUrl}#blog`,
     name: 'Blog',
-    description: 'Artículos sobre desarrollo de software, buenas prácticas y tecnología.',
+    description: 'Artículos, apuntes y recursos sobre programación y tecnología.',
     url: blogUrl,
     inLanguage: 'es-CO',
   };

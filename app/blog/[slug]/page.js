@@ -9,6 +9,18 @@ import { buildBlogPostingSchema } from '../../../seo/schema/blogPosting.schema';
 export const revalidate = 3600; // Revalidar cada hora
 
 /**
+ * Valida que el slug sea un string válido para URLs
+ * Solo permite letras minúsculas, números y guiones
+ * @param {string} slug - Slug a validar
+ * @returns {boolean} True si es válido
+ */
+function isValidSlug(slug) {
+  if (!slug || typeof slug !== 'string') return false;
+  if (slug.length > 200) return false;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+/**
  * Genera los parámetros estáticos para pre-renderizar posts
  */
 export async function generateStaticParams() {
@@ -21,6 +33,14 @@ export async function generateStaticParams() {
  */
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+
+  if (!isValidSlug(slug)) {
+    return {
+      title: 'Post no encontrado',
+      description: 'El artículo solicitado no existe.',
+    };
+  }
+
   const [post, personalInfo] = await Promise.all([
     getCachedBlogPost(slug),
     getCachedPersonalInfo(),
@@ -42,6 +62,11 @@ export async function generateMetadata({ params }) {
  */
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
+
+  if (!isValidSlug(slug)) {
+    notFound();
+  }
+
   const [post, personalInfo] = await Promise.all([
     getCachedBlogPost(slug),
     getCachedPersonalInfo(),
