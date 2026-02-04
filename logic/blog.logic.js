@@ -1,36 +1,4 @@
-/**
- * Formatea una fecha ISO a formato legible largo en español
- * @param {string} dateString - Fecha en formato ISO
- * @returns {string} Fecha formateada (ej: "15 de enero de 2024")
- */
-function formatBlogDate(dateString) {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  const months = [
-    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
-  ];
-
-  return `${date.getDate()} de ${months[date.getMonth()]} de ${date.getFullYear()}`;
-}
-
-/**
- * Formatea una fecha ISO a formato corto en español
- * @param {string} dateString - Fecha en formato ISO
- * @returns {string} Fecha formateada (ej: "Ene 2024")
- */
-function formatBlogDateShort(dateString) {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  const months = [
-    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
-  ];
-
-  return `${months[date.getMonth()]} ${date.getFullYear()}`;
-}
+import { formatDate, formatDateLong } from '../lib/dateUtils';
 
 /**
  * Calcula el tiempo de lectura estimado basado en el contenido markdown
@@ -62,8 +30,8 @@ function adaptBlogPost(rawPost) {
     slug: rawPost.slug || '',
     excerpt: rawPost.excerpt || '',
     publishedDate: rawPost.publishedDate,
-    publishedDateFormatted: formatBlogDate(rawPost.publishedDate),
-    publishedDateShort: formatBlogDateShort(rawPost.publishedDate),
+    publishedDateFormatted: formatDateLong(rawPost.publishedDate),
+    publishedDateShort: formatDate(rawPost.publishedDate),
     lastModified: rawPost.sys?.publishedAt || rawPost.publishedDate,
     tags: Array.isArray(rawPost.tags) ? rawPost.tags : [],
     coverImage: rawPost.coverImage

@@ -33,10 +33,12 @@ export default async function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.webmanifest" />
         <meta name="theme-color" content="#2563EB" />
-        <meta
-          name="google-site-verification"
-          content="SmSLs8hW6F2BOxiuyl2zJ367y1w8jxVj6fM3SBgosZo"
-        />
+        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+          <meta
+            name="google-site-verification"
+            content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+          />
+        )}
       </head>
       <body className={`${GeistSans.className} bg-gray-50 text-gray-900 min-h-screen flex flex-col`}>
         {process.env.NODE_ENV === 'production' && (

@@ -3,24 +3,12 @@
  *
  * Muestra un placeholder animado mientras se cargan los datos.
  * Replica la estructura de la página principal para evitar layout shift.
+ *
+ * Nota: El header se renderiza desde layout.js, no se incluye aquí.
  */
 export default function Loading() {
   return (
-    <>
-      {/* Navigation Header Skeleton */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
-        <div className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
-          <div className="w-10 h-10 rounded-lg bg-gray-200" />
-          <div className="hidden lg:flex lg:gap-x-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-4 bg-gray-200 rounded w-16" />
-            ))}
-          </div>
-          <div className="hidden lg:block h-10 bg-gray-200 rounded-lg w-28" />
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 animate-pulse">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 animate-pulse">
         {/* Profile Header Skeleton */}
         <header>
         <section className="py-8 sm:py-12 lg:py-16">
@@ -85,27 +73,6 @@ export default function Loading() {
           </div>
         </section>
       </main>
-
-        {/* Footer Skeleton */}
-        <footer>
-          <section className="pt-8 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              {/* Info de contacto */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                <div className="h-4 bg-gray-200 rounded w-40" />
-                <div className="h-4 bg-gray-200 rounded w-32" />
-                <div className="h-4 bg-gray-200 rounded w-24" />
-              </div>
-              {/* Redes sociales */}
-              <div className="flex items-center gap-4">
-                <div className="w-5 h-5 bg-gray-200 rounded" />
-                <div className="w-5 h-5 bg-gray-200 rounded" />
-                <div className="w-5 h-5 bg-gray-200 rounded" />
-              </div>
-            </div>
-          </section>
-        </footer>
-      </div>
-    </>
+    </div>
   );
 }

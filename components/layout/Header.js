@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import DownloadCV from '../pdf/DownloadCV';
@@ -77,6 +77,62 @@ export default function Header({ cvData }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const pathname = usePathname();
+  const mobileMenuRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  /**
+   * Focus trap para el menú móvil
+   * Atrapa el foco dentro del menú cuando está abierto
+   */
+  const handleKeyDown = useCallback((e) => {
+    if (!mobileMenuOpen || e.key !== 'Tab') return;
+
+    const focusableElements = mobileMenuRef.current?.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (!focusableElements || focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    // Shift + Tab en el primer elemento -> ir al último
+    if (e.shiftKey && document.activeElement === firstElement) {
+      e.preventDefault();
+      lastElement.focus();
+    }
+    // Tab en el último elemento -> ir al primero
+    else if (!e.shiftKey && document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
+    }
+  }, [mobileMenuOpen]);
+
+  /**
+   * Cerrar menú con Escape y manejar focus trap
+   */
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleKeyDown);
+      // Enfocar el botón de cerrar al abrir el menú
+      closeButtonRef.current?.focus();
+      // Prevenir scroll del body
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen, handleKeyDown]);
 
   /**
    * Detecta la sección visible en el viewport usando IntersectionObserver
@@ -236,11 +292,14 @@ export default function Header({ cvData }) {
 
       {/* Menú móvil - Panel */}
       <div
+        ref={mobileMenuRef}
         id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
         className={`fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white p-6 shadow-xl lg:hidden transform transition-transform duration-300 ease-in-out ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        aria-label="Menú móvil"
       >
         {/* Header del menú móvil */}
         <div className="flex items-center justify-between">
@@ -253,6 +312,7 @@ export default function Header({ cvData }) {
             {initials}
           </Link>
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={closeMobileMenu}
             className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:bg-gray-100 transition-colors"

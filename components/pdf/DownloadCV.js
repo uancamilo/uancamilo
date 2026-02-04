@@ -1,14 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { pdf } from '@react-pdf/renderer';
-import CVDocument from './CVDocument';
 
 /**
  * DownloadCV - Botón para generar y descargar el CV en PDF
  *
  * Genera el PDF en el cliente usando @react-pdf/renderer
- * Optimizado para ATS con formato de una columna
+ * La librería se carga de forma lazy solo cuando el usuario hace clic
+ * para evitar aumentar el bundle inicial
  */
 export default function DownloadCV({ cvData, className, children }) {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -19,6 +18,12 @@ export default function DownloadCV({ cvData, className, children }) {
     setIsGenerating(true);
 
     try {
+      // Lazy import de las dependencias pesadas
+      const [{ pdf }, { default: CVDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('./CVDocument'),
+      ]);
+
       // Generar el PDF blob
       const blob = await pdf(<CVDocument data={cvData} />).toBlob();
 

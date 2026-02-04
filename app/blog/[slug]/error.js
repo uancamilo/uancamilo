@@ -6,6 +6,11 @@ import Link from 'next/link';
  * Error boundary para la página de post individual
  */
 export default function BlogPostError({ error, reset }) {
+  // Solo mostrar detalles del error en desarrollo
+  const errorMessage = process.env.NODE_ENV === 'development' && error?.message
+    ? error.message
+    : 'Ocurrió un error inesperado. Por favor, intenta de nuevo.';
+
   return (
     <main className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto text-center">
@@ -13,7 +18,7 @@ export default function BlogPostError({ error, reset }) {
           Error al cargar el artículo
         </h1>
         <p className="text-gray-600 mb-8">
-          {error?.message || 'Ocurrió un error inesperado. Por favor, intenta de nuevo.'}
+          {errorMessage}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button

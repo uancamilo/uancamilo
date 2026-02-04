@@ -41,6 +41,30 @@ function ShareIcon({ className }) {
  * @param {string} props.excerpt - Descripción corta del artículo
  * @param {string} props.variant - Variante visual: 'compact' | 'full'
  */
+/**
+ * Copia texto al portapapeles con feedback visual
+ * @param {string} text - Texto a copiar
+ * @param {Function} setFeedback - Setter del estado de feedback
+ * @param {number} timeout - Duración del feedback en ms
+ */
+async function copyToClipboardWithFeedback(text, setFeedback, timeout) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // Fallback para navegadores sin soporte de Clipboard API
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  }
+  setFeedback(true);
+  setTimeout(() => setFeedback(false), timeout);
+}
+
 export default function ShareButtons({ url, title, excerpt, variant = 'full' }) {
   const [copied, setCopied] = useState(false);
   const [copiedInstagram, setCopiedInstagram] = useState(false);
@@ -50,24 +74,6 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
     setCanNativeShare(typeof navigator !== 'undefined' && !!navigator.share);
   }, []);
 
-  // Copiar para Instagram
-  const copyForInstagram = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopiedInstagram(true);
-      setTimeout(() => setCopiedInstagram(false), 3000);
-    } catch {
-      const textArea = document.createElement('textarea');
-      textArea.value = url;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopiedInstagram(true);
-      setTimeout(() => setCopiedInstagram(false), 3000);
-    }
-  };
-
   // URLs de compartir para cada red
   const shareUrls = {
     x: `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
@@ -76,23 +82,9 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
     whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`,
   };
 
-  // Copiar al portapapeles
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      const textArea = document.createElement('textarea');
-      textArea.value = url;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  // Handlers de copia usando la función reutilizable
+  const handleCopyLink = () => copyToClipboardWithFeedback(url, setCopied, 2000);
+  const handleCopyForInstagram = () => copyToClipboardWithFeedback(url, setCopiedInstagram, 3000);
 
   // Compartir nativo (Web Share API)
   const handleNativeShare = async () => {
@@ -170,7 +162,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
       {/* Instagram - Copia enlace con tooltip */}
       <div className="relative">
         <button
-          onClick={copyForInstagram}
+          onClick={handleCopyForInstagram}
           className={`${buttonBaseClass} ${
             copiedInstagram
               ? 'bg-[#E4405F] text-white border-[#E4405F]'
@@ -190,7 +182,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
 
       {/* Copiar enlace */}
       <button
-        onClick={copyToClipboard}
+        onClick={handleCopyLink}
         className={`${buttonBaseClass} ${
           copied
             ? 'bg-green-500 text-white border-green-500'

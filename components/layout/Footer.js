@@ -115,10 +115,11 @@ export default function Footer({ personalInfo }) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`Perfil de ${name}`}
+                        aria-label={`Perfil de ${name} (abre en nueva pestaña)`}
                         className="text-gray-600 hover:text-blue-600 transition-colors"
                       >
                         <Icon className="w-5 h-5" aria-hidden="true" />
+                        <span className="sr-only">(abre en nueva pestaña)</span>
                       </a>
                     );
                   })}

@@ -18,7 +18,12 @@ const nextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['10.177.158.144:3000', '10.177.158.144'],
 };
+
+// Configurar orígenes de desarrollo permitidos desde variable de entorno
+// Formato: "host1:port1,host2:port2" o "host1,host2"
+if (process.env.ALLOWED_DEV_ORIGINS) {
+  nextConfig.allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS.split(',').map(o => o.trim());
+}
 
 module.exports = nextConfig;
