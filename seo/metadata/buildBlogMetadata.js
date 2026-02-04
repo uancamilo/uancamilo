@@ -24,6 +24,18 @@ export function buildBlogListMetadata(data, options = {}) {
     alternates: {
       canonical: blogUrl,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    publisher: data?.name || undefined,
     openGraph: {
       type: 'website',
       title,
@@ -69,9 +81,21 @@ export function buildBlogPostMetadata(post, options = {}) {
     title: post.title,
     description: post.excerpt,
     authors: post.author ? [{ name: post.author.name }] : undefined,
+    publisher: post.author?.name || undefined,
     keywords: post.tags?.length > 0 ? post.tags : undefined,
     alternates: {
       canonical: postUrl,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
     openGraph: {
       type: 'article',

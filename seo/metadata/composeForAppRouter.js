@@ -45,6 +45,24 @@ export function composeMetadataForAppRouter(data, options = {}) {
     metadata.description = 'Portafolio y currículum profesional';
   }
 
+  // Robots - permitir indexación y seguimiento de enlaces
+  metadata.robots = {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  };
+
+  // Publisher
+  if (data?.name && !data.name.includes('no disponible')) {
+    metadata.publisher = data.name;
+  }
+
   // Author
   if (data?.name && !data.name.includes('no disponible')) {
     metadata.authors = [
