@@ -68,6 +68,7 @@ function LanguageCard({ language }) {
             href={certification}
             target="_blank"
             rel="noopener noreferrer"
+            title={`Ver certificación de ${name}`}
             aria-label={`Ver certificación de ${name} (abre en nueva pestaña)`}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
           >

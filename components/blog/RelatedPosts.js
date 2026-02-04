@@ -27,11 +27,12 @@ export default function RelatedPosts({ posts }) {
           >
             {/* Imagen de portada */}
             {post.coverImage && (
-              <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
+              <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`} className="block overflow-hidden">
                 <div className="relative aspect-video">
                   <Image
                     src={post.coverImage.url}
                     alt={post.coverImage.alt}
+                    title={post.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -55,7 +56,7 @@ export default function RelatedPosts({ posts }) {
 
               {/* Título */}
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                <Link href={`/blog/${post.slug}`}>
+                <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`}>
                   {post.title}
                 </Link>
               </h3>

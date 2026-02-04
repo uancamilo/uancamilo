@@ -16,6 +16,7 @@ function SkillBar({ skill }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
+            title={`Más información sobre ${name}`}
             className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline transition-colors"
             aria-label={`Ir a ${name}`}
           >

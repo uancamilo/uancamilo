@@ -13,11 +13,12 @@ export default function BlogPostCard({ post }) {
     <article className="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Imagen de portada */}
       {post.coverImage && (
-        <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
+        <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`} className="block overflow-hidden">
           <div className="relative aspect-video">
             <Image
               src={post.coverImage.url}
               alt={post.coverImage.alt}
+              title={post.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -47,7 +48,7 @@ export default function BlogPostCard({ post }) {
 
         {/* Título */}
         <h2 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-          <Link href={`/blog/${post.slug}`}>
+          <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`}>
             {post.title}
           </Link>
         </h2>
@@ -79,6 +80,7 @@ export default function BlogPostCard({ post }) {
                 <Image
                   src={post.author.image}
                   alt={post.author.name}
+                  title={`Autor: ${post.author.name}`}
                   width={24}
                   height={24}
                   className="rounded-full"

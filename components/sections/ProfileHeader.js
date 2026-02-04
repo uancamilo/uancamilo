@@ -48,6 +48,7 @@ export default function ProfileHeader({ personalInfo }) {
             <Image
               src={profileImage.url}
               alt={`Foto de ${name}`}
+              title={`Foto de perfil de ${name}`}
               width={240}
               height={240}
               sizes="(max-width: 639px) 176px, (max-width: 767px) 208px, 240px"

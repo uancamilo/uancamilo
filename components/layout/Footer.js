@@ -72,6 +72,7 @@ export default function Footer({ personalInfo }) {
                     <li>
                       <a
                         href={`mailto:${email}`}
+                        title={`Enviar correo a ${email}`}
                         className="flex items-center gap-2 hover:text-blue-600 transition-colors"
                       >
                         <FaEnvelope className="w-4 h-4" aria-hidden="true" />
@@ -83,6 +84,7 @@ export default function Footer({ personalInfo }) {
                     <li>
                       <a
                         href={`tel:${phone}`}
+                        title={`Llamar a ${phone}`}
                         className="flex items-center gap-2 hover:text-blue-600 transition-colors"
                       >
                         <FaPhone className="w-4 h-4" aria-hidden="true" />
@@ -115,6 +117,7 @@ export default function Footer({ personalInfo }) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={`Visitar perfil de ${name}`}
                         aria-label={`Perfil de ${name} (abre en nueva pestaña)`}
                         className="text-gray-600 hover:text-blue-600 transition-colors"
                       >

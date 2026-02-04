@@ -227,6 +227,7 @@ export default function Header({ cvData }) {
           <div className="flex lg:flex-1">
             <Link
               href="/"
+              title="Ir al inicio"
               className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 transition-colors"
               aria-label="Ir al inicio"
             >
@@ -256,6 +257,7 @@ export default function Header({ cvData }) {
                 <a
                   key={link.name}
                   href={link.href}
+                  title={`Ir a ${link.name}`}
                   className={`text-sm font-medium transition-colors ${
                     isActive
                       ? 'text-blue-600 underline underline-offset-4'
@@ -306,6 +308,7 @@ export default function Header({ cvData }) {
           <Link
             href="/"
             onClick={closeMobileMenu}
+            title="Ir al inicio"
             className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white font-bold text-lg"
             aria-label="Ir al inicio"
           >
@@ -333,6 +336,7 @@ export default function Header({ cvData }) {
                     key={link.name}
                     href={link.href}
                     onClick={closeMobileMenu}
+                    title={`Ir a ${link.name}`}
                     className={`block rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
                       isActive
                         ? 'text-blue-600 bg-blue-50'

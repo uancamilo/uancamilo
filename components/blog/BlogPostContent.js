@@ -94,6 +94,7 @@ export default async function BlogPostContent({ post, postUrl }) {
                 <Image
                   src={post.author.image}
                   alt={post.author.name}
+                  title={`Autor: ${post.author.name}`}
                   width={32}
                   height={32}
                   className="rounded-full"
@@ -144,6 +145,7 @@ export default async function BlogPostContent({ post, postUrl }) {
             <Image
               src={post.coverImage.url}
               alt={post.coverImage.alt}
+              title={post.title}
               fill
               sizes="(max-width: 768px) 100vw, 800px"
               className="object-cover"
