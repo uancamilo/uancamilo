@@ -1,3 +1,5 @@
+import { generateId } from '../lib/generateId';
+
 /**
  * Mapeo de niveles a etiquetas legibles
  */
@@ -20,7 +22,7 @@ function adaptLanguageItem(rawLanguage) {
   const levelLabel = levelLabels[levelKey] || rawLanguage.level || 'No especificado';
 
   return {
-    id: rawLanguage.sys?.id || crypto.randomUUID(),
+    id: rawLanguage.sys?.id || generateId(),
     name: rawLanguage.name || 'Idioma no especificado',
     level: levelLabel,
     levelKey,

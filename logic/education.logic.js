@@ -1,4 +1,5 @@
 import { formatDate, calculateDuration } from '../lib/dateUtils';
+import { generateId } from '../lib/generateId';
 
 /**
  * Transforma una educación cruda de Contentful a formato de UI
@@ -13,7 +14,7 @@ function adaptEducationItem(rawEducation) {
   const duration = calculateDuration(rawEducation.startDate, rawEducation.endDate);
 
   return {
-    id: rawEducation.sys?.id || crypto.randomUUID(),
+    id: rawEducation.sys?.id || generateId(),
     institution: rawEducation.institution || 'Institución no especificada',
     degree: rawEducation.degree || 'Título no especificado',
     startDate: rawEducation.startDate,

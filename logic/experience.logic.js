@@ -1,4 +1,5 @@
 import { formatDate, calculateDuration } from '../lib/dateUtils';
+import { generateId } from '../lib/generateId';
 
 /**
  * Transforma una experiencia cruda de Contentful a formato de UI
@@ -13,7 +14,7 @@ function adaptExperience(rawExperience) {
   const duration = calculateDuration(rawExperience.startDate, rawExperience.endDate);
 
   return {
-    id: rawExperience.sys?.id || crypto.randomUUID(),
+    id: rawExperience.sys?.id || generateId(),
     company: rawExperience.company || 'Empresa no especificada',
     position: rawExperience.position || 'Cargo no especificado',
     startDate: rawExperience.startDate,

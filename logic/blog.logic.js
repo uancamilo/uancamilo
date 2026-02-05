@@ -1,4 +1,5 @@
 import { formatDate, formatDateLong } from '../lib/dateUtils';
+import { generateId } from '../lib/generateId';
 
 /**
  * Calcula el tiempo de lectura estimado basado en el contenido markdown
@@ -25,7 +26,7 @@ function adaptBlogPost(rawPost) {
   if (!rawPost) return null;
 
   return {
-    id: rawPost.sys?.id || crypto.randomUUID(),
+    id: rawPost.sys?.id || generateId(),
     title: rawPost.title || 'Sin título',
     slug: rawPost.slug || '',
     excerpt: rawPost.excerpt || '',
@@ -94,7 +95,7 @@ function adaptBlogCategory(rawCategory) {
   if (!rawCategory) return null;
 
   return {
-    id: rawCategory.sys?.id || crypto.randomUUID(),
+    id: rawCategory.sys?.id || generateId(),
     name: rawCategory.name || 'Sin nombre',
     slug: rawCategory.slug || '',
     description: rawCategory.description || null,
