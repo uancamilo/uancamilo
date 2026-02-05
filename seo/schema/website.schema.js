@@ -1,5 +1,7 @@
 /**
  * Builder para schema WebSite de Schema.org
+ * Incluye SearchAction para habilitar Sitelinks Search Box en Google
+ *
  * @param {Object} data - Datos normalizados del sitio
  * @param {string} data.name - Nombre del sitio/autor
  * @param {string} data.description - Descripción del sitio
@@ -19,6 +21,14 @@ export function buildWebSiteSchema(data) {
     inLanguage: data.inLanguage || 'es-CO',
     author: {
       '@id': `${siteUrl}#person`,
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/blog?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
     },
   };
 }

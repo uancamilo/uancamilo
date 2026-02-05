@@ -33,7 +33,7 @@ export async function POST(request) {
 
     // Parsear body
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, phone, subject, message } = body;
 
     // Validar campos requeridos
     if (!name || !email || !subject || !message) {
@@ -55,6 +55,7 @@ export async function POST(request) {
     const sanitizedData = {
       name: sanitizeText(name, 100),
       email: sanitizeText(email, 100),
+      phone: sanitizeText(phone || '', 20),
       subject: sanitizeText(subject, 200),
       message: sanitizeText(message, 5000),
     };
@@ -101,6 +102,7 @@ Nuevo mensaje desde el formulario de contacto:
 
 Nombre: ${sanitizedData.name}
 Email: ${sanitizedData.email}
+Teléfono: ${sanitizedData.phone || 'No proporcionado'}
 Asunto: ${sanitizedData.subject}
 
 Mensaje:
@@ -124,6 +126,14 @@ Este mensaje fue enviado desde el formulario de contacto del sitio web.
               <td style="padding: 8px 0; font-weight: bold; color: #374151;">Email:</td>
               <td style="padding: 8px 0;">
                 <a href="mailto:${sanitizedData.email}" style="color: #1d4ed8;">${sanitizedData.email}</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #374151;">Teléfono:</td>
+              <td style="padding: 8px 0; color: #1f2937;">
+                ${sanitizedData.phone
+                  ? `<a href="tel:${sanitizedData.phone}" style="color: #1d4ed8;">${sanitizedData.phone}</a>`
+                  : 'No proporcionado'}
               </td>
             </tr>
             <tr>
