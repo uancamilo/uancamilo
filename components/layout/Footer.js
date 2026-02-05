@@ -64,9 +64,9 @@ export default function Footer({ personalInfo }) {
             {/* Información de contacto */}
             {hasContact && (
               <div className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+                <p className="text-sm font-semibold uppercase tracking-wider text-gray-500">
                   Contacto
-                </h2>
+                </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   {email && (
                     <li>
@@ -105,9 +105,9 @@ export default function Footer({ personalInfo }) {
             {/* Redes sociales */}
             {validSocialLinks.length > 0 && (
               <div className="space-y-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+                <p className="text-sm font-semibold uppercase tracking-wider text-gray-500">
                   Redes
-                </h2>
+                </p>
                 <div className="flex items-center gap-4">
                   {validSocialLinks.map(({ name, url }) => {
                     const Icon = socialIconMap[name.toLowerCase()];
