@@ -11,7 +11,7 @@ const CONTENT_TYPE_PATHS = {
   blogCategory: ['/blog'],
 
   // CV / Portfolio
-  personalInformation: ['/', '/sitemap.xml'],
+  personalInfo: ['/', '/sitemap.xml'],
   experience: ['/'],
   skills: ['/'],
   education: ['/'],
