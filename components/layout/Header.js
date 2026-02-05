@@ -60,7 +60,7 @@ const navLinks = [
   { name: 'Proyectos', href: '/#proyectos' },
   { name: 'Experiencia', href: '/#experiencia' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Contacto', href: '/#contacto' },
+  { name: 'Contacto', href: '/contacto' },
 ];
 
 /**
@@ -198,6 +198,9 @@ export default function Header({ cvData }) {
   const isLinkActive = (href) => {
     if (href === '/blog') {
       return pathname.startsWith('/blog');
+    }
+    if (href === '/contacto') {
+      return pathname === '/contacto';
     }
     // Para links de secciones, verificar si es la sección visible
     if (href.startsWith('/#') && pathname === '/') {
