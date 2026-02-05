@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import BlogCategoryBadge from './BlogCategoryBadge';
+import BlogCoverImage from './BlogCoverImage';
 
 /**
  * Componente para mostrar posts relacionados
@@ -26,20 +26,10 @@ export default function RelatedPosts({ posts }) {
             className="group bg-white rounded-lg border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Imagen de portada */}
-            {post.coverImage && (
-              <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`} className="block overflow-hidden">
-                <div className="relative aspect-video">
-                  <Image
-                    src={post.coverImage.url}
-                    alt={post.coverImage.alt}
-                    title={post.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </Link>
-            )}
+            <BlogCoverImage
+              post={post}
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
 
             {/* Contenido */}
             <div className="p-4">

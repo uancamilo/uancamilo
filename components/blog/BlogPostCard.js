@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import BlogCategoryBadge from './BlogCategoryBadge';
+import BlogCoverImage from './BlogCoverImage';
 
 /**
  * Tarjeta de post para la lista del blog
@@ -12,20 +13,10 @@ export default function BlogPostCard({ post }) {
   return (
     <article className="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Imagen de portada */}
-      {post.coverImage && (
-        <Link href={`/blog/${post.slug}`} title={`Leer: ${post.title}`} className="block overflow-hidden">
-          <div className="relative aspect-video">
-            <Image
-              src={post.coverImage.url}
-              alt={post.coverImage.alt}
-              title={post.title}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        </Link>
-      )}
+      <BlogCoverImage
+        post={post}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
 
       {/* Contenido */}
       <div className="p-5">

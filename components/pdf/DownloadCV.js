@@ -41,7 +41,9 @@ export default function DownloadCV({ cvData, className, children }) {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error generando PDF:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error generando PDF:', error);
+      }
     } finally {
       setIsGenerating(false);
     }

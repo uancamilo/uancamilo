@@ -23,7 +23,10 @@ function getBaseUrl(personalInfo) {
     return url.endsWith('/') ? url.slice(0, -1) : url;
   }
 
-  // Fallback: localhost (solo para desarrollo)
+  // Fallback: localhost (advertir en producción)
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('NEXT_PUBLIC_SITE_URL no está configurada. sitemap.xml usará localhost.');
+  }
   return 'http://localhost:3000';
 }
 

@@ -45,6 +45,7 @@ export default function BlogCategoryBadge({
     return (
       <Link
         href={`/blog?categoria=${slug}`}
+        title={`Filtrar artículos por categoría: ${name}`}
         className={`${baseClasses} ${categoryClasses}`}
       >
         {name}

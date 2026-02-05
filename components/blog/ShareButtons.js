@@ -42,6 +42,21 @@ function ShareIcon({ className }) {
  * @param {string} props.variant - Variante visual: 'compact' | 'full'
  */
 /**
+ * Valida que una URL sea segura (solo http/https)
+ * @param {string} url - URL a validar
+ * @returns {boolean} - true si la URL es válida y segura
+ */
+function isValidUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Copia texto al portapapeles con feedback visual
  * @param {string} text - Texto a copiar
  * @param {Function} setFeedback - Setter del estado de feedback
@@ -74,26 +89,30 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
     setCanNativeShare(typeof navigator !== 'undefined' && !!navigator.share);
   }, []);
 
-  // URLs de compartir para cada red
-  const shareUrls = {
-    x: `https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`,
-  };
+  // Validar URL antes de usarla
+  const safeUrl = isValidUrl(url) ? url : '';
+  const safeTitle = title || '';
+
+  // URLs de compartir para cada red (solo si la URL es válida)
+  const shareUrls = safeUrl ? {
+    x: `https://x.com/intent/tweet?url=${encodeURIComponent(safeUrl)}&text=${encodeURIComponent(safeTitle)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(safeUrl)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(safeUrl)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${safeTitle} ${safeUrl}`)}`,
+  } : null;
 
   // Handlers de copia usando la función reutilizable
-  const handleCopyLink = () => copyToClipboardWithFeedback(url, setCopied, 2000);
-  const handleCopyForInstagram = () => copyToClipboardWithFeedback(url, setCopiedInstagram, 3000);
+  const handleCopyLink = () => safeUrl && copyToClipboardWithFeedback(safeUrl, setCopied, 2000);
+  const handleCopyForInstagram = () => safeUrl && copyToClipboardWithFeedback(safeUrl, setCopiedInstagram, 3000);
 
   // Compartir nativo (Web Share API)
   const handleNativeShare = async () => {
-    if (navigator.share) {
+    if (navigator.share && safeUrl) {
       try {
         await navigator.share({
-          title,
+          title: safeTitle,
           text: excerpt,
-          url,
+          url: safeUrl,
         });
       } catch {
         // Usuario canceló o error
@@ -101,8 +120,8 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
     }
   };
 
-  // Configuración de botones
-  const socialButtons = [
+  // Configuración de botones (solo si hay URLs válidas)
+  const socialButtons = shareUrls ? [
     {
       name: 'X',
       icon: SiX,
@@ -127,7 +146,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
       href: shareUrls.whatsapp,
       hoverClass: 'hover:bg-[#25D366] hover:text-white hover:border-[#25D366]',
     },
-  ];
+  ] : [];
 
   // Estilos según variante
   const buttonSize = variant === 'compact' ? 'w-9 h-9' : 'w-10 h-10';
@@ -152,6 +171,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
           href={href}
           target="_blank"
           rel="noopener noreferrer"
+          title={`Compartir en ${name}`}
           className={`${buttonBaseClass} ${hoverClass}`}
           aria-label={`Compartir en ${name}`}
         >
@@ -163,6 +183,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
       <div className="relative">
         <button
           onClick={handleCopyForInstagram}
+          title="Copiar enlace para compartir en Instagram"
           className={`${buttonBaseClass} ${
             copiedInstagram
               ? 'bg-[#E4405F] text-white border-[#E4405F]'
@@ -183,6 +204,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
       {/* Copiar enlace */}
       <button
         onClick={handleCopyLink}
+        title={copied ? 'Enlace copiado' : 'Copiar enlace al portapapeles'}
         className={`${buttonBaseClass} ${
           copied
             ? 'bg-green-500 text-white border-green-500'
@@ -201,6 +223,7 @@ export default function ShareButtons({ url, title, excerpt, variant = 'full' }) 
       {canNativeShare && (
         <button
           onClick={handleNativeShare}
+          title="Más opciones de compartir"
           className={`${buttonBaseClass} hover:bg-blue-600 hover:text-white hover:border-blue-600`}
           aria-label="Más opciones de compartir"
         >
