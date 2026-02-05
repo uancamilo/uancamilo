@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -26,4 +30,4 @@ if (process.env.ALLOWED_DEV_ORIGINS) {
   nextConfig.allowedDevOrigins = process.env.ALLOWED_DEV_ORIGINS.split(',').map(o => o.trim());
 }
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

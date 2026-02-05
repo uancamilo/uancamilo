@@ -23,6 +23,7 @@
     "shiki": "^3.21.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.8",
