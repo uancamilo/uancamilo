@@ -79,6 +79,7 @@ export default function Header({ cvData }) {
   const pathname = usePathname();
   const mobileMenuRef = useRef(null);
   const closeButtonRef = useRef(null);
+  const debounceTimeoutRef = useRef(null);
 
   /**
    * Focus trap para el menú móvil
@@ -136,6 +137,7 @@ export default function Header({ cvData }) {
 
   /**
    * Detecta la sección visible en el viewport usando IntersectionObserver
+   * Incluye debounce para evitar parpadeo durante smooth scroll
    */
   useEffect(() => {
     // Solo observar secciones en la página principal
@@ -173,7 +175,13 @@ export default function Header({ cvData }) {
           }
         });
 
-        setActiveSection(mostVisible);
+        // Debounce para evitar parpadeo durante smooth scroll
+        if (debounceTimeoutRef.current) {
+          clearTimeout(debounceTimeoutRef.current);
+        }
+        debounceTimeoutRef.current = setTimeout(() => {
+          setActiveSection(mostVisible);
+        }, 150);
       },
       {
         threshold: [0, 0.25, 0.5, 0.75, 1],
@@ -189,7 +197,12 @@ export default function Header({ cvData }) {
       }
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
   }, [pathname]);
 
   /**
