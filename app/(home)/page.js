@@ -1,18 +1,18 @@
-import { groupSkillsByCategory } from '../logic/skills.logic';
-import { composeSchemas } from '../seo/schema/composer';
-import { composeMetadataForAppRouter } from '../seo/metadata/composeForAppRouter';
+import { groupSkillsByCategory } from '../../logic/skills.logic';
+import { composeSchemas } from '../../seo/schema/composer';
+import { composeMetadataForAppRouter } from '../../seo/metadata/composeForAppRouter';
 import {
   getCachedPersonalInfo,
   getCachedSkills,
   getCachedCvData,
-} from '../lib/data';
+} from '../../lib/data';
 
-import ProfileHeader from '../components/sections/ProfileHeader';
-import Experience from '../components/sections/Experience';
-import Skills from '../components/sections/Skills';
-import Education from '../components/sections/Education';
-import Languages from '../components/sections/Languages';
-import Projects from '../components/sections/Projects';
+import ProfileHeader from '../../components/sections/ProfileHeader';
+import Experience from '../../components/sections/Experience';
+import Skills from '../../components/sections/Skills';
+import Education from '../../components/sections/Education';
+import Languages from '../../components/sections/Languages';
+import Projects from '../../components/sections/Projects';
 
 /**
  * Genera metadata SEO para la página usando App Router API
