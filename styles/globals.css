@@ -95,22 +95,7 @@
     @apply font-mono;
   }
 
-  /* Soporte para temas claro/oscuro de Shiki */
-  .shiki,
-  .shiki span {
-    color: var(--shiki-light) !important;
-    background-color: var(--shiki-light-bg) !important;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .shiki,
-    .shiki span {
-      color: var(--shiki-dark) !important;
-      background-color: var(--shiki-dark-bg) !important;
-    }
-  }
-
-  /* Estilo base para bloques de código en el blog */
+  /* Estilo base para bloques de código en el blog (Shiki github-dark) */
   .shiki-wrapper .shiki {
     @apply rounded-lg;
   }
